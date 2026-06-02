@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { handlePrismaError } from '../common/prisma-errors.helper';
 
 @Injectable()
 export class PaymentsService {
@@ -14,22 +15,38 @@ export class PaymentsService {
   }
 
   async createPayment(payment: CreatePaymentDto) {
-    return await this.prisma.payment.create({ data: payment });
+    try {
+      return await this.prisma.payment.create({ data: payment });
+    } catch (error) {
+      handlePrismaError(error, 'Payment');
+    }
   }
 
   async findOne(id: number) {
-    return await this.prisma.payment.findUnique({ where: { id } });
+    try {
+      return await this.prisma.payment.findUniqueOrThrow({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Payment ${id}`);
+    }
   }
 
   async updatePayment(id: number, payment: UpdatePaymentDto) {
     const { name, active } = payment;
-    return await this.prisma.payment.update({
-      where: { id },
-      data: { name, active },
-    });
+    try {
+      return await this.prisma.payment.update({
+        where: { id },
+        data: { name, active },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Payment ${id}`);
+    }
   }
 
   async deletePayment(id: number) {
-    return await this.prisma.payment.delete({ where: { id } });
+    try {
+      return await this.prisma.payment.delete({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Payment ${id}`);
+    }
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCrustDto } from './dto/create-crust.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateCrustDto } from './dto/update-crust.dto';
+import { handlePrismaError } from '../common/prisma-errors.helper';
 
 @Injectable()
 export class CrustsService {
@@ -14,23 +15,46 @@ export class CrustsService {
   }
 
   async createCrust(crust: CreateCrustDto) {
-    return await this.prisma.crust.create({ data: crust });
+    try {
+      return await this.prisma.crust.create({ data: crust });
+    } catch (error) {
+      handlePrismaError(error, 'Crust');
+    }
   }
 
   async findOne(id: number) {
-    return await this.prisma.crust.findUnique({ where: { id } });
+    try {
+      return await this.prisma.crust.findUniqueOrThrow({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Crust ${id}`);
+    }
   }
 
   async updateCrust(id: number, crust: UpdateCrustDto) {
     const { name, description, priceSmall, priceMedium, priceLarge, active } =
       crust;
-    return await this.prisma.crust.update({
-      where: { id },
-      data: { name, description, priceSmall, priceMedium, priceLarge, active },
-    });
+    try {
+      return await this.prisma.crust.update({
+        where: { id },
+        data: {
+          name,
+          description,
+          priceSmall,
+          priceMedium,
+          priceLarge,
+          active,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Crust ${id}`);
+    }
   }
 
   async deleteCrust(id: number) {
-    return await this.prisma.crust.delete({ where: { id } });
+    try {
+      return await this.prisma.crust.delete({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Crust ${id}`);
+    }
   }
 }
