@@ -1,0 +1,11 @@
+{
+  "name": "cintiago",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "api": "npm run start:dev --workspace=apps/api"
+  }
+}

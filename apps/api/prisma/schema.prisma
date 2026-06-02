@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id           Int      @id @default(autoincrement())
+  name         String
+  phone        String
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  zipCode      String
+  createdAt    DateTime @default(now())
+  orders       Order[]
+}
+
+model Payment {
+  id     Int     @id @default(autoincrement())
+  name   String
+  active Boolean @default(true)
+  orders Order[]
+}
+
+model Ingredient {
+  id               Int                       @id @default(autoincrement())
+  name             String                    @unique
+  category         String?
+  createdAt        DateTime                  @default(now())
+  pizzaIngredients PizzaIngredient[]
+  ingredientPrice  IngredientPrice?
+  halfIngredients  OrderItemHalfIngredient[]
+}
+
+model Pizza {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  description      String?
+  priceSmall       Decimal?
+  priceMedium      Decimal?
+  priceLarge       Decimal?
+  active           Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  pizzaIngredients PizzaIngredient[]
+  orderItemHalves  OrderItemHalf[]
+}
+
+model PizzaIngredient {
+  pizza         Pizza      @relation(fields: [pizzaId], references: [id], onDelete: Cascade)
+  pizzaId       Int
+  ingredient    Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId  Int
+  quantity      String?
+
+  @@id([pizzaId, ingredientId])
+}
+
+model IngredientPrice {
+  ingredient    Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  ingredientId  Int        @id
+  priceSmall    Decimal?
+  priceMedium   Decimal?
+  priceLarge    Decimal?
+}
+
+model Crust {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  priceSmall  Decimal?
+  priceMedium Decimal?
+  priceLarge  Decimal?
+  active      Boolean     @default(true)
+  orderItems  OrderItem[]
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Decimal
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  orderProducts OrderProduct[]
+}
+
+model Order {
+  id            Int            @id @default(autoincrement())
+  client        Client         @relation(fields: [clientId], references: [id])
+  clientId      Int
+  payment       Payment        @relation(fields: [paymentId], references: [id])
+  paymentId     Int
+  total         Decimal?
+  status        String         @default("pending")
+  createdAt     DateTime       @default(now())
+  orderItems    OrderItem[]
+  orderProducts OrderProduct[]
+}
+
+model OrderItem {
+  id         Int             @id @default(autoincrement())
+  order      Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int
+  crust      Crust?          @relation(fields: [crustId], references: [id])
+  crustId    Int?
+  size       String
+  quantity   Int             @default(1)
+  halves     OrderItemHalf[]
+}
+
+model OrderItemHalf {
+  id          Int                       @id @default(autoincrement())
+  orderItem   OrderItem                 @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  orderItemId Int
+  pizza       Pizza                     @relation(fields: [pizzaId], references: [id])
+  pizzaId     Int
+  half        Int
+  ingredients OrderItemHalfIngredient[]
+}
+
+model OrderItemHalfIngredient {
+  orderItemHalf   OrderItemHalf @relation(fields: [orderItemHalfId], references: [id], onDelete: Cascade)
+  orderItemHalfId Int
+  ingredient      Ingredient    @relation(fields: [ingredientId], references: [id])
+  ingredientId    Int
+  action          String
+
+  @@id([orderItemHalfId, ingredientId])
+}
+
+model OrderProduct {
+  id        Int     @id @default(autoincrement())
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int     @default(1)
+}
