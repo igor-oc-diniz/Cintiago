@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { handlePrismaError } from '../common/prisma-errors.helper';
 
 @Injectable()
 export class ClientsService {
@@ -12,11 +13,19 @@ export class ClientsService {
   }
 
   async createClient(client: CreateClientDto) {
-    return await this.prisma.client.create({ data: client });
+    try {
+      return await this.prisma.client.create({ data: client });
+    } catch (error) {
+      handlePrismaError(error, 'Cliente');
+    }
   }
 
   async findOne(id: number) {
-    return await this.prisma.client.findUnique({ where: { id } });
+    try {
+      return await this.prisma.client.findUniqueOrThrow({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Cliente ${id}`);
+    }
   }
 
   async updateClient(id: number, client: UpdateClientDto) {
@@ -30,22 +39,30 @@ export class ClientsService {
       city,
       zipCode,
     } = client;
-    return await this.prisma.client.update({
-      where: { id },
-      data: {
-        name,
-        phone,
-        street,
-        number,
-        complement,
-        neighborhood,
-        city,
-        zipCode,
-      },
-    });
+    try {
+      return await this.prisma.client.update({
+        where: { id },
+        data: {
+          name,
+          phone,
+          street,
+          number,
+          complement,
+          neighborhood,
+          city,
+          zipCode,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Cliente ${id}`);
+    }
   }
 
   async deleteClient(id: number) {
-    return await this.prisma.client.delete({ where: { id } });
+    try {
+      return await this.prisma.client.delete({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Cliente ${id}`);
+    }
   }
 }

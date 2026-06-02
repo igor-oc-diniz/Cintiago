@@ -606,6 +606,53 @@
       "name": "Orders",
       "item": [
         {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/orders",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["orders"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/orders/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["orders", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"status\": \"confirmed\" }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/orders/1/status",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["orders", "1", "status"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Create Order",
           "request": {
             "method": "POST",

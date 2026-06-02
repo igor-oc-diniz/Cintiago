@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
+import { handlePrismaError } from '../common/prisma-errors.helper';
 
 @Injectable()
 export class PizzasService {
@@ -14,23 +15,46 @@ export class PizzasService {
   }
 
   async createPizza(pizza: CreatePizzaDto) {
-    return await this.prisma.pizza.create({ data: pizza });
+    try {
+      return await this.prisma.pizza.create({ data: pizza });
+    } catch (error) {
+      handlePrismaError(error, 'Pizza');
+    }
   }
 
   async findOne(id: number) {
-    return await this.prisma.pizza.findUnique({ where: { id } });
+    try {
+      return await this.prisma.pizza.findUniqueOrThrow({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Pizza ${id}`);
+    }
   }
 
   async updatePizza(id: number, pizza: UpdatePizzaDto) {
     const { name, description, priceSmall, priceMedium, priceLarge, active } =
       pizza;
-    return await this.prisma.pizza.update({
-      where: { id },
-      data: { name, description, priceSmall, priceMedium, priceLarge, active },
-    });
+    try {
+      return await this.prisma.pizza.update({
+        where: { id },
+        data: {
+          name,
+          description,
+          priceSmall,
+          priceMedium,
+          priceLarge,
+          active,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Pizza ${id}`);
+    }
   }
 
   async deletePizza(id: number) {
-    return await this.prisma.pizza.delete({ where: { id } });
+    try {
+      return await this.prisma.pizza.delete({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Pizza ${id}`);
+    }
   }
 }

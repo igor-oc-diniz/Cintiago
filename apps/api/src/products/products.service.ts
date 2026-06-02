@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { handlePrismaError } from '../common/prisma-errors.helper';
 
 @Injectable()
 export class ProductsService {
@@ -14,22 +15,38 @@ export class ProductsService {
   }
 
   async createProduct(product: CreateProductDto) {
-    return await this.prisma.product.create({ data: product });
+    try {
+      return await this.prisma.product.create({ data: product });
+    } catch (error) {
+      handlePrismaError(error, 'Product');
+    }
   }
 
   async findOne(id: number) {
-    return await this.prisma.product.findUnique({ where: { id } });
+    try {
+      return await this.prisma.product.findUniqueOrThrow({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Product ${id}`);
+    }
   }
 
   async updateProduct(id: number, product: UpdateProductDto) {
     const { name, description, price, active } = product;
-    return await this.prisma.product.update({
-      where: { id },
-      data: { name, description, price, active },
-    });
+    try {
+      return await this.prisma.product.update({
+        where: { id },
+        data: { name, description, price, active },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Product ${id}`);
+    }
   }
 
   async deleteProduct(id: number) {
-    return await this.prisma.product.delete({ where: { id } });
+    try {
+      return await this.prisma.product.delete({ where: { id } });
+    } catch (error) {
+      handlePrismaError(error, `Product ${id}`);
+    }
   }
 }
