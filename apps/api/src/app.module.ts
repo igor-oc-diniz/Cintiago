@@ -5,6 +5,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PizzasModule } from './pizzas/pizzas.module';
 import { ConfigModule } from '@nestjs/config';
 import { IngredientsModule } from './ingredients/ingredients.module';
+import { ProductsModule } from './products/products.module';
+import { PaymentsModule } from './payments/payments.module';
+import { CrustsModule } from './crusts/crusts.module';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { IngredientsModule } from './ingredients/ingredients.module';
     PrismaModule,
     PizzasModule,
     IngredientsModule,
+    ProductsModule,
+    PaymentsModule,
+    CrustsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
