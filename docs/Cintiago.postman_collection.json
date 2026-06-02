@@ -1,0 +1,630 @@
+{
+  "info": {
+    "_postman_id": "51f0fa01-9845-4a9b-be4b-f7a885cdd2d9",
+    "name": "Cintiago",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55433120",
+    "_collection_link": "https://go.postman.co/collection/55433120-51f0fa01-9845-4a9b-be4b-f7a885cdd2d9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Pizza",
+      "item": [
+        {
+          "name": "Get All Pizzas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/pizzas",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Pizza",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Quatro Queijos\", \"description\": \"Mussarela, cheddar, parmesão e provolone\", \"priceSmall\": 35.90, \"priceMedium\": 45.90, \"priceLarge\": 55.90 }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/pizzas",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Pizza",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/pizzas/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Pizza",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Margherita\", \"description\": \"Molho de tomate, mussarela e manjericão\", \"priceSmall\": 25.90, \"priceMedium\": 35.90, \"priceLarge\": 45.90, \"active\": true }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/pizzas/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Pizza",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/pizzas/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ingredients",
+      "item": [
+        {
+          "name": "Get All Ingredients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredients",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Ingredient",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Manjericão\", \"category\": \"tempero\" }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/ingredients",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Ingredient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ingredient",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Calabresa\", \"category\": \"carne\" }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/ingredients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ingredient",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ingredient Prices",
+      "item": [
+        {
+          "name": "Get All Ingredient Prices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upsert Ingredient Price",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"ingredientId\": 1, \"priceSmall\": 2.00, \"priceMedium\": 3.00, \"priceLarge\": 4.00 }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Ingredient Price",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ingredient Price",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"priceSmall\": 2.50, \"priceMedium\": 3.50, \"priceLarge\": 4.50 }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ingredient Price",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/products",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Brownie\", \"description\": \"Brownie de chocolate\", \"price\": 10.00 }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/products",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/products/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Brownie\", \"description\": \"Brownie de chocolate com nozes\", \"price\": 12.00, \"active\": true }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/products/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/products/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Get All Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/payments",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Dinheiro\" }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/payments",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/payments/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Payment",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Pix\", \"active\": true }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/payments/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Payment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/payments/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Crusts",
+      "item": [
+        {
+          "name": "Get All Crusts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/crusts",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Crust",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Cheddar\", \"description\": \"Borda recheada com cheddar cremoso\", \"priceSmall\": 5.00, \"priceMedium\": 7.00, \"priceLarge\": 9.00 }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/crusts",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Crust",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/crusts/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Crust",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Catupiry\", \"description\": \"Borda recheada com catupiry\", \"priceSmall\": 6.00, \"priceMedium\": 8.00, \"priceLarge\": 10.00, \"active\": true }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/crusts/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Crust",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/crusts/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Get All Clients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/clients",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maria Souza\",\n  \"phone\": \"37988887777\",\n  \"street\": \"Av. Brasil\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Jardim América\",\n  \"city\": \"Lavras\",\n  \"zipCode\": \"37200100\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/clients",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/clients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Client",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"37999998888\",\n  \"street\": \"Rua das Flores\",\n  \"number\": \"100\",\n  \"complement\": \"Apto 2\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"Lavras\",\n  \"zipCode\": \"37200000\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/clients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Client",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/clients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": 1,\n  \"paymentId\": 1,\n  \"items\": [\n    {\n      \"size\": \"large\",\n      \"crustId\": 1,\n      \"quantity\": 1,\n      \"halves\": [\n        {\n          \"pizzaId\": 1,\n          \"half\": 1,\n          \"ingredients\": [\n            { \"ingredientId\": 2, \"action\": \"remove\" }\n          ]\n        },\n        {\n          \"pizzaId\": 2,\n          \"half\": 2\n        }\n      ]\n    }\n  ],\n  \"products\": [\n    { \"productId\": 1, \"quantity\": 2 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/orders",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["orders"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
