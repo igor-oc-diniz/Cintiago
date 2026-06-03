@@ -6,13 +6,84 @@
     "_exporter_id": "55433120",
     "_collection_link": "https://go.postman.co/collection/55433120-51f0fa01-9845-4a9b-be4b-f7a885cdd2d9?source=collection_link"
   },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
   "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Google OAuth - Iniciar Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/auth/google",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["auth", "google"]
+            },
+            "description": "Inicia o fluxo OAuth com o Google. Abrir no browser — redireciona para a tela de login do Google."
+          },
+          "response": []
+        },
+        {
+          "name": "Dev Token (OPERATOR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "pm.collectionVariables.set('token', res.token);",
+                  "console.log('Token salvo:', res.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/auth/dev-token",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["auth", "dev-token"]
+            },
+            "description": "Gera um JWT de OPERATOR para testes locais e salva automaticamente em {{token}}. Não usar em produção."
+          },
+          "response": []
+        },
+        {
+          "name": "Google OAuth - Callback",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/auth/google/callback",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["auth", "google", "callback"]
+            },
+            "description": "Callback chamado automaticamente pelo Google após login. Não usar manualmente."
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Pizza",
       "item": [
         {
           "name": "Get All Pizzas",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
@@ -20,6 +91,21 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["pizzas"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Pizza",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/pizzas/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
             }
           },
           "response": []
@@ -44,15 +130,20 @@
           "response": []
         },
         {
-          "name": "Find Pizza",
+          "name": "Create Many Pizzas",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"name\": \"Quatro Queijos\", \"description\": \"Mussarela, cheddar, parmesão e provolone\", \"priceSmall\": 35.90, \"priceMedium\": 45.90, \"priceLarge\": 55.90 },\n  { \"name\": \"Margherita\", \"description\": \"Molho de tomate, mussarela e manjericão\", \"priceSmall\": 25.90, \"priceMedium\": 35.90, \"priceLarge\": 45.90 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
             "url": {
-              "raw": "http://{{local}}/pizzas/1",
+              "raw": "http://{{local}}/pizzas/bulk",
               "protocol": "http",
               "host": ["{{local}}"],
-              "path": ["pizzas", "1"]
+              "path": ["pizzas", "bulk"]
             }
           },
           "response": []
@@ -98,6 +189,7 @@
         {
           "name": "Get All Ingredients",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
@@ -105,6 +197,21 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["ingredients"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Ingredient",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredients/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
             }
           },
           "response": []
@@ -129,15 +236,20 @@
           "response": []
         },
         {
-          "name": "Find Ingredient",
+          "name": "Create Many Ingredients",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"name\": \"Manjericão\", \"category\": \"tempero\" },\n  { \"name\": \"Calabresa\", \"category\": \"carne\" },\n  { \"name\": \"Mussarela\", \"category\": \"queijo\" }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
             "url": {
-              "raw": "http://{{local}}/ingredients/1",
+              "raw": "http://{{local}}/ingredients/bulk",
               "protocol": "http",
               "host": ["{{local}}"],
-              "path": ["ingredients", "1"]
+              "path": ["ingredients", "bulk"]
             }
           },
           "response": []
@@ -195,6 +307,20 @@
           "response": []
         },
         {
+          "name": "Find Ingredient Price",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/ingredient-prices/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Upsert Ingredient Price",
           "request": {
             "method": "POST",
@@ -214,15 +340,20 @@
           "response": []
         },
         {
-          "name": "Find Ingredient Price",
+          "name": "Upsert Many Ingredient Prices",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"ingredientId\": 1, \"priceSmall\": 2.00, \"priceMedium\": 3.00, \"priceLarge\": 4.00 },\n  { \"ingredientId\": 2, \"priceSmall\": 1.50, \"priceMedium\": 2.50, \"priceLarge\": 3.50 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
             "url": {
-              "raw": "http://{{local}}/ingredient-prices/1",
+              "raw": "http://{{local}}/ingredient-prices/bulk",
               "protocol": "http",
               "host": ["{{local}}"],
-              "path": ["ingredient-prices", "1"]
+              "path": ["ingredient-prices", "bulk"]
             }
           },
           "response": []
@@ -268,6 +399,7 @@
         {
           "name": "Get All Products",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
@@ -275,6 +407,21 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Product",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/products/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
             }
           },
           "response": []
@@ -299,15 +446,20 @@
           "response": []
         },
         {
-          "name": "Find Product",
+          "name": "Create Many Products",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"name\": \"Brownie\", \"description\": \"Brownie de chocolate\", \"price\": 10.00 },\n  { \"name\": \"Refrigerante\", \"description\": \"Lata 350ml\", \"price\": 6.00 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
             "url": {
-              "raw": "http://{{local}}/products/1",
+              "raw": "http://{{local}}/products/bulk",
               "protocol": "http",
               "host": ["{{local}}"],
-              "path": ["products", "1"]
+              "path": ["products", "bulk"]
             }
           },
           "response": []
@@ -353,6 +505,7 @@
         {
           "name": "Get All Payments",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
@@ -360,6 +513,21 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["payments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Payment",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/payments/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
             }
           },
           "response": []
@@ -379,20 +547,6 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["payments"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Find Payment",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://{{local}}/payments/1",
-              "protocol": "http",
-              "host": ["{{local}}"],
-              "path": ["payments", "1"]
             }
           },
           "response": []
@@ -438,6 +592,7 @@
         {
           "name": "Get All Crusts",
           "request": {
+            "auth": { "type": "noauth" },
             "method": "GET",
             "header": [],
             "url": {
@@ -445,6 +600,21 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["crusts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Crust",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/crusts/1",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
             }
           },
           "response": []
@@ -469,15 +639,20 @@
           "response": []
         },
         {
-          "name": "Find Crust",
+          "name": "Create Many Crusts",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"name\": \"Cheddar\", \"description\": \"Borda recheada com cheddar cremoso\", \"priceSmall\": 5.00, \"priceMedium\": 7.00, \"priceLarge\": 9.00 },\n  { \"name\": \"Catupiry\", \"description\": \"Borda recheada com catupiry\", \"priceSmall\": 6.00, \"priceMedium\": 8.00, \"priceLarge\": 10.00 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
             "url": {
-              "raw": "http://{{local}}/crusts/1",
+              "raw": "http://{{local}}/crusts/bulk",
               "protocol": "http",
               "host": ["{{local}}"],
-              "path": ["crusts", "1"]
+              "path": ["crusts", "bulk"]
             }
           },
           "response": []
@@ -535,25 +710,6 @@
           "response": []
         },
         {
-          "name": "Create Client",
-          "request": {
-            "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Maria Souza\",\n  \"phone\": \"37988887777\",\n  \"street\": \"Av. Brasil\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Jardim América\",\n  \"city\": \"Lavras\",\n  \"zipCode\": \"37200100\"\n}",
-              "options": { "raw": { "language": "json" } }
-            },
-            "url": {
-              "raw": "http://{{local}}/clients",
-              "protocol": "http",
-              "host": ["{{local}}"],
-              "path": ["clients"]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Find Client",
           "request": {
             "method": "GET",
@@ -563,6 +719,25 @@
               "protocol": "http",
               "host": ["{{local}}"],
               "path": ["clients", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json", "type": "text" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"phone\": \"37988887777\",\n  \"street\": \"Av. Brasil\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Jardim América\",\n  \"city\": \"Lavras\",\n  \"zipCode\": \"37200100\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "http://{{local}}/clients",
+              "protocol": "http",
+              "host": ["{{local}}"],
+              "path": ["clients"]
             }
           },
           "response": []
@@ -673,5 +848,9 @@
         }
       ]
     }
+  ],
+  "variable": [
+    { "key": "local", "value": "localhost:3000" },
+    { "key": "token", "value": "" }
   ]
 }

@@ -6,10 +6,14 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('pizzas')
 export class PizzasController {
@@ -20,21 +24,34 @@ export class PizzasController {
     return this.pizzaService.findAll();
   }
 
-  @Post()
-  createPizza(@Body() createPizzaDto: CreatePizzaDto) {
-    return this.pizzaService.createPizza(createPizzaDto);
-  }
-
   @Get(':id')
   findPizza(@Param('id') id: string) {
     return this.pizzaService.findOne(+id);
   }
 
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post()
+  createPizza(@Body() createPizzaDto: CreatePizzaDto) {
+    return this.pizzaService.createPizza(createPizzaDto);
+  }
+
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('bulk')
+  createManyPizzas(@Body() createPizzaDtos: CreatePizzaDto[]) {
+    return this.pizzaService.createManyPizzas(createPizzaDtos);
+  }
+
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   updatePizza(@Param('id') id: string, @Body() pizzaDto: UpdatePizzaDto) {
     return this.pizzaService.updatePizza(+id, pizzaDto);
   }
 
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deletePizza(@Param('id') id: string) {
     return this.pizzaService.deletePizza(+id);

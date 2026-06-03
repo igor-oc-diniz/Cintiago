@@ -6,10 +6,14 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('payments')
 export class PaymentsController {
@@ -20,21 +24,27 @@ export class PaymentsController {
     return this.paymentsService.findAll();
   }
 
-  @Post()
-  createPayment(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.createPayment(createPaymentDto);
-  }
-
   @Get(':id')
   findPayment(@Param('id') id: string) {
     return this.paymentsService.findOne(+id);
   }
 
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post()
+  createPayment(@Body() createPaymentDto: CreatePaymentDto) {
+    return this.paymentsService.createPayment(createPaymentDto);
+  }
+
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   updatePayment(@Param('id') id: string, @Body() paymentDto: UpdatePaymentDto) {
     return this.paymentsService.updatePayment(+id, paymentDto);
   }
 
+  @Roles('OPERATOR')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deletePayment(@Param('id') id: string) {
     return this.paymentsService.deletePayment(+id);
