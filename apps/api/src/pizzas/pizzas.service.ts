@@ -22,6 +22,14 @@ export class PizzasService {
     }
   }
 
+  async createManyPizzas(pizzas: CreatePizzaDto[]) {
+    try {
+      return await this.prisma.pizza.createMany({ data: pizzas });
+    } catch (error) {
+      handlePrismaError(error, 'Pizza');
+    }
+  }
+
   async findOne(id: number) {
     try {
       return await this.prisma.pizza.findUniqueOrThrow({ where: { id } });

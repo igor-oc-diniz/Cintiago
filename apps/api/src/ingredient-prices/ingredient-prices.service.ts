@@ -12,6 +12,14 @@ export class IngredientPricesService {
     return await this.prisma.ingredientPrice.findMany();
   }
 
+  async upsertManyPrices(dtos: CreateIngredientPriceDto[]) {
+    try {
+      return await Promise.all(dtos.map((dto) => this.upsertPrice(dto)));
+    } catch (error) {
+      handlePrismaError(error, 'IngredientPrice');
+    }
+  }
+
   async upsertPrice(dto: CreateIngredientPriceDto) {
     const { ingredientId, priceSmall, priceMedium, priceLarge } = dto;
     try {

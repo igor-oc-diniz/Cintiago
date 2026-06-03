@@ -22,6 +22,14 @@ export class CrustsService {
     }
   }
 
+  async createManyCrusts(crusts: CreateCrustDto[]) {
+    try {
+      return await this.prisma.crust.createMany({ data: crusts });
+    } catch (error) {
+      handlePrismaError(error, 'Crust');
+    }
+  }
+
   async findOne(id: number) {
     try {
       return await this.prisma.crust.findUniqueOrThrow({ where: { id } });
