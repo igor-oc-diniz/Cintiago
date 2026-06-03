@@ -4,12 +4,27 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  OPERATOR
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  googleId  String   @unique
+  email     String   @unique
+  name      String
+  role      Role     @default(CLIENT)
+  client    Client?
+  createdAt DateTime @default(now())
 }
 
 model Client {
   id           Int      @id @default(autoincrement())
-  name         String
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @unique
   phone        String
   street       String
   number       String

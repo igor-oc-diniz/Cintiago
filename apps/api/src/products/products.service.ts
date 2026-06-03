@@ -22,6 +22,14 @@ export class ProductsService {
     }
   }
 
+  async createManyProducts(products: CreateProductDto[]) {
+    try {
+      return await this.prisma.product.createMany({ data: products });
+    } catch (error) {
+      handlePrismaError(error, 'Product');
+    }
+  }
+
   async findOne(id: number) {
     try {
       return await this.prisma.product.findUniqueOrThrow({ where: { id } });

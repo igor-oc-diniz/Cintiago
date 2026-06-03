@@ -11,6 +11,7 @@ import { CrustsModule } from './crusts/crusts.module';
 import { ClientsModule } from './clients/clients.module';
 import { OrdersModule } from './orders/orders.module';
 import { IngredientPricesModule } from './ingredient-prices/ingredient-prices.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { IngredientPricesModule } from './ingredient-prices/ingredient-prices.mo
     ClientsModule,
     OrdersModule,
     IngredientPricesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

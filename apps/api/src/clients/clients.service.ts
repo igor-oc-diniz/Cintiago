@@ -29,21 +29,12 @@ export class ClientsService {
   }
 
   async updateClient(id: number, client: UpdateClientDto) {
-    const {
-      name,
-      phone,
-      street,
-      number,
-      complement,
-      neighborhood,
-      city,
-      zipCode,
-    } = client;
+    const { phone, street, number, complement, neighborhood, city, zipCode } =
+      client;
     try {
       return await this.prisma.client.update({
         where: { id },
         data: {
-          name,
           phone,
           street,
           number,

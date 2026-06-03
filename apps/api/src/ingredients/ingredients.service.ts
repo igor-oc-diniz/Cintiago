@@ -20,6 +20,14 @@ export class IngredientsService {
     }
   }
 
+  async createManyIngredients(ingredients: CreateIngredientDto[]) {
+    try {
+      return await this.prisma.ingredient.createMany({ data: ingredients });
+    } catch (error) {
+      handlePrismaError(error, 'Ingredient');
+    }
+  }
+
   async findIngredient(id: number) {
     try {
       return await this.prisma.ingredient.findUniqueOrThrow({ where: { id } });
