@@ -1165,6 +1165,34 @@
           "response": []
         },
         {
+          "name": "Update My Client",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"37999990000\",\n  \"street\": \"Rua Nova\",\n  \"number\": \"10\",\n  \"complement\": \"Casa\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"Lavras\",\n  \"zipCode\": \"37200000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{local}}/clients/me",
+              "protocol": "http",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "clients",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Update Client",
           "request": {
             "method": "PATCH",

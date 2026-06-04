@@ -45,6 +45,16 @@ export class ClientsController {
     return this.clientsService.createClient(createClientDto);
   }
 
+  @Roles('CLIENT')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Patch('/me')
+  updateMyClient(
+    @Req() req: { user: JwtUser },
+    @Body() updateClientDto: UpdateClientDto,
+  ) {
+    return this.clientsService.updateMyClient(req.user.userId, updateClientDto);
+  }
+
   @Roles('OPERATOR')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
