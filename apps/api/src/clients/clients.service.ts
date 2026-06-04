@@ -58,6 +58,27 @@ export class ClientsService {
     }
   }
 
+  async updateMyClient(userId: number, client: UpdateClientDto) {
+    const { phone, street, number, complement, neighborhood, city, zipCode } =
+      client;
+    try {
+      return await this.prisma.client.update({
+        where: { userId },
+        data: {
+          phone,
+          street,
+          number,
+          complement,
+          neighborhood,
+          city,
+          zipCode,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, 'Cliente');
+    }
+  }
+
   async deleteClient(id: number) {
     try {
       return await this.prisma.client.delete({ where: { id } });
