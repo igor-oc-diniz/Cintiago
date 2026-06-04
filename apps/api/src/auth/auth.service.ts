@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserWithClient } from './types/user-with-client.type';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from './enums/role.enum';
 
 interface FindOrCreateUserDto {
   googleId: string;
@@ -38,7 +39,7 @@ export class AuthService {
     return this.jwt.sign({
       sub: 0,
       email: 'dev@dev.com',
-      role: 'OPERATOR',
+      role: Role.OPERATOR,
       hasAddress: true,
     });
   }

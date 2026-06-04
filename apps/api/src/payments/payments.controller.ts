@@ -14,6 +14,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 
 @Controller('payments')
 export class PaymentsController {
@@ -29,21 +30,21 @@ export class PaymentsController {
     return this.paymentsService.findOne(+id);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   createPayment(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentsService.createPayment(createPaymentDto);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   updatePayment(@Param('id') id: string, @Body() paymentDto: UpdatePaymentDto) {
     return this.paymentsService.updatePayment(+id, paymentDto);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deletePayment(@Param('id') id: string) {

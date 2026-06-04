@@ -14,6 +14,7 @@ import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 
 @Controller('ingredients')
 export class IngredientsController {
@@ -24,14 +25,14 @@ export class IngredientsController {
     return this.ingredientService.findAll();
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   createIngredient(@Body() createIngredient: CreateIngredientDto) {
     return this.ingredientService.createIngredient(createIngredient);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('bulk')
   createManyIngredients(@Body() createIngredients: CreateIngredientDto[]) {
@@ -43,7 +44,7 @@ export class IngredientsController {
     return this.ingredientService.findIngredient(+id);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   updateIngredient(
@@ -53,7 +54,7 @@ export class IngredientsController {
     return this.ingredientService.updateIngredient(+id, ingredient);
   }
 
-  @Roles('OPERATOR')
+  @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deleteIngredient(@Param('id') id: string) {
