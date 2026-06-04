@@ -5,9 +5,6 @@ import { CreateOrderProductDto } from './create-order-product.dto';
 
 export class CreateOrderDto {
   @IsInt()
-  clientId: number;
-
-  @IsInt()
   paymentId: number;
 
   @IsArray()
