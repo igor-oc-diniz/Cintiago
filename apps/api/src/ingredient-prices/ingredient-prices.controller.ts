@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { IngredientPricesService } from './ingredient-prices.service';
 import { CreateIngredientPriceDto } from './dto/create-ingredient-price.dto';
+import { CreateIngredientWithPriceDto } from './dto/create-ingredient-with-price.dto';
 import { UpdateIngredientPriceDto } from './dto/update-ingredient-price.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -18,7 +19,9 @@ import { Role } from '../auth/enums/role.enum';
 
 @Controller('ingredient-prices')
 export class IngredientPricesController {
-  constructor(private readonly ingredientPricesService: IngredientPricesService) {}
+  constructor(
+    private readonly ingredientPricesService: IngredientPricesService,
+  ) {}
 
   @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -39,6 +42,20 @@ export class IngredientPricesController {
   @Post('bulk')
   upsertManyPrices(@Body() dtos: CreateIngredientPriceDto[]) {
     return this.ingredientPricesService.upsertManyPrices(dtos);
+  }
+
+  @Roles(Role.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('with-ingredient')
+  createWithIngredient(@Body() dto: CreateIngredientWithPriceDto) {
+    return this.ingredientPricesService.createIngredientWithPrice(dto);
+  }
+
+  @Roles(Role.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('with-ingredient/bulk')
+  createManyWithIngredient(@Body() dtos: CreateIngredientWithPriceDto[]) {
+    return this.ingredientPricesService.createManyIngredientsWithPrice(dtos);
   }
 
   @Roles(Role.OPERATOR)
