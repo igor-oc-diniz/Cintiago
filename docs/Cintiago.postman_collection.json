@@ -89,49 +89,18 @@
                 "callback"
               ]
             },
-            "description": "Callback chamado automaticamente pelo Google após login. Não usar manualmente."
+            "description": "Callback chamado automaticamente pelo Google após login. Não usar manualmente. Seta cookies httpOnly: accessToken (15min) e refreshToken (30d)."
           },
           "response": []
         },
         {
           "name": "Refresh Token",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.accessToken) {",
-                  "  pm.collectionVariables.set('token', res.accessToken);",
-                  "  pm.collectionVariables.set('refreshToken', res.refreshToken);",
-                  "  console.log('Tokens atualizados.');",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
           "request": {
             "auth": {
               "type": "noauth"
             },
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{ \"refreshToken\": \"{{refreshToken}}\" }",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
+            "header": [],
             "url": {
               "raw": "http://{{local}}/auth/refresh",
               "protocol": "http",
@@ -143,7 +112,7 @@
                 "refresh"
               ]
             },
-            "description": "Troca o refresh token por um novo par de tokens. Salva automaticamente os novos tokens nas variáveis {{token}} e {{refreshToken}}."
+            "description": "Renova os tokens lendo o cookie httpOnly refreshToken. Retorna novos cookies accessToken (15min) e refreshToken (30d). Não requer body."
           },
           "response": []
         },
@@ -163,7 +132,7 @@
                 "logout"
               ]
             },
-            "description": "Invalida o refresh token no banco. Requer access token no header (Bearer {{token}})."
+            "description": "Invalida o refresh token no banco e limpa os cookies accessToken e refreshToken. Requer access token no header (Bearer {{token}})."
           },
           "response": []
         }
@@ -1468,10 +1437,6 @@
     },
     {
       "key": "token",
-      "value": ""
-    },
-    {
-      "key": "refreshToken",
       "value": ""
     }
   ]
