@@ -58,6 +58,14 @@ export class ClientsService {
     }
   }
 
+  async findMyClient(userId: number) {
+    try {
+      return await this.prisma.client.findUniqueOrThrow({ where: { userId } });
+    } catch (error) {
+      handlePrismaError(error, 'Cliente');
+    }
+  }
+
   async updateMyClient(userId: number, client: UpdateClientDto) {
     const { phone, street, number, complement, neighborhood, city, zipCode } =
       client;
