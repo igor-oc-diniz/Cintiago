@@ -85,7 +85,7 @@ export class OrdersService {
     }
   }
 
-  async createOrder(order: CreateOrderDto) {
+  async createOrder(userId: number, order: CreateOrderDto) {
     if (!order.items || order.items.length === 0) {
       throw new BadRequestException('O pedido deve ter ao menos um item');
     }
@@ -118,7 +118,7 @@ export class OrdersService {
 
     const [client, pizzas, crusts, ingredientPrices, products] =
       await Promise.all([
-        this.prisma.client.findUnique({ where: { id: order.clientId } }),
+        this.prisma.client.findUnique({ where: { userId: userId } }),
         this.prisma.pizza.findMany({ where: { id: { in: pizzaIds } } }),
         this.prisma.crust.findMany({ where: { id: { in: crustIds } } }),
         this.prisma.ingredientPrice.findMany({
@@ -127,8 +127,7 @@ export class OrdersService {
         this.prisma.product.findMany({ where: { id: { in: productIds } } }),
       ]);
 
-    if (!client)
-      throw new NotFoundException(`Cliente ${order.clientId} nao encontrado`);
+    if (!client) throw new NotFoundException(`Cliente nao encontrado`);
 
     const pizzaMap = new Map(pizzas.map((p) => [p.id, p]));
     const crustsMap = new Map(crusts.map((c) => [c.id, c]));
@@ -200,7 +199,7 @@ export class OrdersService {
       const createdOrder = await this.prisma.$transaction(async (tx) => {
         const newOrder = await tx.order.create({
           data: {
-            clientId: order.clientId,
+            clientId: client.id,
             paymentId: order.paymentId,
             total,
           },
@@ -253,6 +252,20 @@ export class OrdersService {
       return createdOrder;
     } catch (error) {
       handlePrismaError(error, 'Pedido');
+    }
+  }
+
+  async findMyOrders(userId: number) {
+    try {
+      const currentClient = await this.prisma.client.findUniqueOrThrow({
+        where: { userId },
+      });
+
+      return await this.prisma.order.findMany({
+        where: { clientId: currentClient.id },
+      });
+    } catch (error) {
+      handlePrismaError(error, 'Cliente');
     }
   }
 }

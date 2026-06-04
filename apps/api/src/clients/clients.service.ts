@@ -20,6 +20,15 @@ export class ClientsService {
     }
   }
 
+  async createMyClient(userId: number, createClientDto: CreateClientDto) {
+    createClientDto.userId = userId;
+    try {
+      return await this.prisma.client.create({ data: createClientDto });
+    } catch (error) {
+      handlePrismaError(error, 'Cliente');
+    }
+  }
+
   async findOne(id: number) {
     try {
       return await this.prisma.client.findUniqueOrThrow({ where: { id } });
