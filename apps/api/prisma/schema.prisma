@@ -16,9 +16,10 @@ model User {
   googleId  String   @unique
   email     String   @unique
   name      String
-  role      Role     @default(CLIENT)
-  client    Client?
-  createdAt DateTime @default(now())
+  role         Role     @default(CLIENT)
+  refreshToken String?
+  client       Client?
+  createdAt    DateTime @default(now())
 }
 
 model Client {

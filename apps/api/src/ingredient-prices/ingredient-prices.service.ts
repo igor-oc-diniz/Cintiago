@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateIngredientPriceDto } from './dto/create-ingredient-price.dto';
+import { CreateIngredientWithPriceDto } from './dto/create-ingredient-with-price.dto';
 import { UpdateIngredientPriceDto } from './dto/update-ingredient-price.dto';
 import { handlePrismaError } from '../common/prisma-errors.helper';
 
@@ -30,6 +31,42 @@ export class IngredientPricesService {
       });
     } catch (error) {
       handlePrismaError(error, 'IngredientPrice');
+    }
+  }
+
+  async createIngredientWithPrice(ingredient: CreateIngredientWithPriceDto) {
+    const { name, category, priceSmall, priceMedium, priceLarge } = ingredient;
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const ingredient = await tx.ingredient.create({
+          data: { name, category },
+        });
+        const price = await tx.ingredientPrice.create({
+          data: {
+            ingredientId: ingredient.id,
+            priceSmall,
+            priceMedium,
+            priceLarge,
+          },
+        });
+        return { ...ingredient, price };
+      });
+    } catch (error) {
+      handlePrismaError(error, 'Ingredient');
+    }
+  }
+
+  async createManyIngredientsWithPrice(
+    ingredients: CreateIngredientWithPriceDto[],
+  ) {
+    try {
+      return await Promise.all(
+        ingredients.map((ingredient) =>
+          this.createIngredientWithPrice(ingredient),
+        ),
+      );
+    } catch (error) {
+      handlePrismaError(error, 'Ingredient');
     }
   }
 

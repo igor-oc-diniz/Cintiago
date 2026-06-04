@@ -1,11 +1,25 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserWithClient } from './types/user-with-client.type';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtUser } from './types/jwt-payload.type';
 import * as express from 'express';
 
-interface RequestWithUser extends express.Request {
+interface RequestWithGoogleUser extends express.Request {
   user: UserWithClient;
+}
+
+interface RequestWithJwtUser extends express.Request {
+  user: JwtUser;
 }
 
 @Controller('auth')
@@ -14,9 +28,7 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  googleLogin() {
-    // O Passport redireciona pro Google automaticamente
-  }
+  googleLogin() {}
 
   @Get('dev-token')
   devToken() {
@@ -26,15 +38,33 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  googleCallback(@Req() req: RequestWithUser, @Res() res: express.Response) {
+  async googleCallback(
+    @Req() req: RequestWithGoogleUser,
+    @Res() res: express.Response,
+  ) {
     const user = req.user;
-    const token = this.authService.generateToken(user);
+    const tokens = this.authService.generateTokens(user);
+    await this.authService.saveRefreshToken(user.id, tokens.refreshToken);
 
     const hasAddress = user.client !== null;
-    const frontendUrl = hasAddress
-      ? `http://localhost:4200?token=${token}`
-      : `http://localhost:4200/cadastro?token=${token}`;
+    const baseUrl = hasAddress
+      ? 'http://localhost:4200'
+      : 'http://localhost:4200/cadastro';
 
-    res.redirect(frontendUrl);
+    const redirectUrl = `${baseUrl}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
+    res.redirect(redirectUrl);
+  }
+
+  @Post('refresh')
+  async refresh(@Body('refreshToken') refreshToken: string) {
+    const tokens = await this.authService.refreshAccessToken(refreshToken);
+    return tokens;
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: RequestWithJwtUser) {
+    await this.authService.logout(req.user.userId);
+    return { message: 'Logout realizado com sucesso' };
   }
 }
