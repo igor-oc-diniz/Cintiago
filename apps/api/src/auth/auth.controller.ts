@@ -51,20 +51,46 @@ export class AuthController {
       ? 'http://localhost:4200'
       : 'http://localhost:4200/cadastro';
 
-    const redirectUrl = `${baseUrl}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
-    res.redirect(redirectUrl);
+    res.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+    res.redirect(baseUrl); // sem query params
   }
 
   @Post('refresh')
-  async refresh(@Body('refreshToken') refreshToken: string) {
+  async refresh(@Req() req: express.Request, @Res() res: express.Response) {
+    const refreshToken: string = req.cookies['refreshToken'];
     const tokens = await this.authService.refreshAccessToken(refreshToken);
-    return tokens;
+    res.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+    res.json({ message: 'Token renovado com sucesso' });
   }
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
-  async logout(@Req() req: RequestWithJwtUser) {
+  async logout(@Req() req: RequestWithJwtUser, @Res() res: express.Response) {
     await this.authService.logout(req.user.userId);
-    return { message: 'Logout realizado com sucesso' };
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.json({ message: 'Logout realizado com sucesso' });
   }
 }
