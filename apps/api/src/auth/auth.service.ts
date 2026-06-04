@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserWithClient } from './types/user-with-client.type';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from './enums/role.enum';
+import * as bcrypt from 'bcrypt';
 
 interface FindOrCreateUserDto {
   googleId: string;
   email: string;
   name: string;
+}
+
+export interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
 }
 
 @Injectable()
@@ -44,12 +50,63 @@ export class AuthService {
     });
   }
 
-  generateToken(user: UserWithClient) {
-    return this.jwt.sign({
+  generateTokens(user: UserWithClient): TokenPair {
+    const payload = {
       sub: user.id,
       email: user.email,
       role: user.role,
       hasAddress: user.client !== null,
+    };
+
+    const accessToken = this.jwt.sign(payload, { expiresIn: '15m' });
+    const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '30d' });
+
+    return { accessToken, refreshToken };
+  }
+
+  async saveRefreshToken(userId: number, refreshToken: string): Promise<void> {
+    const hash = await bcrypt.hash(refreshToken, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: hash },
+    });
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<TokenPair> {
+    let userId: number;
+    try {
+      const payload = this.jwt.verify<{ sub: number }>(refreshToken);
+      userId = payload.sub;
+    } catch {
+      throw new UnauthorizedException('Refresh token inválido');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { client: true },
+    });
+
+    if (!user || !user.refreshToken) {
+      throw new UnauthorizedException('Refresh token inválido');
+    }
+
+    const tokenMatches = await bcrypt.compare(
+      refreshToken,
+      user.refreshToken as string,
+    );
+    if (!tokenMatches) {
+      throw new UnauthorizedException('Refresh token inválido');
+    }
+
+    const tokens = this.generateTokens(user);
+    await this.saveRefreshToken(userId, tokens.refreshToken);
+    return tokens;
+  }
+
+  async logout(userId: number): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshToken: null },
     });
   }
 }

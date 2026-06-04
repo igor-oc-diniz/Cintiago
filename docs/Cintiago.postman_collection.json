@@ -92,6 +92,80 @@
             "description": "Callback chamado automaticamente pelo Google após login. Não usar manualmente."
           },
           "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.accessToken) {",
+                  "  pm.collectionVariables.set('token', res.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', res.refreshToken);",
+                  "  console.log('Tokens atualizados.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"refreshToken\": \"{{refreshToken}}\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{local}}/auth/refresh",
+              "protocol": "http",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Troca o refresh token por um novo par de tokens. Salva automaticamente os novos tokens nas variáveis {{token}} e {{refreshToken}}."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://{{local}}/auth/logout",
+              "protocol": "http",
+              "host": [
+                "{{local}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Invalida o refresh token no banco. Requer access token no header (Bearer {{token}})."
+          },
+          "response": []
         }
       ]
     },
@@ -1394,6 +1468,10 @@
     },
     {
       "key": "token",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
       "value": ""
     }
   ]
