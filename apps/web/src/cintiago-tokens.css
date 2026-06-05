@@ -1,0 +1,324 @@
+/*
+ * cintiago-tokens.css
+ * Cintiago — Design System Tokens
+ * Gerado a partir do DESIGN.md (Artisanal Italian Heritage)
+ *
+ * Como usar:
+ *   1. Importe no topo do seu index.css: @import './cintiago-tokens.css';
+ *   2. Anexe ao setup do Claude Design para que ele aplique os tokens
+ *      automaticamente em todos os artefatos gerados.
+ *
+ * Google Fonts — adicione ao <head> do index.html:
+ *   <link rel="preconnect" href="https://fonts.googleapis.com">
+ *   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+ */
+
+:root {
+
+  /* ── Fonts ──────────────────────────────────────────────────────────────── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Be Vietnam Pro', system-ui, sans-serif;
+
+  /* ── Color: Surfaces (Parchment family) ─────────────────────────────────── */
+  --color-background:              #fdf9ef;
+  --color-surface:                 #f1eee4;
+  --color-surface-dim:             #dddad0;
+  --color-surface-bright:          #fdf9ef;
+  --color-surface-lowest:          #ffffff;
+  --color-surface-low:             #f7f3e9;
+  --color-surface-high:            #ece8de;
+  --color-surface-highest:         #e6e2d8;
+  --color-surface-variant:         #e6e2d8;
+  --color-inverse-surface:         #31312a;
+
+  /* ── Color: On-Surface (text sobre superfícies) ──────────────────────────── */
+  --color-on-background:           #1c1c16;
+  --color-on-surface:              #1c1c16;
+  --color-on-surface-variant:      #58413e;
+  --color-on-inverse-surface:      #f4f0e7;
+  --color-charcoal:                #2d2926; /* texto principal de alta legibilidade */
+
+  /* ── Color: Outline ──────────────────────────────────────────────────────── */
+  --color-outline:                 #8b716c;
+  --color-outline-variant:         #dfbfba;
+  --color-bamboo-accent:           rgba(135, 95, 17, 0.30); /* borda fina artesanal */
+
+  /* ── Color: Primary — Terracotta Red ────────────────────────────────────── */
+  --color-primary:                 #922719;
+  --color-primary-tint:            #a83727;
+  --color-primary-container:       #b33f2e;
+  --color-on-primary:              #ffffff;
+  --color-on-primary-container:    #ffded8;
+  --color-inverse-primary:         #ffb4a7;
+  --color-primary-fixed:           #ffdad4;
+  --color-primary-fixed-dim:       #ffb4a7;
+  --color-on-primary-fixed:        #400200;
+  --color-on-primary-fixed-variant:#872012;
+
+  /* ── Color: Secondary — Basil Green ─────────────────────────────────────── */
+  --color-secondary:               #4d6545;
+  --color-secondary-container:     #cfebc2;
+  --color-on-secondary:            #ffffff;
+  --color-on-secondary-container:  #536b4a;
+  --color-secondary-fixed:         #cfebc2;
+  --color-secondary-fixed-dim:     #b3cea7;
+  --color-on-secondary-fixed:      #0b2007;
+  --color-on-secondary-fixed-variant: #364d2f;
+
+  /* ── Color: Tertiary — Bamboo Gold ──────────────────────────────────────── */
+  --color-tertiary:                #6a4800;
+  --color-tertiary-container:      #875f11;
+  --color-on-tertiary:             #ffffff;
+  --color-on-tertiary-container:   #ffe1b7;
+  --color-tertiary-fixed:          #ffdead;
+  --color-tertiary-fixed-dim:      #f2be69;
+  --color-on-tertiary-fixed:       #281900;
+  --color-on-tertiary-fixed-variant: #604100;
+
+  /* ── Color: Error ────────────────────────────────────────────────────────── */
+  --color-error:                   #ba1a1a;
+  --color-error-container:         #ffdad6;
+  --color-on-error:                #ffffff;
+  --color-on-error-container:      #93000a;
+
+  /* ── Typography: Scale ───────────────────────────────────────────────────── */
+  /* Headlines — Playfair Display */
+  --text-headline-lg-size:         40px;
+  --text-headline-lg-line:         48px;
+  --text-headline-lg-weight:       700;
+
+  --text-headline-lg-mobile-size:  32px;
+  --text-headline-lg-mobile-line:  38px;
+  --text-headline-lg-mobile-weight:700;
+
+  --text-headline-md-size:         28px;
+  --text-headline-md-line:         34px;
+  --text-headline-md-weight:       600;
+
+  /* Body — Be Vietnam Pro */
+  --text-body-lg-size:             18px;
+  --text-body-lg-line:             28px;
+  --text-body-lg-weight:           400;
+
+  --text-body-md-size:             16px;
+  --text-body-md-line:             24px;
+  --text-body-md-weight:           400;
+
+  --text-label-sm-size:            12px;
+  --text-label-sm-line:            16px;
+  --text-label-sm-weight:          600;
+  --text-label-sm-spacing:         0.05em;
+
+  /* ── Border Radius ───────────────────────────────────────────────────────── */
+  --radius-sm:      0.25rem;   /*  4px */
+  --radius-base:    0.5rem;    /*  8px — botões, inputs */
+  --radius-md:      0.75rem;   /* 12px */
+  --radius-lg:      1rem;      /* 16px */
+  --radius-xl:      1.5rem;    /* 24px — cards, modais, "pizza peel" */
+  --radius-full:    9999px;    /* pills */
+
+  /* ── Spacing ─────────────────────────────────────────────────────────────── */
+  --space-unit:            8px;
+  --space-gutter:          24px;
+  --space-margin-mobile:   16px;
+  --space-margin-desktop:  48px;
+  --container-max-width:   1200px;
+
+  /* ── Shadow (warm, diffused — 5% opacity) ───────────────────────────────── */
+  --shadow-sm: 0 2px 8px rgba(74, 50, 31, 0.05);
+  --shadow:    0 4px 20px rgba(74, 50, 31, 0.05);
+  --shadow-lg: 0 8px 32px rgba(74, 50, 31, 0.08);
+
+  /* ── Textures ────────────────────────────────────────────────────────────── */
+  /* Ripas de bambu — use como background em dividers e footer */
+  --texture-bamboo-slats: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 11px,
+    rgba(106, 72, 0, 0.06) 11px,
+    rgba(106, 72, 0, 0.06) 12px
+  );
+}
+
+/* ── Utility classes de tipografia ─────────────────────────────────────────── */
+
+.text-headline-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-lg-size);
+  line-height: var(--text-headline-lg-line);
+  font-weight: var(--text-headline-lg-weight);
+}
+@media (max-width: 768px) {
+  .text-headline-lg {
+    font-size: var(--text-headline-lg-mobile-size);
+    line-height: var(--text-headline-lg-mobile-line);
+  }
+}
+
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-md-size);
+  line-height: var(--text-headline-md-line);
+  font-weight: var(--text-headline-md-weight);
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  font-weight: var(--text-body-lg-weight);
+}
+
+.text-body-md {
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  font-weight: var(--text-body-md-weight);
+}
+
+.text-label-sm {
+  font-family: var(--font-body);
+  font-size: var(--text-label-sm-size);
+  line-height: var(--text-label-sm-line);
+  font-weight: var(--text-label-sm-weight);
+  letter-spacing: var(--text-label-sm-spacing);
+  text-transform: uppercase;
+}
+
+/* ── Componentes base ───────────────────────────────────────────────────────── */
+
+/* Botão primário — Terracotta Red */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-tint);
+  box-shadow: var(--shadow);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Botão secundário — Basil Green outline */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 23px;
+  background-color: transparent;
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--color-secondary-fixed);
+}
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Card de produto */
+.card-product {
+  background-color: var(--color-surface-lowest);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-bamboo-accent);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-product__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.card-product__body {
+  padding: 16px 20px 20px;
+  background-color: var(--color-surface-low);
+}
+
+/* Input field */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--color-surface-high);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-base);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  color: var(--color-on-surface);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  outline: none;
+}
+.input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-lowest);
+}
+
+/* Chip / badge */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-sm-weight);
+  letter-spacing: var(--text-label-sm-spacing);
+}
+.chip--vegetarian {
+  background-color: rgba(77, 101, 69, 0.12);
+  color: var(--color-secondary);
+}
+.chip--new {
+  background-color: rgba(146, 39, 25, 0.10);
+  color: var(--color-primary);
+}
+.chip--gold {
+  background-color: rgba(106, 72, 0, 0.10);
+  color: var(--color-tertiary-container);
+}
+
+/* Divider de bambu */
+.bamboo-divider {
+  height: 24px;
+  background-image: var(--texture-bamboo-slats);
+  background-color: var(--color-surface-high);
+  border-top: 1px solid var(--color-bamboo-accent);
+  border-bottom: 1px solid var(--color-bamboo-accent);
+}
+
+/* Container padrão */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-margin-mobile);
+}
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--space-margin-desktop);
+  }
+}
