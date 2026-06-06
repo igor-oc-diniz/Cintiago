@@ -45,6 +45,9 @@ export type CartItem = CartPizzaItem | CartProductItem
 interface CartState {
   items: CartItem[]
   subtotal: number
+  deliveryType: 'delivery' | 'pickup' | 'dine_in' | null
+  paymentId: number | null
+  paymentName: string | null
 }
 
 // ─── Payload de actions ──────────────────────────────────────────────────────
@@ -89,6 +92,9 @@ function generateId(): string {
 const initialState: CartState = {
   items: [],
   subtotal: 0,
+  deliveryType: null,
+  paymentId: null,
+  paymentName: null,
 }
 
 const cartSlice = createSlice({
@@ -186,9 +192,21 @@ const cartSlice = createSlice({
       }
     },
 
+    setDelivery(state, action: PayloadAction<{ type: CartState['deliveryType'] }>) {
+      state.deliveryType = action.payload.type
+    },
+
+    setPayment(state, action: PayloadAction<{ id: number; name: string }>) {
+      state.paymentId = action.payload.id
+      state.paymentName = action.payload.name
+    },
+
     clearCart(state) {
       state.items = []
       state.subtotal = 0
+      state.deliveryType = null
+      state.paymentId = null
+      state.paymentName = null
     },
   },
 })
@@ -199,6 +217,8 @@ export const {
   updateQuantity,
   removeItem,
   updateHalfIngredients,
+  setDelivery,
+  setPayment,
   clearCart,
 } = cartSlice.actions
 
@@ -212,6 +232,8 @@ export const selectCartItems = (state: RootState) => state.cart.items
 export const selectCartSubtotal = (state: RootState) => state.cart.subtotal
 export const selectCartCount = (state: RootState) =>
   state.cart.items.reduce((sum, i) => sum + i.quantity, 0)
+export const selectDeliveryType = (state: RootState) => state.cart.deliveryType
+export const selectPayment = (state: RootState) => ({ id: state.cart.paymentId, name: state.cart.paymentName })
 
 // ─── Serialização para POST /orders ──────────────────────────────────────────
 //

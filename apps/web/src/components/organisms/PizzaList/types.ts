@@ -6,6 +6,7 @@ export interface PizzaListProps {
   isError: boolean
   onRetry: () => void
   onPizzaClick: (id: number) => void
+  variant?: 'list' | 'grid'
   columns?: 2 | 3 | 4
   className?: string
 }
