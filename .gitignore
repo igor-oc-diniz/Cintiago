@@ -5,4 +5,5 @@ node_modules/
 **/.env
 dist/
 **/dist/
-*.js.mapCLAUDE.md
+*.js.map
+CLAUDE.md

@@ -1,30 +1,30 @@
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Home, UtensilsCrossed, ClipboardList, User } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { useNavigate, useLocation } from "react-router-dom";
+import { Home, UtensilsCrossed, ClipboardList, User } from "lucide-react";
+import { cn } from "@/utils/cn";
 
 const NAV_ITEMS = [
-  { label: 'Home',    icon: Home,              path: '/'        },
-  { label: 'Menu',    icon: UtensilsCrossed,   path: '/menu'    },
-  { label: 'Pedidos', icon: ClipboardList,     path: '/orders'  },
-  { label: 'Perfil',  icon: User,              path: '/profile' },
-]
+  { label: "Home", icon: Home, path: "/" },
+  { label: "Menu", icon: UtensilsCrossed, path: "/menu" },
+  { label: "Pedidos", icon: ClipboardList, path: "/orders" },
+  { label: "Perfil", icon: User, path: "/profile" },
+];
 
 export function BottomNavBar() {
-  const navigate  = useNavigate()
-  const { pathname } = useLocation()
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
     <nav
       className={cn(
-        'flex items-center justify-around',
-        'bg-[var(--color-surface-lowest)]/90 backdrop-blur-md',
-        'border-t border-[var(--color-bamboo-accent)]',
-        'pt-2 pb-safe-area-inset-bottom',
-        'shadow-[0_-4px_12px_0_rgba(74,50,31,0.05)]',
+        "flex items-center justify-around",
+        "bg-[var(--color-surface-lowest)]/90 backdrop-blur-md",
+        "border-t border-[var(--color-bamboo-accent)]",
+        "pt-2 pb-safe-area-inset-bottom",
+        "shadow-[0_-4px_12px_0_rgba(74,50,31,0.05)]",
       )}
     >
       {NAV_ITEMS.map(({ label, icon: Icon, path }) => {
-        const isActive = pathname === path
+        const isActive = pathname === path;
 
         return (
           <button
@@ -35,27 +35,27 @@ export function BottomNavBar() {
           >
             <span
               className={cn(
-                'flex items-center justify-center rounded-xl px-4 py-1.5',
+                "flex items-center justify-center rounded-xl px-4 py-1.5",
                 isActive
-                  ? 'bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)]'
-                  : 'text-[var(--color-on-surface-variant)]',
+                  ? "bg-[var(--color-primary-container)] text-[var(--color-on-primary-container)]"
+                  : "text-[var(--color-on-surface-variant)]",
               )}
             >
               <Icon size={18} />
             </span>
             <span
               className={cn(
-                'text-[10px] font-body font-semibold tracking-wide',
+                "text-[10px] font-body font-semibold tracking-wide",
                 isActive
-                  ? 'text-[var(--color-primary)]'
-                  : 'text-[var(--color-on-surface-variant)]',
+                  ? "text-[var(--color-primary)]"
+                  : "text-[var(--color-on-surface-variant)]",
               )}
             >
               {label}
             </span>
           </button>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }

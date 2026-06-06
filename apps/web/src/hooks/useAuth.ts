@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   selectUser,
   selectToken,
@@ -6,15 +6,15 @@ import {
   selectHasCompletedProfile,
   selectAuthLoading,
   logout,
-} from '@/store/slices/authSlice'
+} from "@/store/slices/authSlice";
 
 export function useAuth() {
-  const dispatch = useAppDispatch()
-  const user = useAppSelector(selectUser)
-  const token = useAppSelector(selectToken)
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const hasCompletedProfile = useAppSelector(selectHasCompletedProfile)
-  const isLoading = useAppSelector(selectAuthLoading)
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const token = useAppSelector(selectToken);
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const hasCompletedProfile = useAppSelector(selectHasCompletedProfile);
+  const isLoading = useAppSelector(selectAuthLoading);
 
   return {
     user,
@@ -23,5 +23,5 @@ export function useAuth() {
     hasCompletedProfile,
     isLoading,
     logout: () => dispatch(logout()),
-  }
+  };
 }

@@ -1,36 +1,36 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { useCart } from '@/hooks/useCart'
-import { getPizzas } from '@/api/pizzas'
-import { getProducts } from '@/api/products'
-import { QUERY_KEYS } from '@/lib/queryClient'
-import type { Product } from '@/types/domain'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useCart } from "@/hooks/useCart";
+import { getPizzas } from "@/api/pizzas";
+import { getProducts } from "@/api/products";
+import { QUERY_KEYS } from "@/lib/queryClient";
+import type { Product } from "@/types/domain";
 
-export type HomeTab = 'pizzas' | 'extras'
+export type HomeTab = "pizzas" | "extras";
 
 export function useHomeData() {
-  const navigate          = useNavigate()
-  const { addProduct }    = useCart()
-  const [activeTab, setActiveTab] = useState<HomeTab>('pizzas')
+  const navigate = useNavigate();
+  const { addProduct } = useCart();
+  const [activeTab, setActiveTab] = useState<HomeTab>("pizzas");
 
   const pizzasQuery = useQuery({
     queryKey: QUERY_KEYS.pizzas,
-    queryFn:  getPizzas,
-  })
+    queryFn: getPizzas,
+  });
 
   const productsQuery = useQuery({
     queryKey: QUERY_KEYS.products,
-    queryFn:  getProducts,
-  })
+    queryFn: getProducts,
+  });
 
   const handleAddProduct = (product: Product) => {
     addProduct({
-      productId:   product.id,
+      productId: product.id,
       productName: product.name,
-      unitPrice:   product.price,
-    })
-  }
+      unitPrice: product.price,
+    });
+  };
 
   return {
     // Tab
@@ -38,21 +38,21 @@ export function useHomeData() {
     setActiveTab,
 
     // Pizzas
-    pizzas:        pizzasQuery.data ?? [],
+    pizzas: pizzasQuery.data ?? [],
     pizzasLoading: pizzasQuery.isLoading,
-    pizzasError:   pizzasQuery.isError,
+    pizzasError: pizzasQuery.isError,
     refetchPizzas: pizzasQuery.refetch,
 
     // Extras
-    products:        productsQuery.data ?? [],
+    products: productsQuery.data ?? [],
     productsLoading: productsQuery.isLoading,
-    productsError:   productsQuery.isError,
+    productsError: productsQuery.isError,
     refetchProducts: productsQuery.refetch,
 
     // Handlers
-    onPizzaClick:  (id: number) => navigate(`/pizza/${id}`),
-    onAddProduct:  handleAddProduct,
-  }
+    onPizzaClick: (id: number) => navigate(`/pizza/${id}`),
+    onAddProduct: handleAddProduct,
+  };
 }
 
-export type HomePageProps = ReturnType<typeof useHomeData>
+export type HomePageProps = ReturnType<typeof useHomeData>;

@@ -1,5 +1,5 @@
-import { X } from 'lucide-react'
-import type { AuthLayoutProps } from './types'
+import { X } from "lucide-react";
+import type { AuthLayoutProps } from "./types";
 
 export function AuthLayout({ children, onClose }: AuthLayoutProps) {
   return (
@@ -23,5 +23,5 @@ export function AuthLayout({ children, onClose }: AuthLayoutProps) {
         <main className="w-full max-w-sm">{children}</main>
       </div>
     </div>
-  )
+  );
 }

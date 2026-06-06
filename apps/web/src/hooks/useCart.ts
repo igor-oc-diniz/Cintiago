@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   selectCartItems,
   selectCartSubtotal,
@@ -12,16 +12,19 @@ import {
   setDelivery,
   setPayment,
   clearCart,
-} from '@/store/slices/cartSlice'
-import type { AddPizzaPayload, AddProductPayload } from '@/store/slices/cartSlice'
+} from "@/store/slices/cartSlice";
+import type {
+  AddPizzaPayload,
+  AddProductPayload,
+} from "@/store/slices/cartSlice";
 
 export function useCart() {
-  const dispatch = useAppDispatch()
-  const items = useAppSelector(selectCartItems)
-  const subtotal = useAppSelector(selectCartSubtotal)
-  const count = useAppSelector(selectCartCount)
-  const deliveryType = useAppSelector(selectDeliveryType)
-  const payment = useAppSelector(selectPayment)
+  const dispatch = useAppDispatch();
+  const items = useAppSelector(selectCartItems);
+  const subtotal = useAppSelector(selectCartSubtotal);
+  const count = useAppSelector(selectCartCount);
+  const deliveryType = useAppSelector(selectDeliveryType);
+  const payment = useAppSelector(selectPayment);
 
   return {
     items,
@@ -35,10 +38,10 @@ export function useCart() {
     updateQuantity: (id: string, quantity: number) =>
       dispatch(updateQuantity({ id, quantity })),
     removeItem: (id: string) => dispatch(removeItem(id)),
-    setDelivery: (type: 'delivery' | 'pickup' | 'dine_in') =>
+    setDelivery: (type: "delivery" | "pickup" | "dine_in") =>
       dispatch(setDelivery({ type })),
     setPayment: (id: number, name: string) =>
       dispatch(setPayment({ id, name })),
     clearCart: () => dispatch(clearCart()),
-  }
+  };
 }
