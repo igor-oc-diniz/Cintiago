@@ -13,6 +13,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.enableCors({
+    origin: 'http://localhost:5174', // URL do seu app React
+    credentials: true, // necessário por causa dos cookies httpOnly
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

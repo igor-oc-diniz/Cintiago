@@ -7,5 +7,6 @@ export interface PizzaCardProps {
   isVegetarian: boolean
   isNew: boolean
   onClick: () => void
+  variant?: 'horizontal' | 'vertical'
   className?: string
 }

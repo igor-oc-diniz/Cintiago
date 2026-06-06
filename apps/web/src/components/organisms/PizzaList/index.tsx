@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { AlertCircle, Search } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { Spinner } from '@/components/atoms/Spinner'
 import { PizzaCard } from '@/components/molecules/PizzaCard'
-import { CategoryFilter } from '@/components/molecules/CategoryFilter'
 import { EmptyState } from '@/components/molecules/EmptyState'
 import type { PizzaListProps } from './types'
+
+const CATEGORIES = ['Todas', 'Vegetariana', 'Tradicional']
 
 const GRID_COLS: Record<number, string> = {
   2: 'grid-cols-2',
@@ -19,7 +20,8 @@ export function PizzaList({
   isError,
   onRetry,
   onPizzaClick,
-  columns = 2,
+  variant = 'list',
+  columns = 3,
   className,
 }: PizzaListProps) {
   const [activeCategory, setActiveCategory] = useState('Todas')
@@ -44,34 +46,66 @@ export function PizzaList({
     )
   }
 
-  const categories = [...new Set(pizzas.flatMap((p) =>
-    p.ingredients.map((i) => (i.isVegetarian ? 'Vegetariana' : 'Tradicional')),
-  ))]
-
   const filtered =
     activeCategory === 'Todas'
       ? pizzas
-      : pizzas.filter((p) => {
-          if (activeCategory === 'Vegetariana') return p.isVegetarian
-          if (activeCategory === 'Tradicional') return !p.isVegetarian
-          return true
-        })
+      : activeCategory === 'Vegetariana'
+        ? pizzas.filter((p) => p.isVegetarian)
+        : pizzas.filter((p) => !p.isVegetarian)
 
   return (
-    <div className={cn('flex flex-col gap-4', className)}>
-      <CategoryFilter
-        categories={categories}
-        active={activeCategory}
-        onChange={setActiveCategory}
-      />
+    <div className={cn('flex flex-col gap-3', className)}>
+      {/* Filter chips */}
+      <div className="cg-noscroll" style={{ display: 'flex', gap: variant === 'grid' ? 9 : 8, flexWrap: variant === 'grid' ? 'wrap' : undefined, overflowX: variant === 'list' ? 'auto' : undefined, padding: '2px 0' }}>
+        {CATEGORIES.map((cat) => {
+          const active = activeCategory === cat
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              style={{
+                flexShrink: 0, height: variant === 'grid' ? 38 : 36, padding: variant === 'grid' ? '0 18px' : '0 16px',
+                borderRadius: 'var(--radius-full)', cursor: 'pointer',
+                border: active ? '1px solid transparent' : '1px solid var(--border-strong)',
+                background: active ? 'var(--primary)' : 'var(--surface)',
+                color: active ? 'var(--on-primary)' : 'var(--fg2)',
+                fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 13.5,
+                boxShadow: active ? 'var(--shadow-xs)' : 'none',
+                transition: 'all var(--dur-fast) var(--ease-soft)',
+              }}
+            >
+              {cat}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Pizza cards */}
       {filtered.length === 0 ? (
-        <EmptyState
-          icon={<Search size={48} />}
-          title="Nenhuma pizza encontrada"
-          description="Tente selecionar outra categoria."
-        />
+        <EmptyState title="Nenhuma pizza encontrada" description="Tente selecionar outra categoria." />
+      ) : variant === 'grid' ? (
+        <div className={cn('grid gap-[22px]', GRID_COLS[columns])}>
+          {filtered.map((pizza) => {
+            const startingPrice = Math.min(...pizza.prices.map((p) => p.price))
+            return (
+              <PizzaCard
+                key={pizza.id}
+                id={pizza.id}
+                name={pizza.name}
+                description={pizza.description}
+                imageUrl={pizza.imageUrl}
+                startingPrice={startingPrice}
+                isVegetarian={pizza.isVegetarian}
+                isNew={pizza.isNew}
+                variant="vertical"
+                onClick={() => onPizzaClick(pizza.id)}
+              />
+            )
+          })}
+        </div>
       ) : (
-        <div className={cn('grid gap-3', GRID_COLS[columns])}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {filtered.map((pizza) => {
             const startingPrice = Math.min(...pizza.prices.map((p) => p.price))
             return (

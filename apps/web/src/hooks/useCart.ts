@@ -3,10 +3,14 @@ import {
   selectCartItems,
   selectCartSubtotal,
   selectCartCount,
+  selectDeliveryType,
+  selectPayment,
   addPizza,
   addProduct,
   updateQuantity,
   removeItem,
+  setDelivery,
+  setPayment,
   clearCart,
 } from '@/store/slices/cartSlice'
 import type { AddPizzaPayload, AddProductPayload } from '@/store/slices/cartSlice'
@@ -16,16 +20,25 @@ export function useCart() {
   const items = useAppSelector(selectCartItems)
   const subtotal = useAppSelector(selectCartSubtotal)
   const count = useAppSelector(selectCartCount)
+  const deliveryType = useAppSelector(selectDeliveryType)
+  const payment = useAppSelector(selectPayment)
 
   return {
     items,
     subtotal,
     count,
+    deliveryType,
+    paymentId: payment.id,
+    paymentName: payment.name,
     addPizza: (payload: AddPizzaPayload) => dispatch(addPizza(payload)),
     addProduct: (payload: AddProductPayload) => dispatch(addProduct(payload)),
     updateQuantity: (id: string, quantity: number) =>
       dispatch(updateQuantity({ id, quantity })),
     removeItem: (id: string) => dispatch(removeItem(id)),
+    setDelivery: (type: 'delivery' | 'pickup' | 'dine_in') =>
+      dispatch(setDelivery({ type })),
+    setPayment: (id: number, name: string) =>
+      dispatch(setPayment({ id, name })),
     clearCart: () => dispatch(clearCart()),
   }
 }
