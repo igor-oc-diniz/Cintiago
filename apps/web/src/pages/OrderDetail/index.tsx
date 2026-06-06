@@ -1,1 +1,3 @@
-export default function OrderDetail() { return <div>OrderDetail</div> }
+export default function OrderDetail() {
+  return <div>OrderDetail</div>;
+}

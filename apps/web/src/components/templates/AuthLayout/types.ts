@@ -1,6 +1,6 @@
-import type React from 'react'
+import type React from "react";
 
 export interface AuthLayoutProps {
-  children: React.ReactNode
-  onClose?: () => void
+  children: React.ReactNode;
+  onClose?: () => void;
 }

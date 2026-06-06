@@ -1,16 +1,16 @@
-import { AlertCircle } from 'lucide-react'
-import { cn } from '@/utils/cn'
-import { Spinner } from '@/components/atoms/Spinner'
-import { ProductCard } from '@/components/molecules/ProductCard'
-import { EmptyState } from '@/components/molecules/EmptyState'
-import type { ProductListProps } from './types'
+import { AlertCircle } from "lucide-react";
+import { cn } from "@/utils/cn";
+import { Spinner } from "@/components/atoms/Spinner";
+import { ProductCard } from "@/components/molecules/ProductCard";
+import { EmptyState } from "@/components/molecules/EmptyState";
+import type { ProductListProps } from "./types";
 
 const GRID_COLS: Record<number, string> = {
-  1: 'grid-cols-1',
-  2: 'grid-cols-2',
-  3: 'grid-cols-3',
-  4: 'grid-cols-4',
-}
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-4",
+};
 
 export function ProductList({
   products,
@@ -23,10 +23,10 @@ export function ProductList({
 }: ProductListProps) {
   if (isLoading) {
     return (
-      <div className={cn('flex justify-center py-16', className)}>
+      <div className={cn("flex justify-center py-16", className)}>
         <Spinner size="lg" />
       </div>
-    )
+    );
   }
 
   if (isError) {
@@ -35,10 +35,10 @@ export function ProductList({
         icon={<AlertCircle size={48} />}
         title="Algo deu errado"
         description="Não foi possível carregar os produtos."
-        action={{ label: 'Tentar novamente', onClick: onRetry }}
+        action={{ label: "Tentar novamente", onClick: onRetry }}
         className={className}
       />
-    )
+    );
   }
 
   if (products.length === 0) {
@@ -48,11 +48,11 @@ export function ProductList({
         description="Nenhum produto extra disponível no momento."
         className={className}
       />
-    )
+    );
   }
 
   return (
-    <div className={cn('grid gap-3', GRID_COLS[columns], className)}>
+    <div className={cn("grid gap-3", GRID_COLS[columns], className)}>
       {products.map((product) => (
         <ProductCard
           key={product.id}
@@ -65,5 +65,5 @@ export function ProductList({
         />
       ))}
     </div>
-  )
+  );
 }

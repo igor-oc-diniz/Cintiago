@@ -1,7 +1,7 @@
-import { cn } from '@/utils/cn'
-import { Button } from '@/components/atoms/Button'
-import { formatPrice } from '@/utils/format'
-import type { ProductCardProps } from './types'
+import { cn } from "@/utils/cn";
+import { Button } from "@/components/atoms/Button";
+import { formatPrice } from "@/utils/format";
+import type { ProductCardProps } from "./types";
 
 export function ProductCard({
   name,
@@ -14,7 +14,7 @@ export function ProductCard({
   return (
     <div
       className={cn(
-        'flex gap-3 bg-[var(--color-surface-lowest)] rounded-lg border border-[var(--color-bamboo-accent)] p-3',
+        "flex gap-3 bg-[var(--color-surface-lowest)] rounded-lg border border-[var(--color-bamboo-accent)] p-3",
         className,
       )}
     >
@@ -48,5 +48,5 @@ export function ProductCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

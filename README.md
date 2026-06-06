@@ -24,17 +24,17 @@ cintiago/
 
 ## Módulos da API
 
-| Módulo              | Endpoints      | Acesso                              |
-|---------------------|----------------|-------------------------------------|
-| `pizzas`            | CRUD completo  | GET público / mutações: OPERATOR    |
-| `ingredients`       | CRUD completo  | GET público / mutações: OPERATOR    |
-| `products`          | CRUD completo  | GET público / mutações: OPERATOR    |
-| `crusts`            | CRUD completo  | GET público / mutações: OPERATOR    |
-| `payments`          | CRUD completo  | GET público / mutações: OPERATOR    |
-| `clients`           | CRUD completo  | OPERATOR                            |
-| `ingredient-prices` | CRUD completo  | OPERATOR                            |
+| Módulo              | Endpoints        | Acesso                             |
+| ------------------- | ---------------- | ---------------------------------- |
+| `pizzas`            | CRUD completo    | GET público / mutações: OPERATOR   |
+| `ingredients`       | CRUD completo    | GET público / mutações: OPERATOR   |
+| `products`          | CRUD completo    | GET público / mutações: OPERATOR   |
+| `crusts`            | CRUD completo    | GET público / mutações: OPERATOR   |
+| `payments`          | CRUD completo    | GET público / mutações: OPERATOR   |
+| `clients`           | CRUD completo    | OPERATOR                           |
+| `ingredient-prices` | CRUD completo    | OPERATOR                           |
 | `orders`            | GET, PATCH, POST | GET/PATCH: OPERATOR / POST: CLIENT |
-| `auth`              | OAuth, JWT     | Público                             |
+| `auth`              | OAuth, JWT       | Público                            |
 
 ## Autenticação
 

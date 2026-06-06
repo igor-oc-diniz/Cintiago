@@ -1,90 +1,90 @@
 // store/slices/cartSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // ─── Tipos do domínio ────────────────────────────────────────────────────────
 
-export type Size = 'small' | 'medium' | 'large'
+export type Size = "small" | "medium" | "large";
 
 export interface IngredientOverride {
-  ingredientId: number
-  ingredientName: string // só para exibição — não vai para a API
-  action: 'add' | 'remove'
+  ingredientId: number;
+  ingredientName: string; // só para exibição — não vai para a API
+  action: "add" | "remove";
 }
 
 export interface PizzaHalf {
-  pizzaId: number
-  pizzaName: string   // só para exibição
-  half: 1 | 2
-  ingredients: IngredientOverride[]
+  pizzaId: number;
+  pizzaName: string; // só para exibição
+  half: 1 | 2;
+  ingredients: IngredientOverride[];
 }
 
 /** Um item de pizza no carrinho (pode ter 1 ou 2 metades) */
 export interface CartPizzaItem {
-  id: string            // uuid local — não existe na API, é para gerenciar o carrinho
-  type: 'pizza'
-  size: Size
-  crustId: number | null
-  crustName: string | null
-  quantity: number
-  halves: PizzaHalf[]   // sempre 1 ou 2 elementos
-  unitPrice: number     // calculado no frontend para exibição
+  id: string; // uuid local — não existe na API, é para gerenciar o carrinho
+  type: "pizza";
+  size: Size;
+  crustId: number | null;
+  crustName: string | null;
+  quantity: number;
+  halves: PizzaHalf[]; // sempre 1 ou 2 elementos
+  unitPrice: number; // calculado no frontend para exibição
 }
 
 /** Um produto avulso no carrinho (bebida, sobremesa, etc.) */
 export interface CartProductItem {
-  id: string            // uuid local
-  type: 'product'
-  productId: number
-  productName: string
-  quantity: number
-  unitPrice: number
+  id: string; // uuid local
+  type: "product";
+  productId: number;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
 }
 
-export type CartItem = CartPizzaItem | CartProductItem
+export type CartItem = CartPizzaItem | CartProductItem;
 
 interface CartState {
-  items: CartItem[]
-  subtotal: number
-  deliveryType: 'delivery' | 'pickup' | 'dine_in' | null
-  paymentId: number | null
-  paymentName: string | null
+  items: CartItem[];
+  subtotal: number;
+  deliveryType: "delivery" | "pickup" | "dine_in" | null;
+  paymentId: number | null;
+  paymentName: string | null;
 }
 
 // ─── Payload de actions ──────────────────────────────────────────────────────
 
 export interface AddPizzaPayload {
-  size: Size
-  crustId: number | null
-  crustName: string | null
-  halves: PizzaHalf[]
-  unitPrice: number
+  size: Size;
+  crustId: number | null;
+  crustName: string | null;
+  halves: PizzaHalf[];
+  unitPrice: number;
 }
 
 export interface AddProductPayload {
-  productId: number
-  productName: string
-  unitPrice: number
+  productId: number;
+  productName: string;
+  unitPrice: number;
 }
 
 interface UpdateQuantityPayload {
-  id: string
-  quantity: number
+  id: string;
+  quantity: number;
 }
 
 interface UpdateHalfIngredientsPayload {
-  itemId: string
-  half: 1 | 2
-  ingredients: IngredientOverride[]
+  itemId: string;
+  half: 1 | 2;
+  ingredients: IngredientOverride[];
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function calcSubtotal(items: CartItem[]): number {
-  return items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
+  return items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 }
 
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
 // ─── Slice ───────────────────────────────────────────────────────────────────
@@ -95,84 +95,84 @@ const initialState: CartState = {
   deliveryType: null,
   paymentId: null,
   paymentName: null,
-}
+};
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
     addPizza(state, action: PayloadAction<AddPizzaPayload>) {
-      const { size, crustId, crustName, halves, unitPrice } = action.payload
+      const { size, crustId, crustName, halves, unitPrice } = action.payload;
 
       // Se já existe item idêntico (mesmas metades, tamanho e borda), só incrementa
       const existing = state.items.find(
         (item): item is CartPizzaItem =>
-          item.type === 'pizza' &&
+          item.type === "pizza" &&
           item.size === size &&
           item.crustId === crustId &&
           item.halves.length === halves.length &&
           item.halves.every((h, i) => h.pizzaId === halves[i]?.pizzaId),
-      )
+      );
 
       if (existing) {
-        existing.quantity += 1
+        existing.quantity += 1;
       } else {
         state.items.push({
           id: generateId(),
-          type: 'pizza',
+          type: "pizza",
           size,
           crustId,
           crustName,
           quantity: 1,
           halves,
           unitPrice,
-        })
+        });
       }
 
-      state.subtotal = calcSubtotal(state.items)
+      state.subtotal = calcSubtotal(state.items);
     },
 
     addProduct(state, action: PayloadAction<AddProductPayload>) {
-      const { productId, productName, unitPrice } = action.payload
+      const { productId, productName, unitPrice } = action.payload;
 
       const existing = state.items.find(
         (item): item is CartProductItem =>
-          item.type === 'product' && item.productId === productId,
-      )
+          item.type === "product" && item.productId === productId,
+      );
 
       if (existing) {
-        existing.quantity += 1
+        existing.quantity += 1;
       } else {
         state.items.push({
           id: generateId(),
-          type: 'product',
+          type: "product",
           productId,
           productName,
           quantity: 1,
           unitPrice,
-        })
+        });
       }
 
-      state.subtotal = calcSubtotal(state.items)
+      state.subtotal = calcSubtotal(state.items);
     },
 
     updateQuantity(state, action: PayloadAction<UpdateQuantityPayload>) {
-      const { id, quantity } = action.payload
-      const item = state.items.find((i) => i.id === id)
-      if (!item) return
+      const { id, quantity } = action.payload;
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return;
 
       if (quantity <= 0) {
-        state.items = state.items.filter((i) => i.id !== id)
+        state.items = state.items.filter((i) => i.id !== id);
       } else {
-        item.quantity = quantity
+        item.quantity = quantity;
       }
 
-      state.subtotal = calcSubtotal(state.items)
+      state.subtotal = calcSubtotal(state.items);
     },
 
     removeItem(state, action: PayloadAction<string>) {
-      state.items = state.items.filter((i) => i.id !== action.payload)
-      state.subtotal = calcSubtotal(state.items)
+      state.items = state.items.filter((i) => i.id !== action.payload);
+      state.subtotal = calcSubtotal(state.items);
     },
 
     /** Permite editar os ingredientes de uma metade específica já no carrinho */
@@ -180,36 +180,39 @@ const cartSlice = createSlice({
       state,
       action: PayloadAction<UpdateHalfIngredientsPayload>,
     ) {
-      const { itemId, half, ingredients } = action.payload
+      const { itemId, half, ingredients } = action.payload;
       const item = state.items.find(
-        (i): i is CartPizzaItem => i.type === 'pizza' && i.id === itemId,
-      )
-      if (!item) return
+        (i): i is CartPizzaItem => i.type === "pizza" && i.id === itemId,
+      );
+      if (!item) return;
 
-      const pizzaHalf = item.halves.find((h) => h.half === half)
+      const pizzaHalf = item.halves.find((h) => h.half === half);
       if (pizzaHalf) {
-        pizzaHalf.ingredients = ingredients
+        pizzaHalf.ingredients = ingredients;
       }
     },
 
-    setDelivery(state, action: PayloadAction<{ type: CartState['deliveryType'] }>) {
-      state.deliveryType = action.payload.type
+    setDelivery(
+      state,
+      action: PayloadAction<{ type: CartState["deliveryType"] }>,
+    ) {
+      state.deliveryType = action.payload.type;
     },
 
     setPayment(state, action: PayloadAction<{ id: number; name: string }>) {
-      state.paymentId = action.payload.id
-      state.paymentName = action.payload.name
+      state.paymentId = action.payload.id;
+      state.paymentName = action.payload.name;
     },
 
     clearCart(state) {
-      state.items = []
-      state.subtotal = 0
-      state.deliveryType = null
-      state.paymentId = null
-      state.paymentName = null
+      state.items = [];
+      state.subtotal = 0;
+      state.deliveryType = null;
+      state.paymentId = null;
+      state.paymentName = null;
     },
   },
-})
+});
 
 export const {
   addPizza,
@@ -220,20 +223,23 @@ export const {
   setDelivery,
   setPayment,
   clearCart,
-} = cartSlice.actions
+} = cartSlice.actions;
 
-export default cartSlice.reducer
+export default cartSlice.reducer;
 
 // ─── Selectors ───────────────────────────────────────────────────────────────
 
-import type { RootState } from '../store'
+import type { RootState } from "../store";
 
-export const selectCartItems = (state: RootState) => state.cart.items
-export const selectCartSubtotal = (state: RootState) => state.cart.subtotal
+export const selectCartItems = (state: RootState) => state.cart.items;
+export const selectCartSubtotal = (state: RootState) => state.cart.subtotal;
 export const selectCartCount = (state: RootState) =>
-  state.cart.items.reduce((sum, i) => sum + i.quantity, 0)
-export const selectDeliveryType = (state: RootState) => state.cart.deliveryType
-export const selectPayment = (state: RootState) => ({ id: state.cart.paymentId, name: state.cart.paymentName })
+  state.cart.items.reduce((sum, i) => sum + i.quantity, 0);
+export const selectDeliveryType = (state: RootState) => state.cart.deliveryType;
+export const selectPayment = (state: RootState) => ({
+  id: state.cart.paymentId,
+  name: state.cart.paymentName,
+});
 
 // ─── Serialização para POST /orders ──────────────────────────────────────────
 //
@@ -262,10 +268,12 @@ export function serializeCartToOrderPayload(
   clientId: number,
   paymentId: number,
 ) {
-  const pizzaItems = items.filter((i): i is CartPizzaItem => i.type === 'pizza')
+  const pizzaItems = items.filter(
+    (i): i is CartPizzaItem => i.type === "pizza",
+  );
   const productItems = items.filter(
-    (i): i is CartProductItem => i.type === 'product',
-  )
+    (i): i is CartProductItem => i.type === "product",
+  );
 
   return {
     clientId,
@@ -292,5 +300,5 @@ export function serializeCartToOrderPayload(
       productId: item.productId,
       quantity: item.quantity,
     })),
-  }
+  };
 }

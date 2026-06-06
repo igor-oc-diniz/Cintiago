@@ -1,6 +1,6 @@
 export interface StarRatingProps {
-  value: number
-  onChange?: (value: number) => void
-  size?: 'sm' | 'md'
-  className?: string
+  value: number;
+  onChange?: (value: number) => void;
+  size?: "sm" | "md";
+  className?: string;
 }

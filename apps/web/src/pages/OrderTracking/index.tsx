@@ -1,1 +1,3 @@
-export default function OrderTracking() { return <div>OrderTracking</div> }
+export default function OrderTracking() {
+  return <div>OrderTracking</div>;
+}

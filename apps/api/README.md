@@ -50,13 +50,13 @@ O fluxo de autenticação usa Google OAuth 2.0 com tokens armazenados em cookies
 
 ### Endpoints
 
-| Método | Rota | Auth | Descrição |
-|--------|------|------|-----------|
-| `GET` | `/auth/google` | — | Inicia fluxo OAuth |
-| `GET` | `/auth/google/callback` | — | Callback do Google (uso interno) |
-| `GET` | `/auth/dev-token` | — | Gera token OPERATOR para testes locais |
-| `POST` | `/auth/refresh` | cookie | Renova tokens via cookie `refreshToken` |
-| `POST` | `/auth/logout` | Bearer | Invalida refresh token e limpa cookies |
+| Método | Rota                    | Auth   | Descrição                               |
+| ------ | ----------------------- | ------ | --------------------------------------- |
+| `GET`  | `/auth/google`          | —      | Inicia fluxo OAuth                      |
+| `GET`  | `/auth/google/callback` | —      | Callback do Google (uso interno)        |
+| `GET`  | `/auth/dev-token`       | —      | Gera token OPERATOR para testes locais  |
+| `POST` | `/auth/refresh`         | cookie | Renova tokens via cookie `refreshToken` |
+| `POST` | `/auth/logout`          | Bearer | Invalida refresh token e limpa cookies  |
 
 ### Roles
 
@@ -65,16 +65,16 @@ O fluxo de autenticação usa Google OAuth 2.0 com tokens armazenados em cookies
 
 ## Módulos
 
-| Módulo | GETs públicos | Mutações |
-|--------|--------------|----------|
-| `pizzas` | ✅ | `OPERATOR` |
-| `ingredients` | ✅ | `OPERATOR` |
-| `products` | ✅ | `OPERATOR` |
-| `payments` | ✅ | `OPERATOR` |
-| `crusts` | ✅ | `OPERATOR` |
-| `clients` | — | `OPERATOR` (exceto `/me` → `CLIENT`) |
-| `ingredient-prices` | — | `OPERATOR` |
-| `orders` | — | `OPERATOR` (exceto `POST /orders` e `GET /orders/my` → `CLIENT`) |
+| Módulo              | GETs públicos | Mutações                                                         |
+| ------------------- | ------------- | ---------------------------------------------------------------- |
+| `pizzas`            | ✅            | `OPERATOR`                                                       |
+| `ingredients`       | ✅            | `OPERATOR`                                                       |
+| `products`          | ✅            | `OPERATOR`                                                       |
+| `payments`          | ✅            | `OPERATOR`                                                       |
+| `crusts`            | ✅            | `OPERATOR`                                                       |
+| `clients`           | —             | `OPERATOR` (exceto `/me` → `CLIENT`)                             |
+| `ingredient-prices` | —             | `OPERATOR`                                                       |
+| `orders`            | —             | `OPERATOR` (exceto `POST /orders` e `GET /orders/my` → `CLIENT`) |
 
 ## Testes
 

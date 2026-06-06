@@ -1,7 +1,7 @@
-import { Minus, Plus, Trash2 } from 'lucide-react'
-import { cn } from '@/utils/cn'
-import { Button } from '@/components/atoms/Button'
-import type { QuantitySelectorProps } from './types'
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { cn } from "@/utils/cn";
+import { Button } from "@/components/atoms/Button";
+import type { QuantitySelectorProps } from "./types";
 
 export function QuantitySelector({
   value,
@@ -10,15 +10,15 @@ export function QuantitySelector({
   onChange,
   className,
 }: QuantitySelectorProps) {
-  const isAtMin = value <= min
+  const isAtMin = value <= min;
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn("flex items-center gap-2", className)}>
       <Button
         variant="ghost"
         size="sm"
         onClick={() => onChange(isAtMin ? 0 : value - 1)}
-        aria-label={isAtMin ? 'Remover' : 'Diminuir'}
+        aria-label={isAtMin ? "Remover" : "Diminuir"}
         className="p-1"
       >
         {isAtMin ? <Trash2 size={16} /> : <Minus size={16} />}
@@ -37,5 +37,5 @@ export function QuantitySelector({
         <Plus size={16} />
       </Button>
     </div>
-  )
+  );
 }

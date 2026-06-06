@@ -1,1 +1,3 @@
-export default function OrderConfirm() { return <div>OrderConfirm</div> }
+export default function OrderConfirm() {
+  return <div>OrderConfirm</div>;
+}

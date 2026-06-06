@@ -21,13 +21,8 @@
             "url": {
               "raw": "http://{{local}}/auth/google",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "auth",
-                "google"
-              ]
+              "host": ["{{local}}"],
+              "path": ["auth", "google"]
             },
             "description": "Inicia o fluxo OAuth com o Google. Abrir no browser — redireciona para a tela de login do Google."
           },
@@ -57,13 +52,8 @@
             "url": {
               "raw": "http://{{local}}/auth/dev-token",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "auth",
-                "dev-token"
-              ]
+              "host": ["{{local}}"],
+              "path": ["auth", "dev-token"]
             },
             "description": "Gera um JWT de OPERATOR para testes locais e salva automaticamente em {{token}}. Não usar em produção."
           },
@@ -80,14 +70,8 @@
             "url": {
               "raw": "http://{{local}}/auth/google/callback",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "auth",
-                "google",
-                "callback"
-              ]
+              "host": ["{{local}}"],
+              "path": ["auth", "google", "callback"]
             },
             "description": "Callback chamado automaticamente pelo Google após login. Não usar manualmente. Seta cookies httpOnly: accessToken (15min) e refreshToken (30d)."
           },
@@ -104,13 +88,8 @@
             "url": {
               "raw": "http://{{local}}/auth/refresh",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "auth",
-                "refresh"
-              ]
+              "host": ["{{local}}"],
+              "path": ["auth", "refresh"]
             },
             "description": "Renova os tokens lendo o cookie httpOnly refreshToken. Retorna novos cookies accessToken (15min) e refreshToken (30d). Não requer body."
           },
@@ -124,13 +103,8 @@
             "url": {
               "raw": "http://{{local}}/auth/logout",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
+              "host": ["{{local}}"],
+              "path": ["auth", "logout"]
             },
             "description": "Invalida o refresh token no banco e limpa os cookies accessToken e refreshToken. Requer access token no header (Bearer {{token}})."
           },
@@ -152,12 +126,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas"]
             }
           },
           "response": []
@@ -173,13 +143,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
             }
           },
           "response": []
@@ -207,12 +172,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas"]
             }
           },
           "response": []
@@ -240,13 +201,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas/bulk",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas",
-                "bulk"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas", "bulk"]
             }
           },
           "response": []
@@ -274,13 +230,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
             }
           },
           "response": []
@@ -293,13 +244,8 @@
             "url": {
               "raw": "http://{{local}}/pizzas/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "pizzas",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["pizzas", "1"]
             }
           },
           "response": []
@@ -320,12 +266,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients"]
             }
           },
           "response": []
@@ -341,13 +283,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
             }
           },
           "response": []
@@ -375,12 +312,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients"]
             }
           },
           "response": []
@@ -408,13 +341,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients/bulk",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients",
-                "bulk"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients", "bulk"]
             }
           },
           "response": []
@@ -442,13 +370,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
             }
           },
           "response": []
@@ -461,13 +384,8 @@
             "url": {
               "raw": "http://{{local}}/ingredients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredients", "1"]
             }
           },
           "response": []
@@ -485,12 +403,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices"]
             }
           },
           "response": []
@@ -503,13 +417,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
             }
           },
           "response": []
@@ -537,12 +446,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices"]
             }
           },
           "response": []
@@ -570,13 +475,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices/bulk",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices",
-                "bulk"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "bulk"]
             }
           },
           "response": []
@@ -604,13 +504,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices/8",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices",
-                "8"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "8"]
             }
           },
           "response": []
@@ -623,13 +518,8 @@
             "url": {
               "raw": "http://{{local}}/ingredient-prices/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "ingredient-prices",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["ingredient-prices", "1"]
             }
           },
           "response": []
@@ -650,12 +540,8 @@
             "url": {
               "raw": "http://{{local}}/products",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products"]
             }
           },
           "response": []
@@ -671,13 +557,8 @@
             "url": {
               "raw": "http://{{local}}/products/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
             }
           },
           "response": []
@@ -705,12 +586,8 @@
             "url": {
               "raw": "http://{{local}}/products",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products"]
             }
           },
           "response": []
@@ -738,13 +615,8 @@
             "url": {
               "raw": "http://{{local}}/products/bulk",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products",
-                "bulk"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products", "bulk"]
             }
           },
           "response": []
@@ -772,13 +644,8 @@
             "url": {
               "raw": "http://{{local}}/products/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
             }
           },
           "response": []
@@ -791,13 +658,8 @@
             "url": {
               "raw": "http://{{local}}/products/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "products",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["products", "1"]
             }
           },
           "response": []
@@ -818,12 +680,8 @@
             "url": {
               "raw": "http://{{local}}/payments",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "payments"
-              ]
+              "host": ["{{local}}"],
+              "path": ["payments"]
             }
           },
           "response": []
@@ -839,13 +697,8 @@
             "url": {
               "raw": "http://{{local}}/payments/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "payments",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
             }
           },
           "response": []
@@ -873,12 +726,8 @@
             "url": {
               "raw": "http://{{local}}/payments",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "payments"
-              ]
+              "host": ["{{local}}"],
+              "path": ["payments"]
             }
           },
           "response": []
@@ -906,13 +755,8 @@
             "url": {
               "raw": "http://{{local}}/payments/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "payments",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
             }
           },
           "response": []
@@ -925,13 +769,8 @@
             "url": {
               "raw": "http://{{local}}/payments/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "payments",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["payments", "1"]
             }
           },
           "response": []
@@ -952,12 +791,8 @@
             "url": {
               "raw": "http://{{local}}/crusts",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts"]
             }
           },
           "response": []
@@ -973,13 +808,8 @@
             "url": {
               "raw": "http://{{local}}/crusts/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
             }
           },
           "response": []
@@ -1007,12 +837,8 @@
             "url": {
               "raw": "http://{{local}}/crusts",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts"]
             }
           },
           "response": []
@@ -1040,13 +866,8 @@
             "url": {
               "raw": "http://{{local}}/crusts/bulk",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts",
-                "bulk"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts", "bulk"]
             }
           },
           "response": []
@@ -1074,13 +895,8 @@
             "url": {
               "raw": "http://{{local}}/crusts/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
             }
           },
           "response": []
@@ -1093,13 +909,8 @@
             "url": {
               "raw": "http://{{local}}/crusts/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "crusts",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["crusts", "1"]
             }
           },
           "response": []
@@ -1117,12 +928,8 @@
             "url": {
               "raw": "http://{{local}}/clients",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients"]
             }
           },
           "response": []
@@ -1135,13 +942,8 @@
             "url": {
               "raw": "http://{{local}}/clients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
             }
           },
           "response": []
@@ -1169,12 +971,8 @@
             "url": {
               "raw": "http://{{local}}/clients",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients"]
             }
           },
           "response": []
@@ -1196,13 +994,8 @@
             "url": {
               "raw": "http://{{local}}/clients/me",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients",
-                "me"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients", "me"]
             }
           },
           "response": []
@@ -1224,13 +1017,8 @@
             "url": {
               "raw": "http://{{local}}/clients/me",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients",
-                "me"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients", "me"]
             }
           },
           "response": []
@@ -1258,13 +1046,8 @@
             "url": {
               "raw": "http://{{local}}/clients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
             }
           },
           "response": []
@@ -1277,13 +1060,8 @@
             "url": {
               "raw": "http://{{local}}/clients/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "clients",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["clients", "1"]
             }
           },
           "response": []
@@ -1301,12 +1079,8 @@
             "url": {
               "raw": "http://{{local}}/orders",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "orders"
-              ]
+              "host": ["{{local}}"],
+              "path": ["orders"]
             }
           },
           "response": []
@@ -1319,13 +1093,8 @@
             "url": {
               "raw": "http://{{local}}/orders/1",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "orders",
-                "1"
-              ]
+              "host": ["{{local}}"],
+              "path": ["orders", "1"]
             }
           },
           "response": []
@@ -1353,14 +1122,8 @@
             "url": {
               "raw": "http://{{local}}/orders/1/status",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "orders",
-                "1",
-                "status"
-              ]
+              "host": ["{{local}}"],
+              "path": ["orders", "1", "status"]
             }
           },
           "response": []
@@ -1388,12 +1151,8 @@
             "url": {
               "raw": "http://{{local}}/orders",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "orders"
-              ]
+              "host": ["{{local}}"],
+              "path": ["orders"]
             }
           },
           "response": []
@@ -1406,13 +1165,8 @@
             "url": {
               "raw": "http://{{local}}/orders/my",
               "protocol": "http",
-              "host": [
-                "{{local}}"
-              ],
-              "path": [
-                "orders",
-                "my"
-              ]
+              "host": ["{{local}}"],
+              "path": ["orders", "my"]
             }
           },
           "response": []

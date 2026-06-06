@@ -1,6 +1,6 @@
-import { cn } from '@/utils/cn'
-import { Button } from '@/components/atoms/Button'
-import type { EmptyStateProps } from './types'
+import { cn } from "@/utils/cn";
+import { Button } from "@/components/atoms/Button";
+import type { EmptyStateProps } from "./types";
 
 export function EmptyState({
   icon,
@@ -12,7 +12,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center text-center py-16 px-6',
+        "flex flex-col items-center justify-center text-center py-16 px-6",
         className,
       )}
     >
@@ -35,5 +35,5 @@ export function EmptyState({
         </Button>
       )}
     </div>
-  )
+  );
 }
