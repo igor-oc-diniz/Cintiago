@@ -1,97 +1,14 @@
 import { AppLayout } from '@/components/templates/AppLayout'
 import { Footer }    from '@/components/organisms/Footer'
 import { formatPrice } from '@/utils/format'
+import { PizzaSection } from '@/components/molecules/PizzaSection'
+import { Stepper } from '@/components/molecules/Stepper'
+import { HalfBlock } from '@/components/organisms/HalfBlock'
 import type { PizzaDetailData } from './usePizzaDetailData'
 
 const SIZE_LABELS: Record<string, string> = { small: 'Pequena', medium: 'Média', large: 'Grande' }
 const SIZE_DESC:   Record<string, string> = { small: '4 fatias · 25cm', medium: '6 fatias · 30cm', large: '8 fatias · 35cm' }
 const SIZE_ORDER = ['small', 'medium', 'large'] as const
-
-function DSection({ title, required, note, children }: { title: string; required?: boolean; note?: string; children: React.ReactNode }) {
-  return (
-    <section style={{ paddingBottom: 26 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 14 }}>
-        <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22, color: 'var(--fg1)', margin: 0, whiteSpace: 'nowrap' }}>{title}</h3>
-        {required && <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 11, color: 'var(--primary)', letterSpacing: '0.04em', textTransform: 'uppercase', background: 'var(--primary-soft)', padding: '2px 8px', borderRadius: 999 }}>obrigatório</span>}
-        {note && <span style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--fg4)', marginLeft: 'auto' }}>{note}</span>}
-      </div>
-      {children}
-    </section>
-  )
-}
-
-function Stepper({ value, onChange, min = 1 }: { value: number; onChange: (v: number) => void; min?: number }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      <button type="button" disabled={value <= min} onClick={() => onChange(value - 1)} aria-label="Diminuir"
-        style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid var(--border-strong)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', opacity: value <= min ? 0.4 : 1 }}>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-      </button>
-      <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 17, color: 'var(--fg1)', minWidth: 20, textAlign: 'center' }}>{value}</span>
-      <button type="button" onClick={() => onChange(value + 1)} aria-label="Aumentar"
-        style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid var(--border-strong)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-      </button>
-    </div>
-  )
-}
-
-function IngredientChip({ name, removed, onToggle }: { name: string; removed: boolean; onToggle: () => void }) {
-  return (
-    <button type="button" onClick={onToggle}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 13px', borderRadius: 'var(--radius-full)', cursor: 'pointer', background: removed ? 'var(--surface-inset)' : 'var(--surface)', boxShadow: removed ? 'inset 0 0 0 1px var(--border)' : 'inset 0 0 0 1px var(--border-strong)', border: 'none', fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: 13.5, color: removed ? 'var(--fg4)' : 'var(--fg2)', textDecoration: removed ? 'line-through' : 'none' }}>
-      {removed
-        ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-        : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--fg4)" strokeWidth="2.2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>}
-      {name}
-    </button>
-  )
-}
-
-function AddonRow({ name, price, active, onToggle }: { name: string; price: number; active: boolean; onToggle: () => void }) {
-  return (
-    <button type="button" onClick={onToggle}
-      style={{ display: 'flex', alignItems: 'center', gap: 11, width: '100%', padding: '11px 13px', borderRadius: 'var(--radius-md)', cursor: 'pointer', background: active ? 'var(--success-soft)' : 'var(--surface)', boxShadow: active ? 'inset 0 0 0 1.5px var(--success)' : 'inset 0 0 0 1px var(--border)', border: 'none', textAlign: 'left' }}>
-      <span style={{ width: 22, height: 22, borderRadius: 7, flexShrink: 0, display: 'grid', placeItems: 'center', background: active ? 'var(--success)' : 'transparent', boxShadow: active ? 'none' : 'inset 0 0 0 1.5px var(--border-strong)' }}>
-        {active && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--parchment)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
-      </span>
-      <span style={{ flex: 1, fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: 14, color: 'var(--fg1)' }}>{name}</span>
-      <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 13, color: active ? 'var(--success-hover)' : 'var(--fg3)' }}>+ {formatPrice(price)}</span>
-    </button>
-  )
-}
-
-function HalfBlock({ label, pizzaName, defaultIngs, addonIngs, removedIds, addedIds, onRemove, onAdd }: {
-  label?: string; pizzaName: string
-  defaultIngs: { id: number; name: string; price: number }[]
-  addonIngs:   { id: number; name: string; price: number }[]
-  removedIds: number[]; addedIds: number[]
-  onRemove: (id: number) => void; onAdd: (id: number) => void
-}) {
-  return (
-    <div style={{ flex: 1, minWidth: 0 }}>
-      {label && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-          <span style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--accent-warm)', flexShrink: 0 }} />
-          <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 13.5, color: 'var(--fg1)' }}>{label}</span>
-          <span style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--fg3)' }}>· {pizzaName}</span>
-        </div>
-      )}
-      <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--fg4)', marginBottom: 9 }}>Vem com · toque p/ remover</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 16 }}>
-        {defaultIngs.map((ing) => <IngredientChip key={ing.id} name={ing.name} removed={removedIds.includes(ing.id)} onToggle={() => onRemove(ing.id)} />)}
-      </div>
-      {addonIngs.length > 0 && (
-        <>
-          <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--fg4)', marginBottom: 9 }}>Adicionar</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-            {addonIngs.map((ing) => <AddonRow key={ing.id} name={ing.name} price={ing.price} active={addedIds.includes(ing.id)} onToggle={() => onAdd(ing.id)} />)}
-          </div>
-        </>
-      )}
-    </div>
-  )
-}
 
 export function PizzaDetailDesktop({
   pizza, crusts, allPizzas,
@@ -100,7 +17,7 @@ export function PizzaDetailDesktop({
   qty, setQty,
   isMeia, secondPizzaId, setSecondPizzaId,
   removedIds, addedIds,
-  secondPizza, basePrice, unitPrice, total,
+  secondPizza, total,
   defaultIngs, addonIngs, secondDefaultIngs, secondAddonIngs,
   toggleRemoved, toggleAdded,
   enableMeia, disableMeia,
@@ -162,7 +79,7 @@ export function PizzaDetailDesktop({
           {/* RIGHT — configuration */}
           <div>
             {/* Tamanho */}
-            <DSection title="Tamanho" required>
+            <PizzaSection title="Tamanho" required>
               <div style={{ display: 'flex', gap: 12 }}>
                 {SIZE_ORDER.map((size) => {
                   const priceForSize = pizza.prices.find((p) => p.size === size)?.price
@@ -181,13 +98,13 @@ export function PizzaDetailDesktop({
                   )
                 })}
               </div>
-            </DSection>
+            </PizzaSection>
             <hr className="cg-divider" style={{ marginBottom: 26 }} />
 
             {/* Borda */}
             {crusts.length > 0 && (
               <>
-                <DSection title="Borda" note="opcional">
+                <PizzaSection title="Borda" note="opcional">
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                     {crusts.map((c) => {
                       const on = selectedCrustId === c.id
@@ -200,13 +117,13 @@ export function PizzaDetailDesktop({
                       )
                     })}
                   </div>
-                </DSection>
+                </PizzaSection>
                 <hr className="cg-divider" style={{ marginBottom: 26 }} />
               </>
             )}
 
             {/* Meia a meia */}
-            <DSection title="Meia a meia" note="opcional">
+            <PizzaSection title="Meia a meia" note="opcional">
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 'var(--radius-lg)', background: 'var(--surface)', boxShadow: 'inset 0 0 0 1px var(--border)' }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: 'var(--fg1)' }}>Quero dois sabores</div>
@@ -242,11 +159,11 @@ export function PizzaDetailDesktop({
                   })}
                 </div>
               )}
-            </DSection>
+            </PizzaSection>
             <hr className="cg-divider" style={{ marginBottom: 26 }} />
 
             {/* Personalizar */}
-            <DSection title="Personalizar">
+            <PizzaSection title="Personalizar">
               {meia && (
                 <div className="cg-note" style={{ marginBottom: 18 }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold-800)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
@@ -266,16 +183,16 @@ export function PizzaDetailDesktop({
                   <HalfBlock pizzaName={pizza.name} defaultIngs={defaultIngs} addonIngs={addonIngs} removedIds={removedIds[0]} addedIds={addedIds[0]} onRemove={(id) => toggleRemoved(0, id)} onAdd={(id) => toggleAdded(0, id)} />
                 </div>
               )}
-            </DSection>
+            </PizzaSection>
             <hr className="cg-divider" style={{ marginBottom: 26 }} />
 
             {/* Quantidade */}
-            <DSection title="Quantidade">
+            <PizzaSection title="Quantidade">
               <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
                 <Stepper value={qty} onChange={setQty} />
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--fg3)' }}>{qty > 1 ? `${qty} pizzas` : 'pizza'}</span>
               </div>
-            </DSection>
+            </PizzaSection>
           </div>
         </div>
       </div>

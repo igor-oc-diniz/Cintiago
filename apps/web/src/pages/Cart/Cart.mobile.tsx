@@ -1,100 +1,12 @@
 import type { CartData } from './useCartData'
-import { pizzaItemLabel, pizzaItemSub, pizzaItemCustomizations } from './useCartData'
-import type { CartPizzaItem, CartProductItem } from '@/store/slices/cartSlice'
+import { PizzaCartCard } from '@/components/molecules/PizzaCartCard'
+import { ProductCartCard } from '@/components/molecules/ProductCartCard'
+import { SelectorRow } from '@/components/molecules/SelectorRow'
 
 const chipBtn: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: 6, height: 34, padding: '0 13px',
   borderRadius: 'var(--radius-full)', border: '1px solid var(--border)', background: 'var(--surface)',
   cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 12.5, color: 'var(--fg2)',
-}
-
-function Stepper({ value, onChange, min = 1, size = 'md' }: { value: number; onChange: (v: number) => void; min?: number; size?: 'sm' | 'md' }) {
-  const dim = size === 'md' ? 34 : 30
-  const iconSize = size === 'md' ? 17 : 15
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: size === 'md' ? 14 : 10 }}>
-      <button type="button" disabled={value <= min} onClick={() => onChange(value - 1)}
-        style={{ width: dim, height: dim, borderRadius: '50%', border: '1px solid var(--border-strong)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', opacity: value <= min ? 0.4 : 1, flexShrink: 0 }}>
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12" /></svg>
-      </button>
-      <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: size === 'md' ? 16 : 15, color: 'var(--fg1)', minWidth: 16, textAlign: 'center' }}>{value}</span>
-      <button type="button" onClick={() => onChange(value + 1)}
-        style={{ width: dim, height: dim, borderRadius: '50%', border: '1px solid var(--border-strong)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
-        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-      </button>
-    </div>
-  )
-}
-
-function PizzaCartCard({ item, onQty, onRemove, onEdit }: {
-  item: CartPizzaItem; onQty: (v: number) => void; onRemove: () => void; onEdit: () => void
-}) {
-  const customs = pizzaItemCustomizations(item)
-  return (
-    <div className="cg-card cg-grain" style={{ padding: 12, position: 'relative' }}>
-      <div style={{ display: 'flex', gap: 13 }}>
-        <div style={{ width: 64, height: 64, flexShrink: 0, borderRadius: 'var(--radius-lg)', overflow: 'hidden', background: 'radial-gradient(60% 60% at 38% 32%, #C97A45 0%, #9A4A22 55%, #5E2A12 100%)' }} />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17, color: 'var(--fg1)', lineHeight: 1.15 }}>{pizzaItemLabel(item)}</div>
-          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'var(--fg3)', marginTop: 3 }}>{pizzaItemSub(item)}</div>
-          {customs.length > 0 && (
-            <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--fg4)', marginTop: 4, lineHeight: 1.4 }}>{customs.join(' · ')}</div>
-          )}
-        </div>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--fg1)', flexShrink: 0, whiteSpace: 'nowrap' }}>
-          {(item.unitPrice * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-        </div>
-      </div>
-      <hr className="cg-divider" style={{ margin: '11px 0 10px' }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', gap: 6 }}>
-          <button type="button" onClick={onEdit} style={chipBtn}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--fg3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
-            Editar
-          </button>
-          <button type="button" onClick={onRemove} style={chipBtn}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--fg3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6M14 11v6" /><path d="M9 6V4h6v2" /></svg>
-            Remover
-          </button>
-        </div>
-        <Stepper value={item.quantity} onChange={onQty} size="sm" />
-      </div>
-    </div>
-  )
-}
-
-function ProductCartCard({ item, onQty }: { item: CartProductItem; onQty: (v: number) => void }) {
-  return (
-    <div className="cg-card cg-grain" style={{ display: 'flex', gap: 13, padding: 12, alignItems: 'center' }}>
-      <div style={{ width: 54, height: 54, flexShrink: 0, borderRadius: 'var(--radius-lg)', background: 'linear-gradient(150deg, #DCE6DB 0%, #A9C0A6 100%)' }} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, color: 'var(--fg1)' }}>{item.productName}</div>
-        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 14, color: 'var(--fg1)', marginTop: 3 }}>
-          {(item.unitPrice * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-        </div>
-      </div>
-      <Stepper value={item.quantity} onChange={onQty} size="sm" />
-    </div>
-  )
-}
-
-function SelectorRow({ icon, label, value, placeholder, onClick }: {
-  icon: React.ReactNode; label: string; value: string | null; placeholder: string; onClick: () => void
-}) {
-  const empty = !value
-  return (
-    <button type="button" onClick={onClick} style={{
-      display: 'flex', alignItems: 'center', gap: 13, width: '100%', textAlign: 'left', cursor: 'pointer',
-      padding: '14px', borderRadius: 'var(--radius-lg)', border: 'none', background: 'var(--surface)', boxShadow: 'inset 0 0 0 1px var(--border)',
-    }}>
-      <span style={{ width: 40, height: 40, borderRadius: 'var(--radius-md)', flexShrink: 0, display: 'grid', placeItems: 'center', background: 'var(--surface-inset)' }}>{icon}</span>
-      <span style={{ flex: 1, minWidth: 0 }}>
-        <span style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: 11.5, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--fg4)' }}>{label}</span>
-        <span style={{ display: 'block', fontFamily: 'var(--font-body)', fontWeight: empty ? 500 : 600, fontSize: 14.5, color: empty ? 'var(--fg4)' : 'var(--fg1)', marginTop: 2 }}>{value ?? placeholder}</span>
-      </span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--fg4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-    </button>
-  )
 }
 
 export function CartMobile({ navigate, isLoggedIn, pizzaItems, productItems, isEmpty, subtotal, deliveryType, paymentName, deliveryLabel, fee, total, ready, formatPrice, handleQty, handleRemove }: CartData) {
