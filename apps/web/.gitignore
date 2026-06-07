@@ -21,3 +21,5 @@ yarn-debug.log*
 .idea/
 *.suo
 *.sw?
+CLAUDE.md
+TODO.md

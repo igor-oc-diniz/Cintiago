@@ -2,7 +2,11 @@ import { Input } from "@/components/atoms/Input";
 import { FormField } from "@/components/molecules/FormField";
 import type { AddressFormProps } from "./types";
 
-export function AddressForm({ addr, onFieldChange }: AddressFormProps) {
+export function AddressForm({
+  addr,
+  onFieldChange,
+  isCepLoading = false,
+}: AddressFormProps) {
   return (
     <div
       style={{
@@ -25,9 +29,10 @@ export function AddressForm({ addr, onFieldChange }: AddressFormProps) {
 
       <FormField label="Rua">
         <Input
-          value={addr.rua}
+          value={isCepLoading ? "" : addr.rua}
           onChange={(e) => onFieldChange("rua", e.target.value)}
-          placeholder="Nome da rua"
+          placeholder={isCepLoading ? "Buscando…" : "Nome da rua"}
+          disabled={isCepLoading}
         />
       </FormField>
 
@@ -53,17 +58,19 @@ export function AddressForm({ addr, onFieldChange }: AddressFormProps) {
 
       <FormField label="Bairro">
         <Input
-          value={addr.neighborhood}
+          value={isCepLoading ? "" : addr.neighborhood}
           onChange={(e) => onFieldChange("neighborhood", e.target.value)}
-          placeholder="Bairro"
+          placeholder={isCepLoading ? "Buscando…" : "Bairro"}
+          disabled={isCepLoading}
         />
       </FormField>
 
       <FormField label="Cidade">
         <Input
-          value={addr.city}
+          value={isCepLoading ? "" : addr.city}
           onChange={(e) => onFieldChange("city", e.target.value)}
-          placeholder="Cidade"
+          placeholder={isCepLoading ? "Buscando…" : "Cidade"}
+          disabled={isCepLoading}
         />
       </FormField>
     </div>
