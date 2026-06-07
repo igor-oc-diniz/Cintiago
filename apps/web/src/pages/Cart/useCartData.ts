@@ -2,9 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
 import { formatPrice } from "@/utils/format";
-import type { CartProductItem } from "@/store/slices/cartSlice";
-
-export const DELIVERY_FEE = 8.9;
+import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
+import { DELIVERY_FEE } from "@/constants/delivery";
 
 const DELIVERY_LABELS: Record<string, string> = {
   delivery: "Delivery",

@@ -1,4 +1,5 @@
 import type { CartData } from "./useCartData";
+import { CartSummary } from "@/components/molecules/CartSummary";
 import { PizzaCartCard } from "@/components/molecules/PizzaCartCard";
 import { ProductCartCard } from "@/components/molecules/ProductCartCard";
 import { SelectorRow } from "@/components/molecules/SelectorRow";
@@ -36,6 +37,62 @@ export function CartMobile({
   handleQty,
   handleRemove,
 }: CartData) {
+  const header = (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: isEmpty ? "16px" : "16px 16px 12px",
+        position: "sticky",
+        top: 0,
+        zIndex: 20,
+        background: "var(--bg)",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          border: "1px solid var(--border)",
+          background: "var(--surface)",
+          cursor: "pointer",
+          display: "grid",
+          placeItems: "center",
+          flexShrink: 0,
+        }}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+      </button>
+      <h1
+        style={{
+          fontFamily: "var(--font-display)",
+          fontWeight: 700,
+          fontSize: 24,
+          color: "var(--fg1)",
+          margin: 0,
+        }}
+      >
+        Seu pedido
+      </h1>
+    </div>
+  );
+
   if (isEmpty) {
     return (
       <div
@@ -46,59 +103,7 @@ export function CartMobile({
           flexDirection: "column",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "16px",
-            position: "sticky",
-            top: 0,
-            zIndex: 20,
-            background: "var(--bg)",
-            borderBottom: "1px solid var(--border)",
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              cursor: "pointer",
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-            }}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M19 12H5M12 5l-7 7 7 7" />
-            </svg>
-          </button>
-          <h1
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontSize: 24,
-              color: "var(--fg1)",
-              margin: 0,
-            }}
-          >
-            Seu pedido
-          </h1>
-        </div>
+        {header}
         <div
           style={{
             flex: 1,
@@ -177,60 +182,7 @@ export function CartMobile({
         flexDirection: "column",
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "16px 16px 12px",
-          position: "sticky",
-          top: 0,
-          zIndex: 20,
-          background: "var(--bg)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            cursor: "pointer",
-            display: "grid",
-            placeItems: "center",
-            flexShrink: 0,
-          }}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5M12 5l-7 7 7 7" />
-          </svg>
-        </button>
-        <h1
-          style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 700,
-            fontSize: 24,
-            color: "var(--fg1)",
-            margin: 0,
-          }}
-        >
-          Seu pedido
-        </h1>
-      </div>
+      {header}
 
       {/* Scroll area */}
       <div
@@ -350,100 +302,14 @@ export function CartMobile({
 
         <div style={{ marginTop: 24 }}>
           <hr className="cg-divider" />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 10,
-              padding: "16px 2px 4px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 400,
-                  fontSize: 14,
-                  color: "var(--fg2)",
-                }}
-              >
-                Subtotal
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 500,
-                  fontSize: 14,
-                  color: "var(--fg1)",
-                }}
-              >
-                {formatPrice(subtotal)}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 400,
-                  fontSize: 14,
-                  color: "var(--fg2)",
-                }}
-              >
-                Taxa de entrega
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 500,
-                  fontSize: 14,
-                  color:
-                    deliveryType === "delivery" ? "var(--fg1)" : "var(--fg4)",
-                }}
-              >
-                {deliveryType === "delivery" ? formatPrice(fee) : "a definir"}
-              </span>
-            </div>
-            <div style={{ height: 2 }} />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 700,
-                  fontSize: 16,
-                  color: "var(--fg1)",
-                }}
-              >
-                Total
-              </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: 22,
-                  color: "var(--fg1)",
-                }}
-              >
-                {formatPrice(total)}
-              </span>
-            </div>
+          <div style={{ padding: "16px 2px 4px" }}>
+            <CartSummary
+              subtotal={subtotal}
+              deliveryType={deliveryType}
+              fee={fee}
+              total={total}
+              formatPrice={formatPrice}
+            />
           </div>
         </div>
       </div>

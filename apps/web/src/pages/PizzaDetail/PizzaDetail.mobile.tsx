@@ -1,20 +1,11 @@
 import { formatPrice } from "@/utils/format";
+import { PizzaImageFallback } from "@/components/atoms/PizzaImageFallback";
+import { CrustSelector } from "@/components/molecules/CrustSelector";
 import { PizzaSection } from "@/components/molecules/PizzaSection";
+import { SizeSelector } from "@/components/molecules/SizeSelector";
 import { Stepper } from "@/components/molecules/Stepper";
 import { HalfBlock } from "@/components/organisms/HalfBlock";
 import type { PizzaDetailData } from "./usePizzaDetailData";
-
-const SIZE_LABELS: Record<string, string> = {
-  small: "Pequena",
-  medium: "Média",
-  large: "Grande",
-};
-const SIZE_DESC: Record<string, string> = {
-  small: "4 fatias · 25cm",
-  medium: "6 fatias · 30cm",
-  large: "8 fatias · 35cm",
-};
-const SIZE_ORDER = ["small", "medium", "large"] as const;
 
 export function PizzaDetailMobile({
   pizza,
@@ -75,31 +66,11 @@ export function PizzaDetailMobile({
                 }}
               />
             ) : (
-              <div
-                style={{
-                  flex: 1,
-                  height: "100%",
-                  background:
-                    "radial-gradient(60% 60% at 38% 32%, #C97A45 0%, #9A4A22 55%, #5E2A12 100%)",
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "radial-gradient(70% 60% at 30% 24%, rgba(255,246,230,0.32), transparent 60%)",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    boxShadow: "inset 0 -18px 32px rgba(60,30,12,0.28)",
-                  }}
-                />
-              </div>
+              <PizzaImageFallback
+                half="first"
+                withOverlays
+                style={{ flex: 1, height: "100%" }}
+              />
             )}
             {isMeia && secondPizza && (
               <>
@@ -110,13 +81,9 @@ export function PizzaDetailMobile({
                     style={{ flex: 1, height: "100%", objectFit: "cover" }}
                   />
                 ) : (
-                  <div
-                    style={{
-                      flex: 1,
-                      height: "100%",
-                      background:
-                        "radial-gradient(60% 60% at 62% 32%, #D9683F 0%, #A8331F 56%, #6E1E10 100%)",
-                    }}
+                  <PizzaImageFallback
+                    half="second"
+                    style={{ flex: 1, height: "100%" }}
                   />
                 )}
                 <div
@@ -236,78 +203,13 @@ export function PizzaDetailMobile({
         {/* Size */}
         <div style={{ padding: "18px 0" }}>
           <PizzaSection title="Tamanho" required>
-            <div style={{ display: "flex", gap: 8 }}>
-              {SIZE_ORDER.map((size) => {
-                const priceForSize = pizza.prices.find(
-                  (p) => p.size === size,
-                )?.price;
-                if (!priceForSize) return null;
-                const computedBase =
-                  isMeia && secondPizza
-                    ? Math.max(
-                        priceForSize,
-                        secondPizza.prices.find((p) => p.size === size)
-                          ?.price ?? 0,
-                      )
-                    : priceForSize;
-                const on = selectedSize === size;
-                return (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => setSelectedSize(size)}
-                    style={{
-                      flex: 1,
-                      padding: "13px 8px 12px",
-                      borderRadius: "var(--radius-lg)",
-                      cursor: "pointer",
-                      background: on ? "var(--primary-soft)" : "var(--surface)",
-                      boxShadow: on
-                        ? "inset 0 0 0 2px var(--primary)"
-                        : "inset 0 0 0 1px var(--border-strong)",
-                      border: "none",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: 3,
-                      transition: "all var(--dur-fast) var(--ease-soft)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "var(--font-body)",
-                        fontWeight: 700,
-                        fontSize: 14.5,
-                        color: on ? "var(--primary)" : "var(--fg1)",
-                      }}
-                    >
-                      {SIZE_LABELS[size]}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-body)",
-                        fontSize: 10.5,
-                        color: "var(--fg4)",
-                      }}
-                    >
-                      {SIZE_DESC[size]}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 700,
-                        fontSize: 15,
-                        color: "var(--fg1)",
-                        marginTop: 2,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {formatPrice(computedBase)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <SizeSelector
+              pizza={pizza}
+              secondPizza={secondPizza}
+              isMeia={isMeia}
+              selectedSize={selectedSize}
+              onSelect={setSelectedSize}
+            />
           </PizzaSection>
         </div>
 
@@ -317,67 +219,11 @@ export function PizzaDetailMobile({
             <hr className="cg-divider" style={{ margin: "0 16px" }} />
             <div style={{ padding: "18px 0" }}>
               <PizzaSection title="Borda" note="opcional">
-                <div
-                  className="cg-noscroll"
-                  style={{
-                    display: "flex",
-                    gap: 8,
-                    overflowX: "auto",
-                    padding: "0 16px",
-                    margin: "0 -16px",
-                  }}
-                >
-                  {crusts.map((c) => {
-                    const on = selectedCrustId === c.id;
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => setSelectedCrustId(on ? null : c.id)}
-                        style={{
-                          flexShrink: 0,
-                          minWidth: 104,
-                          padding: "10px 14px",
-                          borderRadius: "var(--radius-lg)",
-                          cursor: "pointer",
-                          background: on
-                            ? "var(--primary-soft)"
-                            : "var(--surface)",
-                          boxShadow: on
-                            ? "inset 0 0 0 2px var(--primary)"
-                            : "inset 0 0 0 1px var(--border-strong)",
-                          border: "none",
-                          textAlign: "left",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 2,
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: "var(--font-body)",
-                            fontWeight: 600,
-                            fontSize: 13.5,
-                            color: on ? "var(--primary)" : "var(--fg1)",
-                          }}
-                        >
-                          {c.name}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: "var(--font-body)",
-                            fontSize: 12,
-                            color: "var(--fg3)",
-                          }}
-                        >
-                          {c.additionalPrice === 0
-                            ? "Grátis"
-                            : `+ ${formatPrice(c.additionalPrice)}`}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                <CrustSelector
+                  crusts={crusts}
+                  selectedCrustId={selectedCrustId}
+                  onSelect={setSelectedCrustId}
+                />
               </PizzaSection>
             </div>
           </>
@@ -709,13 +555,8 @@ export function PizzaDetailMobile({
                             }}
                           />
                         ) : (
-                          <div
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              background:
-                                "radial-gradient(60% 60% at 38% 32%, #C97A45 0%, #9A4A22 55%, #5E2A12 100%)",
-                            }}
+                          <PizzaImageFallback
+                            style={{ width: "100%", height: "100%" }}
                           />
                         )}
                       </div>
