@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserWithClient } from './types/user-with-client.type';
+import { MeResponse } from './types/jwt-payload.type';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from './enums/role.enum';
 import * as bcrypt from 'bcrypt';
@@ -90,10 +91,7 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token inválido');
     }
 
-    const tokenMatches = await bcrypt.compare(
-      refreshToken,
-      user.refreshToken as string,
-    );
+    const tokenMatches = await bcrypt.compare(refreshToken, user.refreshToken);
     if (!tokenMatches) {
       throw new UnauthorizedException('Refresh token inválido');
     }
@@ -101,6 +99,22 @@ export class AuthService {
     const tokens = this.generateTokens(user);
     await this.saveRefreshToken(userId, tokens.refreshToken);
     return tokens;
+  }
+
+  async getMe(userId: number): Promise<MeResponse | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { client: true },
+    });
+    if (!user) return null;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: null,
+      role: user.role,
+      clientId: user.client?.id ?? null,
+    };
   }
 
   async logout(userId: number): Promise<void> {

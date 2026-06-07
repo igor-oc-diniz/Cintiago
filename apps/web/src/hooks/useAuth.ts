@@ -7,6 +7,7 @@ import {
   selectAuthLoading,
   logout,
 } from "@/store/slices/authSlice";
+import { logoutApi } from "@/api/auth";
 
 export function useAuth() {
   const dispatch = useAppDispatch();
@@ -16,12 +17,20 @@ export function useAuth() {
   const hasCompletedProfile = useAppSelector(selectHasCompletedProfile);
   const isLoading = useAppSelector(selectAuthLoading);
 
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } finally {
+      dispatch(logout());
+    }
+  };
+
   return {
     user,
     token,
     isLoggedIn,
     hasCompletedProfile,
     isLoading,
-    logout: () => dispatch(logout()),
+    logout: handleLogout,
   };
 }

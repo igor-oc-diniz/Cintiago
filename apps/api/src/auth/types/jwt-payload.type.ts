@@ -9,3 +9,12 @@ export interface JwtUser {
   email: string;
   role: string;
 }
+
+export interface MeResponse {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string | null;
+  role: string;
+  clientId: number | null;
+}

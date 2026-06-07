@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AuthGuard } from "./AuthGuard";
+import { RootLayout } from "@/components/templates/RootLayout";
 import { lazy, Suspense } from "react";
 
 const Home = lazy(() => import("@/pages/Home"));
@@ -22,114 +23,119 @@ const Fallback = () => (
 );
 
 export const router = createBrowserRouter([
-  // Rotas públicas
   {
-    path: "/",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <Home />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/pizza/:id",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <PizzaDetail />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/cart",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <Cart />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/cart/delivery",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <SelectDelivery />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/cart/payment",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <SelectPayment />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <Suspense fallback={<Fallback />}>
-        <Login />
-      </Suspense>
-    ),
-  },
-
-  // Requer login mas não perfil completo
-  {
-    element: <AuthGuard requireProfile={false} />,
+    element: <RootLayout />,
     children: [
+      // Rotas públicas
       {
-        path: "/onboarding",
+        path: "/",
         element: (
           <Suspense fallback={<Fallback />}>
-            <Onboarding />
+            <Home />
           </Suspense>
         ),
       },
-    ],
-  },
+      {
+        path: "/pizza/:id",
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <PizzaDetail />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Cart />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cart/delivery",
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <SelectDelivery />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cart/payment",
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <SelectPayment />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Login />
+          </Suspense>
+        ),
+      },
 
-  // Requer login + perfil completo
-  {
-    element: <AuthGuard requireProfile={true} />,
-    children: [
+      // Requer login mas não perfil completo
       {
-        path: "/order/confirm",
-        element: (
-          <Suspense fallback={<Fallback />}>
-            <OrderConfirm />
-          </Suspense>
-        ),
+        element: <AuthGuard requireProfile={false} />,
+        children: [
+          {
+            path: "/onboarding",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <Onboarding />
+              </Suspense>
+            ),
+          },
+        ],
       },
+
+      // Requer login + perfil completo
       {
-        path: "/order/:id/tracking",
-        element: (
-          <Suspense fallback={<Fallback />}>
-            <OrderTracking />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/orders",
-        element: (
-          <Suspense fallback={<Fallback />}>
-            <MyOrders />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/orders/:id",
-        element: (
-          <Suspense fallback={<Fallback />}>
-            <OrderDetail />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/profile",
-        element: (
-          <Suspense fallback={<Fallback />}>
-            <Profile />
-          </Suspense>
-        ),
+        element: <AuthGuard requireProfile={true} />,
+        children: [
+          {
+            path: "/order/confirm",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <OrderConfirm />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/order/:id/tracking",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <OrderTracking />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/orders",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <MyOrders />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/orders/:id",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <OrderDetail />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/profile",
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <Profile />
+              </Suspense>
+            ),
+          },
+        ],
       },
     ],
   },

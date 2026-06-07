@@ -22,7 +22,9 @@ export function HomeMobile({
 }: HomePageProps) {
   return (
     <AppLayout variant="mobile" footer={<Footer />}>
-      <HomeBanner />
+      <div style={{ padding: "16px" }}>
+        <HomeBanner />
+      </div>
       <div style={{ padding: "0 16px" }}>
         <CategoryToggle value={activeTab} onChange={setActiveTab} />
       </div>

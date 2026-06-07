@@ -8,7 +8,7 @@ export default function SelectDelivery() {
 
   if (isDesktop) {
     // TODO: implementar versão desktop (Screen 4a — Web)
-    return null;
+    return <SelectDeliveryMobile {...data} />;
   }
 
   return <SelectDeliveryMobile {...data} />;
