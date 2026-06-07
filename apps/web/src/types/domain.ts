@@ -131,6 +131,15 @@ export interface CreateClientPayload {
 
 export type UpdateClientPayload = Partial<CreateClientPayload>;
 
+export interface DeliveryAddress {
+  cep: string;
+  rua: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+}
+
 export interface AuthUser {
   id: number;
   name: string;

@@ -26,7 +26,10 @@ export function CrustSelector({
     : { display: "flex", gap: 12, flexWrap: "wrap" };
 
   return (
-    <div className={isMobile ? "cg-noscroll" : undefined} style={containerStyle}>
+    <div
+      className={isMobile ? "cg-noscroll" : undefined}
+      style={containerStyle}
+    >
       {crusts.map((c) => {
         const on = selectedCrustId === c.id;
         return (

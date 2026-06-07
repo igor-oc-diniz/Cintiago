@@ -8,6 +8,7 @@ const variantClasses = {
   secondary:
     "border border-[var(--color-secondary)] text-[var(--color-secondary)] hover:bg-[var(--color-secondary-fixed)] bg-transparent",
   ghost: "border-0 bg-transparent text-[var(--color-on-surface)]",
+  icon: "border border-[var(--border)] bg-[var(--surface)] text-[var(--color-on-surface)] rounded-full !p-0 w-10 h-10",
 };
 
 const sizeClasses = {

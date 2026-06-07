@@ -65,8 +65,7 @@ export function CartSummary({
             fontFamily: "var(--font-body)",
             fontWeight: 500,
             fontSize: 14,
-            color:
-              deliveryType === "delivery" ? "var(--fg1)" : "var(--fg4)",
+            color: deliveryType === "delivery" ? "var(--fg1)" : "var(--fg4)",
           }}
         >
           {deliveryType === "delivery" ? formatPrice(fee) : "a definir"}
