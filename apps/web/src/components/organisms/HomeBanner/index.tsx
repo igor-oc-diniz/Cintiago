@@ -1,4 +1,6 @@
-export function HomeBanner() {
+import { useBreakpoint } from "@/hooks/useBreakpoint";
+
+function HomeBannerDesktop() {
   return (
     <div
       style={{
@@ -36,7 +38,7 @@ export function HomeBanner() {
         }}
       />
       <div
-        style={{ position: "relative", padding: "54px 56px", maxWidth: 620 }}
+        style={{ position: "relative", padding: "16px 16px", maxWidth: 620 }}
       >
         <div
           style={{
@@ -82,4 +84,33 @@ export function HomeBanner() {
       </div>
     </div>
   );
+}
+
+function HomeBannerMobile() {
+  return (
+    <div style={{ padding: "16px 16px 0" }}>
+      <div className="mr-eyebrow" style={{ marginBottom: 6 }}>
+        Do forno a lenha
+      </div>
+      <h1
+        style={{
+          fontFamily: "var(--font-display)",
+          fontWeight: 800,
+          fontSize: 30,
+          lineHeight: 1.06,
+          letterSpacing: "-0.02em",
+          color: "var(--fg1)",
+          margin: "0 0 16px",
+        }}
+      >
+        Feita do jeito{" "}
+        <span style={{ fontStyle: "italic", fontWeight: 600 }}>devagar</span>.
+      </h1>
+    </div>
+  );
+}
+
+export function HomeBanner() {
+  const { isMobile } = useBreakpoint();
+  return isMobile ? <HomeBannerMobile /> : <HomeBannerDesktop />;
 }
