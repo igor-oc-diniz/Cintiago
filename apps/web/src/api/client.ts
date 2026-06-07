@@ -4,12 +4,14 @@ import { store } from "@/store/store";
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 // Injeta o JWT Bearer token automaticamente em toda request
+// Ignora o valor sentinela "cookie" — auth via cookie httpOnly não precisa de header
 api.interceptors.request.use((config) => {
   const token = store.getState().auth.token;
-  if (token) {
+  if (token && token !== "cookie") {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

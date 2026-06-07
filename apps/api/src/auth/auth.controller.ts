@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserWithClient } from './types/user-with-client.type';
@@ -47,9 +39,8 @@ export class AuthController {
     await this.authService.saveRefreshToken(user.id, tokens.refreshToken);
 
     const hasAddress = user.client !== null;
-    const baseUrl = hasAddress
-      ? 'http://localhost:4200'
-      : 'http://localhost:4200/cadastro';
+    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:5174';
+    const baseUrl = hasAddress ? frontendUrl : `${frontendUrl}/onboarding`;
 
     res.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
@@ -83,6 +74,13 @@ export class AuthController {
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     res.json({ message: 'Token renovado com sucesso' });
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getMe(@Req() req: RequestWithJwtUser) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return await this.authService.getMe(req.user.userId);
   }
 
   @Post('logout')
