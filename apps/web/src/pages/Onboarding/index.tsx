@@ -1,3 +1,7 @@
+import { OnboardingTemplate } from "@/components/templates/OnboardingTemplate";
+import { useOnboardingForm } from "./useOnboardingForm";
+
 export default function Onboarding() {
-  return <div>Onboarding</div>;
+  const form = useOnboardingForm();
+  return <OnboardingTemplate {...form} />;
 }

@@ -13,3 +13,6 @@ export const createClient = (payload: CreateClientPayload) =>
 
 export const updateClient = (id: number, payload: UpdateClientPayload) =>
   api.patch<Client>(`/clients/${id}`, payload).then((r) => r.data);
+
+export const updateMyProfile = (payload: UpdateClientPayload) =>
+  api.patch<Client>("/clients/me", payload).then((r) => r.data);

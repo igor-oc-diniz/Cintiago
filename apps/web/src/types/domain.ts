@@ -120,8 +120,9 @@ export interface Order {
 }
 
 export interface CreateClientPayload {
+  userId: number;
   phone: string;
-  address: string;
+  street: string;
   number: string;
   complement?: string;
   neighborhood: string;
