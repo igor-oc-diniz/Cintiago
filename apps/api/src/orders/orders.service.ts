@@ -246,10 +246,13 @@ export class OrdersService {
           });
         }
 
-        return newOrder;
+        return newOrder.id;
       });
 
-      return createdOrder;
+      return this.prisma.order.findUnique({
+        where: { id: createdOrder },
+        include: this.orderInclude,
+      });
     } catch (error) {
       handlePrismaError(error, 'Pedido');
     }

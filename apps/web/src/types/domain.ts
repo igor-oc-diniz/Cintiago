@@ -85,7 +85,6 @@ export interface OrderProductPayload {
 }
 
 export interface CreateOrderPayload {
-  clientId: number;
   paymentId: number;
   deliveryType: DeliveryType;
   items: OrderItemPayload[];
@@ -99,7 +98,7 @@ export interface OrderItem {
   crust: Crust | null;
   halves: {
     half: 1 | 2;
-    pizza: Pick<Pizza, "id" | "name" | "imageUrl">;
+    pizza: Pick<Pizza, "id" | "name"> & { imageUrl?: string | null };
     ingredients: OrderItemHalfIngredient[];
   }[];
 }
@@ -108,12 +107,18 @@ export interface Order {
   id: number;
   status: OrderStatus;
   deliveryType: DeliveryType;
-  total: number;
+  total: number | string;
   createdAt: string;
-  client: Pick<Client, "id" | "name" | "address" | "number" | "city">;
-  payment: Payment;
-  items: OrderItem[];
-  products: {
+  client: {
+    id: number;
+    street: string;
+    number: string;
+    city: string;
+    name?: string;
+  };
+  payment: Pick<Payment, "id" | "name">;
+  orderItems: OrderItem[];
+  orderProducts: {
     product: Product;
     quantity: number;
   }[];
