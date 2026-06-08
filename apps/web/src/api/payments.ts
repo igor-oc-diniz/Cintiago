@@ -1,5 +1,5 @@
 import { api } from "./client";
-import type { Payment } from "@/types/domain";
+import type { PaymentDTO } from "@cintiago/shared";
 
 export const getPayments = () =>
-  api.get<Payment[]>("/payments").then((r) => r.data);
+  api.get<PaymentDTO[]>("/payments").then((r) => r.data);

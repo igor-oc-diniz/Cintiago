@@ -1,5 +1,5 @@
 import { api } from "./client";
-import type { Product } from "@/types/domain";
+import type { ProductDTO } from "@cintiago/shared";
 
 export const getProducts = () =>
-  api.get<Product[]>("/products").then((r) => r.data);
+  api.get<ProductDTO[]>("/products").then((r) => r.data);

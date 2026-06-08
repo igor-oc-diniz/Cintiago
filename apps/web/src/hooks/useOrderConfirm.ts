@@ -32,9 +32,7 @@ export function useOrderConfirm() {
   const payment = useAppSelector(selectPayment);
   const activeOrder = useAppSelector(selectActiveOrder);
 
-  const subtotal = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   const fee = deliveryType === "delivery" ? DELIVERY_FEE : 0;
-  const total = subtotal + fee;
 
   const mutation = useMutation({
     mutationFn: createOrder,
@@ -95,7 +93,7 @@ export function useOrderConfirm() {
 
   const deliveryLabel = deliveryType ? DELIVERY_LABELS[deliveryType] : null;
   const addressSub =
-    order?.deliveryType === "delivery"
+    deliveryType === "delivery" && order
       ? `${order.client.street}, ${order.client.number}`
       : PIZZERIA.address;
 
@@ -115,7 +113,7 @@ export function useOrderConfirm() {
     deliveryLabel,
     addressSub,
     paymentLabel,
-    total,
+    total: order ? Number(order.total ?? 0) : fee,
     fee,
     formatPrice,
     DELIVERY_ETA,
