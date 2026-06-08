@@ -5,7 +5,7 @@ import { useCart } from "@/hooks/useCart";
 import { getPizzas } from "@/api/pizzas";
 import { getProducts } from "@/api/products";
 import { QUERY_KEYS } from "@/lib/queryClient";
-import type { Product } from "@/types/domain";
+import type { ProductDTO } from "@cintiago/shared";
 
 export type HomeTab = "pizzas" | "extras";
 
@@ -24,11 +24,11 @@ export function useHomeData() {
     queryFn: getProducts,
   });
 
-  const handleAddProduct = (product: Product) => {
+  const handleAddProduct = (product: ProductDTO) => {
     addProduct({
       productId: product.id,
       productName: product.name,
-      unitPrice: product.price,
+      unitPrice: parseFloat(product.price),
     });
   };
 

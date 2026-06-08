@@ -58,9 +58,9 @@ export function ProductList({
           key={product.id}
           id={product.id}
           name={product.name}
-          description={product.description}
-          imageUrl={product.imageUrl}
-          price={product.price}
+          description={product.description ?? ""}
+          imageUrl={""}
+          price={Number(product.price)}
           onAdd={() => onAdd(product)}
         />
       ))}

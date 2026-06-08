@@ -9,7 +9,9 @@ export class IngredientsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return await this.prisma.ingredient.findMany();
+    return await this.prisma.ingredient.findMany({
+      include: { ingredientPrice: true },
+    });
   }
 
   async createIngredient(ingredient: CreateIngredientDto) {
