@@ -265,7 +265,6 @@ export const selectPayment = (state: RootState) => ({
 
 export function serializeCartToOrderPayload(
   items: CartItem[],
-  clientId: number,
   paymentId: number,
 ) {
   const pizzaItems = items.filter(
@@ -276,7 +275,6 @@ export function serializeCartToOrderPayload(
   );
 
   return {
-    clientId,
     paymentId,
     items: pizzaItems.map((item) => ({
       size: item.size,

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Order } from "@/types/domain";
+import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 import type { RootState } from "../store";
 
 interface OrderState {
-  activeOrder: Order | null;
+  activeOrder: OrderDTO | null;
 }
 
 const initialState: OrderState = {
@@ -14,10 +14,10 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    setActiveOrder(state, action: PayloadAction<Order>) {
+    setActiveOrder(state, action: PayloadAction<OrderDTO>) {
       state.activeOrder = action.payload;
     },
-    updateActiveOrderStatus(state, action: PayloadAction<Order["status"]>) {
+    updateActiveOrderStatus(state, action: PayloadAction<OrderStatus>) {
       if (state.activeOrder) {
         state.activeOrder.status = action.payload;
       }
