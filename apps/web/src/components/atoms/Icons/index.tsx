@@ -1,7 +1,10 @@
+import type { CSSProperties } from "react";
+
 interface IconProps {
   size?: number;
   color?: string;
   strokeWidth?: number;
+  style?: CSSProperties;
 }
 
 export function BikeIcon({
@@ -338,6 +341,30 @@ export function LeafIcon({
   size = 20,
   color = "currentColor",
   strokeWidth = 1.8,
+  style,
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={style}
+    >
+      <path d="M11 20A7 7 0 014 13c0-7 7-11 7-11s7 4 7 11a7 7 0 01-7 7z" />
+      <path d="M11 20v-8" />
+    </svg>
+  );
+}
+
+export function ReceiptIcon({
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 1.9,
 }: IconProps) {
   return (
     <svg
@@ -350,8 +377,100 @@ export function LeafIcon({
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M11 20A7 7 0 014 13c0-7 7-11 7-11s7 4 7 11a7 7 0 01-7 7z" />
-      <path d="M11 20v-8" />
+      <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z" />
+      <path d="M16 8h-6" />
+      <path d="M14 12H8" />
+      <path d="M12 16H8" />
+    </svg>
+  );
+}
+
+export function CircleCheckBigIcon({
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 1.9,
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+      <path d="m9 11 3 3L22 4" />
+    </svg>
+  );
+}
+
+export function PhoneIcon({
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 1.9,
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012.88 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+    </svg>
+  );
+}
+
+export function RotateCcwIcon({
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 1.9,
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+    </svg>
+  );
+}
+
+export function PackageCheckIcon({
+  size = 20,
+  color = "currentColor",
+  strokeWidth = 1.9,
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m16 16 2 2 4-4" />
+      <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" />
+      <path d="M16.5 9.4 7.55 4.24" />
+      <polyline points="3.29 7 12 12 20.71 7" />
+      <line x1="12" y1="22" x2="12" y2="12" />
     </svg>
   );
 }

@@ -271,4 +271,19 @@ export class OrdersService {
       handlePrismaError(error, 'Cliente');
     }
   }
+
+  async findMyOrderById(userId: number, orderId: number) {
+    try {
+      const currentClient = await this.prisma.client.findUniqueOrThrow({
+        where: { userId },
+      });
+
+      return await this.prisma.order.findUniqueOrThrow({
+        where: { id: orderId, clientId: currentClient.id },
+        include: this.orderInclude,
+      });
+    } catch (error) {
+      handlePrismaError(error, `Pedido ${orderId}`);
+    }
+  }
 }
