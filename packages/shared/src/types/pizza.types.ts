@@ -7,4 +7,10 @@ export interface PizzaDTO {
   priceLarge: string | null;
   active: boolean;
   createdAt: string;
+  pizzaIngredients?: {
+    ingredient: {
+      id: number;
+      name: string;
+    };
+  }[];
 }

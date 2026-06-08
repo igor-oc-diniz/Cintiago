@@ -11,6 +11,7 @@ export class PizzasService {
   async findAll() {
     return await this.prisma.pizza.findMany({
       where: { active: true },
+      include: { pizzaIngredients: { include: { ingredient: true } } },
     });
   }
 
@@ -32,7 +33,10 @@ export class PizzasService {
 
   async findOne(id: number) {
     try {
-      return await this.prisma.pizza.findUniqueOrThrow({ where: { id } });
+      return await this.prisma.pizza.findUniqueOrThrow({
+        where: { id },
+        include: { pizzaIngredients: { include: { ingredient: true } } },
+      });
     } catch (error) {
       handlePrismaError(error, `Pizza ${id}`);
     }

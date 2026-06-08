@@ -3,4 +3,9 @@ export interface IngredientDTO {
   name: string;
   category: string | null;
   createdAt: string;
+  ingredientPrice?: {
+    priceSmall: string | null;
+    priceMedium: string | null;
+    priceLarge: string | null;
+  } | null;
 }
