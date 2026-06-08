@@ -1,5 +1,6 @@
 import axios from "axios";
 import { store } from "@/store/store";
+import { refreshTokenApi } from "./refreshToken";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -20,9 +21,16 @@ api.interceptors.request.use((config) => {
 // Trata 401 globalmente — limpa auth e redireciona para login
 api.interceptors.response.use(
   (res) => res,
-  (error) => {
-    if (error.response?.status === 401) {
-      store.dispatch({ type: "auth/logout" });
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        await refreshTokenApi();
+        return api(originalRequest);
+      } catch {
+        store.dispatch({ type: "auth/logout" });
+      }
     }
     return Promise.reject(error);
   },
