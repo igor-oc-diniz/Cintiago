@@ -5,7 +5,7 @@ export const getMyOrders = () =>
   api.get<OrderDTO[]>("/orders/my").then((r) => r.data);
 
 export const getOrderById = (id: number) =>
-  api.get<OrderDTO>(`/orders/${id}`).then((r) => r.data);
+  api.get<OrderDTO>(`/orders/my/${id}`).then((r) => r.data);
 
 export const createOrder = (payload: CreateOrderPayloadDTO) =>
   api.post<OrderDTO>("/orders", payload).then((r) => r.data);

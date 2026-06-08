@@ -34,6 +34,13 @@ export class OrdersController {
     return this.ordersService.findMyOrders(req.user.userId);
   }
 
+  @Roles(Role.CLIENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/my/:id')
+  findMyOrderById(@Req() req: { user: JwtUser }, @Param('id') id: string) {
+    return this.ordersService.findMyOrderById(req.user.userId, +id);
+  }
+
   @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
