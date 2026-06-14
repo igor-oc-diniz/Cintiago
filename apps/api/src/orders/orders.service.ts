@@ -266,6 +266,8 @@ export class OrdersService {
 
       return await this.prisma.order.findMany({
         where: { clientId: currentClient.id },
+        include: this.orderInclude,
+        orderBy: { createdAt: 'desc' },
       });
     } catch (error) {
       handlePrismaError(error, 'Cliente');

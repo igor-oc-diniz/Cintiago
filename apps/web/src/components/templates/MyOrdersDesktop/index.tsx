@@ -19,6 +19,7 @@ export function MyOrdersDesktop({
   getStatusLabel,
   handleTrack,
   handleOpenDetail,
+  handleOpenOrder,
   handleRepeat,
 }: MyOrdersDesktopProps) {
   const { user } = useAuth();
@@ -142,7 +143,7 @@ export function MyOrdersDesktop({
                 getStatusLabel={getStatusLabel}
                 formatPrice={formatPrice}
                 onTrack={handleTrack}
-                onOpen={handleOpenDetail}
+                onOpen={(id) => handleOpenOrder(id, order.status)}
               />
             ))}
 

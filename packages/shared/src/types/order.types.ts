@@ -1,12 +1,12 @@
-import type { ClientDTO } from './client.types';
-import type { CrustDTO } from './crust.types';
-import type { IngredientDTO } from './ingredient.types';
-import type { PaymentDTO } from './payment.types';
-import type { PizzaDTO } from './pizza.types';
-import type { ProductDTO } from './product.types';
+import type { ClientDTO } from "./client.types";
+import type { CrustDTO } from "./crust.types";
+import type { IngredientDTO } from "./ingredient.types";
+import type { PaymentDTO } from "./payment.types";
+import type { PizzaDTO } from "./pizza.types";
+import type { ProductDTO } from "./product.types";
 
-export type OrderStatus = 'pending' | 'confirmed' | 'delivered';
-export type PizzaSize = 'small' | 'medium' | 'large';
+export type OrderStatus = "pending" | "confirmed" | "delivering" | "delivered";
+export type PizzaSize = "small" | "medium" | "large";
 
 export interface OrderItemHalfIngredientDTO {
   orderItemHalfId: number;
@@ -57,7 +57,7 @@ export interface OrderDTO {
 
 export interface CreateOrderItemHalfIngredientPayloadDTO {
   ingredientId: number;
-  action: 'add' | 'remove';
+  action: "add" | "remove";
 }
 
 export interface CreateOrderItemHalfPayloadDTO {

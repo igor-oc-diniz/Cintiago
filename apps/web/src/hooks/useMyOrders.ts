@@ -7,7 +7,12 @@ import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 
-const ACTIVE_STATUSES: OrderStatus[] = ["pending", "confirmed", "delivered"];
+const ACTIVE_STATUSES: OrderStatus[] = [
+  "pending",
+  "confirmed",
+  "delivering",
+  "delivered",
+];
 
 export function progressSegment(status: OrderStatus): number {
   switch (status) {
@@ -15,6 +20,8 @@ export function progressSegment(status: OrderStatus): number {
       return 1;
     case "confirmed":
       return 2;
+    case "delivering":
+      return 3;
     case "delivered":
       return 4;
     default:
@@ -48,6 +55,14 @@ export function useMyOrders() {
     navigate(`/order/${orderId}/tracking`);
 
   const handleOpenDetail = (orderId: number) => navigate(`/orders/${orderId}`);
+
+  const handleOpenOrder = (orderId: number, status: OrderStatus) => {
+    if (status === "delivered") {
+      navigate(`/orders/${orderId}`);
+    } else {
+      navigate(`/order/${orderId}/tracking`);
+    }
+  };
 
   const handleBack = () => navigate("/");
 
@@ -117,6 +132,7 @@ export function useMyOrders() {
     getStatusLabel,
     handleTrack,
     handleOpenDetail,
+    handleOpenOrder,
     handleBack,
     handleRepeat,
   };
