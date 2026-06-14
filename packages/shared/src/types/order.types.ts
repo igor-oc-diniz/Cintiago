@@ -55,6 +55,7 @@ export interface OrderDTO {
   paymentId: number;
   total: string | null;
   status: OrderStatus;
+  estimatedDeliveryMinutes: number | null;
   createdAt: string;
   client: ClientDTO;
   payment: PaymentDTO;
