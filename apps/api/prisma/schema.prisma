@@ -137,6 +137,7 @@ model OrderItem {
   crustId    Int?
   size       String
   quantity   Int             @default(1)
+  price      Decimal?
   halves     OrderItemHalf[]
 }
 

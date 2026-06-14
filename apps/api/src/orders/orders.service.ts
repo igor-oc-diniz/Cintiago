@@ -138,6 +138,7 @@ export class OrdersService {
     const productMap = new Map(products.map((p) => [p.id, p]));
 
     let total = 0;
+    const itemUnitPrices = new Map<(typeof order.items)[number], number>();
 
     for (const item of order.items) {
       const halfPrices: number[] = [];
@@ -180,7 +181,10 @@ export class OrdersService {
         crustPrice = this.getPrice(crust, item.size);
       }
 
-      total += (pizzaPrice + crustPrice) * item.quantity;
+      const unitPrice = pizzaPrice + crustPrice;
+      itemUnitPrices.set(item, unitPrice);
+
+      total += unitPrice * item.quantity;
     }
 
     for (const orderProduct of order.products ?? []) {
@@ -214,6 +218,7 @@ export class OrdersService {
               crustId: item.crustId,
               size: item.size,
               quantity: item.quantity,
+              price: itemUnitPrices.get(item),
             },
           });
 
