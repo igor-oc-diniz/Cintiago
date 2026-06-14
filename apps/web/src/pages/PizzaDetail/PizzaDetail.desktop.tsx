@@ -7,6 +7,7 @@ import { PizzaSection } from "@/components/molecules/PizzaSection";
 import { SizeSelector } from "@/components/molecules/SizeSelector";
 import { Stepper } from "@/components/molecules/Stepper";
 import { HalfBlock } from "@/components/organisms/HalfBlock";
+import { NotesField } from "@/components/molecules/NotesField";
 import type { PizzaDetailData } from "./usePizzaDetailData";
 
 export function PizzaDetailDesktop({
@@ -22,15 +23,15 @@ export function PizzaDetailDesktop({
   isMeia,
   secondPizzaId,
   setSecondPizzaId,
-  removedIds,
   addedIds,
+  notes,
+  setNotes,
   secondPizza,
   total,
   defaultIngs,
   addonIngs,
   secondDefaultIngs,
   secondAddonIngs,
-  toggleRemoved,
   toggleAdded,
   enableMeia,
   disableMeia,
@@ -440,9 +441,7 @@ export function PizzaDetailDesktop({
                     pizzaName={pizza.name}
                     defaultIngs={defaultIngs}
                     addonIngs={addonIngs}
-                    removedIds={removedIds[0]}
                     addedIds={addedIds[0]}
-                    onRemove={(id) => toggleRemoved(0, id)}
                     onAdd={(id) => toggleAdded(0, id)}
                   />
                   <div
@@ -459,9 +458,7 @@ export function PizzaDetailDesktop({
                     pizzaName={secondPizza.name}
                     defaultIngs={secondDefaultIngs}
                     addonIngs={secondAddonIngs}
-                    removedIds={removedIds[1]}
                     addedIds={addedIds[1]}
-                    onRemove={(id) => toggleRemoved(1, id)}
                     onAdd={(id) => toggleAdded(1, id)}
                   />
                 </div>
@@ -471,13 +468,22 @@ export function PizzaDetailDesktop({
                     pizzaName={pizza.name}
                     defaultIngs={defaultIngs}
                     addonIngs={addonIngs}
-                    removedIds={removedIds[0]}
                     addedIds={addedIds[0]}
-                    onRemove={(id) => toggleRemoved(0, id)}
                     onAdd={(id) => toggleAdded(0, id)}
                   />
                 </div>
               )}
+            </PizzaSection>
+            <hr className="cg-divider" style={{ marginBottom: 26 }} />
+
+            {/* Observações */}
+            <PizzaSection
+              title="Observações"
+              note="Ex: sem cebola, bem assada…"
+            >
+              <div style={{ maxWidth: 520 }}>
+                <NotesField value={notes} onChange={setNotes} />
+              </div>
             </PizzaSection>
             <hr className="cg-divider" style={{ marginBottom: 26 }} />
 

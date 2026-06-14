@@ -9,6 +9,7 @@ import {
   ArrayMinSize,
   ArrayMaxSize,
   IsString,
+  MaxLength,
 } from 'class-validator';
 import { CreateOrderItemHalfDto } from './create-order-item-half.dto';
 
@@ -24,6 +25,11 @@ export class CreateOrderItemDto {
   @IsInt()
   @Min(1)
   quantity: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  notes?: string;
 
   @IsArray()
   @ArrayMinSize(1)

@@ -9,18 +9,14 @@ export function HalfBlock({
   pizzaName,
   defaultIngs,
   addonIngs,
-  removedIds,
   addedIds,
-  onRemove,
   onAdd,
 }: {
   label?: string;
   pizzaName: string;
   defaultIngs: Ingredient[];
   addonIngs: Ingredient[];
-  removedIds: number[];
   addedIds: number[];
-  onRemove: (id: number) => void;
   onAdd: (id: number) => void;
 }) {
   const { isDesktop } = useBreakpoint();
@@ -86,7 +82,7 @@ export function HalfBlock({
               marginBottom: isDesktop ? 9 : 8,
             }}
           >
-            Vem com · toque p/ remover
+            Vem com
           </div>
           <div
             style={{
@@ -97,12 +93,7 @@ export function HalfBlock({
             }}
           >
             {defaultIngs.map((ing) => (
-              <IngredientChip
-                key={ing.id}
-                name={ing.name}
-                removed={removedIds.includes(ing.id)}
-                onToggle={() => onRemove(ing.id)}
-              />
+              <IngredientChip key={ing.id} name={ing.name} />
             ))}
           </div>
         </>

@@ -10,6 +10,8 @@ import {
   clearCart,
   serializeCartToOrderPayload,
 } from "@/store/slices/cartSlice";
+import { pizzaItemCustomizations } from "@/utils/cart";
+import { orderItemCustomLines } from "@/utils/order";
 import { selectUser } from "@/store/slices/authSlice";
 import { createOrder } from "@/api/orders";
 import { DELIVERY_FEE, DELIVERY_ETA, PIZZERIA } from "@/constants/delivery";
@@ -69,16 +71,22 @@ export function useOrderConfirm() {
 
   // Build human-readable item lines from the confirmed order (preferred) or
   // from the cart snapshot still in state during the loading phase.
-  const itemLines: string[] = order
+  const summaryItems: { headline: string; customLines: string[] }[] = order
     ? [
         ...(order.orderItems ?? []).map((item) => {
           const name =
             item.halves.length === 2
               ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
               : item.halves[0].pizza.name;
-          return `${item.quantity}× ${name}`;
+          return {
+            headline: `${item.quantity}× ${name}`,
+            customLines: orderItemCustomLines(item),
+          };
         }),
-        ...(order.orderProducts ?? []).map((p) => `${p.quantity}× ${p.product.name}`),
+        ...(order.orderProducts ?? []).map((p) => ({
+          headline: `${p.quantity}× ${p.product.name}`,
+          customLines: [],
+        })),
       ]
     : [
         ...pizzaItems.map((item) => {
@@ -86,9 +94,15 @@ export function useOrderConfirm() {
             item.halves.length === 2
               ? `${item.halves[0].pizzaName} / ${item.halves[1].pizzaName}`
               : item.halves[0].pizzaName;
-          return `${item.quantity}× ${name}`;
+          return {
+            headline: `${item.quantity}× ${name}`,
+            customLines: pizzaItemCustomizations(item),
+          };
         }),
-        ...productItems.map((item) => `${item.quantity}× ${item.productName}`),
+        ...productItems.map((item) => ({
+          headline: `${item.quantity}× ${item.productName}`,
+          customLines: [],
+        })),
       ];
 
   const deliveryLabel = deliveryType ? DELIVERY_LABELS[deliveryType] : null;
@@ -109,7 +123,6 @@ export function useOrderConfirm() {
     order,
     isLoading: mutation.isPending,
     isError: mutation.isError,
-    itemLines,
     deliveryLabel,
     addressSub,
     paymentLabel,
@@ -119,6 +132,7 @@ export function useOrderConfirm() {
     DELIVERY_ETA,
     handleTrack,
     handleHome,
+    summaryItems,
   };
 }
 

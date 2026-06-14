@@ -138,6 +138,7 @@ model OrderItem {
   size       String
   quantity   Int             @default(1)
   price      Decimal?
+  notes      String?
   halves     OrderItemHalf[]
 }
 
@@ -156,7 +157,6 @@ model OrderItemHalfIngredient {
   orderItemHalfId Int
   ingredient      Ingredient    @relation(fields: [ingredientId], references: [id])
   ingredientId    Int
-  action          String
 
   @@id([orderItemHalfId, ingredientId])
 }

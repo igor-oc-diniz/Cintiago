@@ -43,8 +43,8 @@ export function usePizzaDetailData() {
   const [isMeia, setIsMeia] = useState(false);
   const [secondPizzaId, setSecondPizzaId] = useState<number | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [removedIds, setRemovedIds] = useState<[number[], number[]]>([[], []]);
   const [addedIds, setAddedIds] = useState<[number[], number[]]>([[], []]);
+  const [notes, setNotes] = useState("");
 
   const secondPizza =
     isMeia && secondPizzaId
@@ -80,16 +80,6 @@ export function usePizzaDetailData() {
     (i) => !secondPizza?.ingredients.find((d) => d.id === i.id),
   );
 
-  const toggleRemoved = (half: 0 | 1, id: number) => {
-    setRemovedIds((prev) => {
-      const next: [number[], number[]] = [prev[0].slice(), prev[1].slice()];
-      const idx = next[half].indexOf(id);
-      if (idx >= 0) next[half].splice(idx, 1);
-      else next[half].push(id);
-      return next;
-    });
-  };
-
   const toggleAdded = (half: 0 | 1, id: number) => {
     setAddedIds((prev) => {
       const next: [number[], number[]] = [prev[0].slice(), prev[1].slice()];
@@ -107,12 +97,19 @@ export function usePizzaDetailData() {
   const disableMeia = () => {
     setIsMeia(false);
     setSecondPizzaId(null);
-    setRemovedIds((prev) => [prev[0], []]);
     setAddedIds((prev) => [prev[0], []]);
   };
 
   const handleAddToCart = () => {
     if (!pizza) return;
+
+    const addedIngredients = (half: 0 | 1) =>
+      addedIds[half].map((ingredientId) => ({
+        ingredientId,
+        ingredientName:
+          allIngredients.find((i) => i.id === ingredientId)?.name ?? "",
+      }));
+
     const halves =
       isMeia && secondPizza
         ? [
@@ -120,43 +117,13 @@ export function usePizzaDetailData() {
               pizzaId: pizza.id,
               pizzaName: pizza.name,
               half: 1 as const,
-              ingredients: [
-                ...removedIds[0].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    pizza.ingredients.find((i) => i.id === ingredientId)
-                      ?.name ?? "",
-                  action: "remove" as const,
-                })),
-                ...addedIds[0].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    allIngredients.find((i) => i.id === ingredientId)?.name ??
-                    "",
-                  action: "add" as const,
-                })),
-              ],
+              ingredients: addedIngredients(0),
             },
             {
               pizzaId: secondPizza.id,
               pizzaName: secondPizza.name,
               half: 2 as const,
-              ingredients: [
-                ...removedIds[1].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    secondPizza.ingredients.find((i) => i.id === ingredientId)
-                      ?.name ?? "",
-                  action: "remove" as const,
-                })),
-                ...addedIds[1].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    allIngredients.find((i) => i.id === ingredientId)?.name ??
-                    "",
-                  action: "add" as const,
-                })),
-              ],
+              ingredients: addedIngredients(1),
             },
           ]
         : [
@@ -164,22 +131,7 @@ export function usePizzaDetailData() {
               pizzaId: pizza.id,
               pizzaName: pizza.name,
               half: 1 as const,
-              ingredients: [
-                ...removedIds[0].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    pizza.ingredients.find((i) => i.id === ingredientId)
-                      ?.name ?? "",
-                  action: "remove" as const,
-                })),
-                ...addedIds[0].map((ingredientId) => ({
-                  ingredientId,
-                  ingredientName:
-                    allIngredients.find((i) => i.id === ingredientId)?.name ??
-                    "",
-                  action: "add" as const,
-                })),
-              ],
+              ingredients: addedIngredients(0),
             },
           ];
 
@@ -188,6 +140,8 @@ export function usePizzaDetailData() {
       crustId: selectedCrustId,
       crustName: selectedCrust?.name ?? null,
       halves,
+      notes,
+      quantity: qty,
       unitPrice,
     });
     navigate(-1);
@@ -211,8 +165,9 @@ export function usePizzaDetailData() {
     setSecondPizzaId,
     sheetOpen,
     setSheetOpen,
-    removedIds,
     addedIds,
+    notes,
+    setNotes,
     secondPizza,
     basePrice,
     crustPrice,
@@ -223,7 +178,6 @@ export function usePizzaDetailData() {
     addonIngs,
     secondDefaultIngs,
     secondAddonIngs,
-    toggleRemoved,
     toggleAdded,
     enableMeia,
     disableMeia,

@@ -2,23 +2,35 @@ import { SumLine } from "@/components/molecules/SumLine";
 import { LeafIcon } from "@/components/atoms/Icons";
 import { Divider } from "@/components/atoms/Divider";
 import { formatPrice, SIZE_LABEL } from "@/utils/format";
+import { orderItemCustomLines } from "@/utils/order";
 import type { OrderDTO } from "@cintiago/shared";
 
 interface OrderMiniSummaryProps {
   order: OrderDTO;
 }
 
+interface SummaryItem {
+  headline: string;
+  customLines: string[];
+}
+
 export function OrderMiniSummary({ order }: OrderMiniSummaryProps) {
-  const itemLines = [
+  const items: SummaryItem[] = [
     ...order.orderItems.map((item) => {
       const name =
         item.halves.length === 2
           ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
           : (item.halves[0]?.pizza.name ?? "Pizza");
       const sizeLabel = SIZE_LABEL[item.size] ?? item.size;
-      return `${item.quantity}× ${name} · ${sizeLabel}`;
+      return {
+        headline: `${item.quantity}× ${name} · ${sizeLabel}`,
+        customLines: orderItemCustomLines(item),
+      };
     }),
-    ...order.orderProducts.map((p) => `${p.quantity}× ${p.product.name}`),
+    ...order.orderProducts.map((p) => ({
+      headline: `${p.quantity}× ${p.product.name}`,
+      customLines: [],
+    })),
   ];
 
   const isPickup = order.client.street === null;
@@ -63,9 +75,21 @@ export function OrderMiniSummary({ order }: OrderMiniSummaryProps) {
             label="Itens"
             value={
               <span>
-                {itemLines.map((line, i) => (
-                  <span key={i} style={{ display: "block" }}>
-                    {line}
+                {items.map((it, i) => (
+                  <span key={i} style={{ display: "block", marginBottom: 4 }}>
+                    <span style={{ display: "block" }}>{it.headline}</span>
+                    {it.customLines.map((line, j) => (
+                      <span
+                        key={j}
+                        style={{
+                          display: "block",
+                          fontSize: 12.5,
+                          color: "var(--fg3)",
+                        }}
+                      >
+                        {line}
+                      </span>
+                    ))}
                   </span>
                 ))}
               </span>

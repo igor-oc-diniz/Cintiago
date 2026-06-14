@@ -5,6 +5,7 @@ import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
+import { orderItemCustomLines } from "@/utils/order";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 import type { ReactNode } from "react";
 import {
@@ -124,9 +125,10 @@ export function useOrderTracking() {
             ingredients: h.ingredients.map((ing) => ({
               ingredientId: ing.ingredientId,
               ingredientName: ing.ingredient.name,
-              action: ing.action as "add" | "remove",
             })),
           })),
+          notes: item.notes,
+          quantity: item.quantity,
           // TODO: backend gap — OrderItemDTO doesn't expose per-item price;
           // using 0 as placeholder. See TODO.md.
           unitPrice: 0,
@@ -147,7 +149,7 @@ export function useOrderTracking() {
     navigate("/cart");
   };
 
-  const itemHeadlines: string[] = order
+  const summaryItems: { headline: string; customLines: string[] }[] = order
     ? [
         ...order.orderItems.map((item) => {
           const name =
@@ -155,9 +157,15 @@ export function useOrderTracking() {
               ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
               : (item.halves[0]?.pizza.name ?? "Pizza");
           const size = SIZE_LABEL[item.size] ?? item.size;
-          return `${item.quantity}× ${name} · ${size}`;
+          return {
+            headline: `${item.quantity}× ${name} · ${size}`,
+            customLines: orderItemCustomLines(item),
+          };
         }),
-        ...order.orderProducts.map((p) => `${p.quantity}× ${p.product.name}`),
+        ...order.orderProducts.map((p) => ({
+          headline: `${p.quantity}× ${p.product.name}`,
+          customLines: [],
+        })),
       ]
     : [];
 
@@ -173,7 +181,7 @@ export function useOrderTracking() {
     handleBack,
     handleContact,
     handleRepeat,
-    itemHeadlines,
+    summaryItems,
   };
 }
 

@@ -8,7 +8,6 @@ export type Size = "small" | "medium" | "large";
 export interface IngredientOverride {
   ingredientId: number;
   ingredientName: string; // só para exibição — não vai para a API
-  action: "add" | "remove";
 }
 
 export interface PizzaHalf {
@@ -27,6 +26,7 @@ export interface CartPizzaItem {
   crustName: string | null;
   quantity: number;
   halves: PizzaHalf[]; // sempre 1 ou 2 elementos
+  notes: string | null; // observações do item (ex: "sem cebola") — texto livre
   unitPrice: number; // calculado no frontend para exibição
 }
 
@@ -57,6 +57,8 @@ export interface AddPizzaPayload {
   crustId: number | null;
   crustName: string | null;
   halves: PizzaHalf[];
+  notes?: string | null;
+  quantity?: number;
   unitPrice: number;
 }
 
@@ -102,20 +104,24 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addPizza(state, action: PayloadAction<AddPizzaPayload>) {
-      const { size, crustId, crustName, halves, unitPrice } = action.payload;
+      const { size, crustId, crustName, halves, notes, quantity, unitPrice } =
+        action.payload;
+      const normalizedNotes = notes?.trim() ? notes.trim() : null;
+      const addQty = quantity && quantity > 0 ? quantity : 1;
 
-      // Se já existe item idêntico (mesmas metades, tamanho e borda), só incrementa
+      // Se já existe item idêntico (mesmas metades, tamanho, borda e notas), só incrementa
       const existing = state.items.find(
         (item): item is CartPizzaItem =>
           item.type === "pizza" &&
           item.size === size &&
           item.crustId === crustId &&
+          item.notes === normalizedNotes &&
           item.halves.length === halves.length &&
           item.halves.every((h, i) => h.pizzaId === halves[i]?.pizzaId),
       );
 
       if (existing) {
-        existing.quantity += 1;
+        existing.quantity += addQty;
       } else {
         state.items.push({
           id: generateId(),
@@ -123,8 +129,9 @@ const cartSlice = createSlice({
           size,
           crustId,
           crustName,
-          quantity: 1,
+          quantity: addQty,
           halves,
+          notes: normalizedNotes,
           unitPrice,
         });
       }
@@ -255,8 +262,9 @@ export const selectPayment = (state: RootState) => ({
 //       size: string,
 //       crustId?: number,
 //       quantity: number,
+//       notes?: string,
 //       halves: [
-//         { pizzaId: number, half: 1|2, ingredients?: [{ ingredientId, action }] }
+//         { pizzaId: number, half: 1|2, ingredients?: [{ ingredientId }] }
 //       ]
 //     }
 //   ],
@@ -280,15 +288,15 @@ export function serializeCartToOrderPayload(
       size: item.size,
       ...(item.crustId ? { crustId: item.crustId } : {}),
       quantity: item.quantity,
+      ...(item.notes ? { notes: item.notes } : {}),
       halves: item.halves.map((h) => ({
         pizzaId: h.pizzaId,
         half: h.half,
-        // Só inclui ingredients se houver overrides — a API aceita sem o campo
+        // Só inclui ingredients se houver adicionais — a API aceita sem o campo
         ...(h.ingredients.length > 0
           ? {
-              ingredients: h.ingredients.map(({ ingredientId, action }) => ({
+              ingredients: h.ingredients.map(({ ingredientId }) => ({
                 ingredientId,
-                action,
               })),
             }
           : {}),

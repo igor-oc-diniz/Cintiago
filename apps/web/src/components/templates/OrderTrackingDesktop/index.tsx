@@ -91,7 +91,7 @@ export function OrderTrackingDesktop({
   handleBack,
   handleContact,
   handleRepeat,
-  itemHeadlines,
+  summaryItems,
 }: OrderTrackingDesktopProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -366,9 +366,24 @@ export function OrderTrackingDesktop({
                 label="Itens"
                 value={
                   <span>
-                    {itemHeadlines.map((h, i) => (
-                      <span key={i} style={{ display: "block" }}>
-                        {h}
+                    {summaryItems.map((it, i) => (
+                      <span
+                        key={i}
+                        style={{ display: "block", marginBottom: 4 }}
+                      >
+                        <span style={{ display: "block" }}>{it.headline}</span>
+                        {it.customLines.map((line, j) => (
+                          <span
+                            key={j}
+                            style={{
+                              display: "block",
+                              fontSize: 12.5,
+                              color: "var(--fg3)",
+                            }}
+                          >
+                            {line}
+                          </span>
+                        ))}
                       </span>
                     ))}
                   </span>

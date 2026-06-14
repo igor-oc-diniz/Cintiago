@@ -6,6 +6,7 @@ import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
+import { orderItemCustomLines } from "@/utils/order";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 
 export interface RatingPayload {
@@ -64,9 +65,10 @@ export function useOrderDetail() {
             ingredients: h.ingredients.map((ing) => ({
               ingredientId: ing.ingredientId,
               ingredientName: ing.ingredient.name,
-              action: ing.action as "add" | "remove",
             })),
           })),
+          notes: item.notes,
+          quantity: item.quantity,
           unitPrice: 0,
         }),
       );
@@ -103,28 +105,8 @@ export function useOrderDetail() {
     ...(o.orderProducts ?? []).map((p) => `${p.quantity}× ${p.product.name}`),
   ];
 
-  const getItemCustomLines = (
-    item: OrderDTO["orderItems"][number],
-  ): string[] => {
-    if (!item.halves?.length) return [];
-    const single = item.halves.length === 1;
-    const out: string[] = [];
-
-    item.halves.forEach((h, i) => {
-      const adds = h.ingredients
-        .filter((ing) => ing.action === "add")
-        .map((ing) => `+ ${ing.ingredient.name.toLowerCase()}`);
-      const removes = h.ingredients
-        .filter((ing) => ing.action === "remove")
-        .map((ing) => `sem ${ing.ingredient.name.toLowerCase()}`);
-      const parts = [...removes, ...adds];
-      if (!parts.length) return;
-      const prefix = single ? "" : i === 0 ? "1ª metade · " : "2ª metade · ";
-      out.push(prefix + parts.join(", "));
-    });
-
-    return out;
-  };
+  const getItemCustomLines = (item: OrderDTO["orderItems"][number]): string[] =>
+    orderItemCustomLines(item);
 
   const getItemSubtitle = (
     item: OrderDTO["orderItems"][number],
