@@ -32,6 +32,11 @@ function buildStages(): TrackingStage[] {
     },
     {
       key: "confirmed",
+      label: "Confirmado",
+      icon: createElement(ReceiptIcon, { size: 17, strokeWidth: 1.9 }),
+    },
+    {
+      key: "preparing",
       label: "Em preparo",
       icon: createElement(FlameIcon, { size: 17, strokeWidth: 1.9 }),
     },
@@ -54,13 +59,18 @@ function buildStages(): TrackingStage[] {
 // Maps API status → timeline active index (0-based)
 function progressIndex(status: OrderStatus): number {
   switch (status) {
-    case "delivered":
-      return 3;
-    // "confirmed" maps to "Em preparo" (index 1) since we only have 3 statuses from API
+    case "pending":
+      return 0;
     case "confirmed":
       return 1;
+    case "preparing":
+      return 2;
+    case "delivering":
+      return 3;
+    case "delivered":
+      return 4;
     default:
-      return 0; // pending
+      return 0;
   }
 }
 

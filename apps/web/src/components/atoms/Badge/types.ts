@@ -3,6 +3,7 @@ import type React from "react";
 export type BadgeVariant =
   | "pending"
   | "confirmed"
+  | "preparing"
   | "delivering"
   | "delivered"
   | "cancelled"

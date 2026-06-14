@@ -17,17 +17,19 @@ export function formatDate(iso: string): string {
 
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   pending: "Aguardando",
-  confirmed: "Em preparo",
+  confirmed: "Confirmado",
+  preparing: "Em preparo",
   delivering: "Saiu para entrega",
   delivered: "Entregue",
   cancelled: "Cancelado",
 };
 
 export const ORDER_STATUS_COLOR: Record<string, string> = {
-  pending: "bg-[var(--gold-50)]   text-[var(--gold-900)]",
-  confirmed: "bg-[var(--gold-50)]   text-[var(--gold-900)]",
+  pending: "bg-[var(--gold-50)]    text-[var(--gold-900)]",
+  confirmed: "bg-[var(--gold-50)]  text-[var(--gold-900)]",
+  preparing: "bg-[var(--gold-50)]  text-[var(--gold-900)]",
   delivering: "bg-[var(--terracotta-50)] text-[var(--terracotta-700)]",
-  delivered: "bg-[var(--basil-50)]  text-[var(--basil-700)]",
+  delivered: "bg-[var(--basil-50)] text-[var(--basil-700)]",
   cancelled: "bg-[rgba(0,0,0,0.06)] text-[var(--fg3)]",
 };
 

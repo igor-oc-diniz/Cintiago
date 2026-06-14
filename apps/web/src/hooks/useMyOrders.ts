@@ -10,6 +10,7 @@ import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 const ACTIVE_STATUSES: OrderStatus[] = [
   "pending",
   "confirmed",
+  "preparing",
   "delivering",
   "delivered",
 ];
@@ -20,10 +21,12 @@ export function progressSegment(status: OrderStatus): number {
       return 1;
     case "confirmed":
       return 2;
-    case "delivering":
+    case "preparing":
       return 3;
-    case "delivered":
+    case "delivering":
       return 4;
+    case "delivered":
+      return 5;
     default:
       return 0;
   }

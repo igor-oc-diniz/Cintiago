@@ -5,7 +5,13 @@ import type { PaymentDTO } from "./payment.types";
 import type { PizzaDTO } from "./pizza.types";
 import type { ProductDTO } from "./product.types";
 
-export type OrderStatus = "pending" | "confirmed" | "delivering" | "delivered";
+export type OrderStatus =
+  | "pending"
+  | "confirmed"
+  | "preparing"
+  | "delivering"
+  | "delivered"
+  | "cancelled";
 export type PizzaSize = "small" | "medium" | "large";
 
 export interface OrderItemHalfIngredientDTO {

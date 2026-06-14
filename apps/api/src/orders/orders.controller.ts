@@ -14,6 +14,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
+import { OrderStatus } from '@prisma/client';
 import type { JwtUser } from '../auth/types/jwt-payload.type';
 
 @Controller('orders')
@@ -51,7 +52,7 @@ export class OrdersController {
   @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('status') status: string) {
+  updateStatus(@Param('id') id: string, @Body('status') status: OrderStatus) {
     return this.ordersService.updateStatus(+id, status);
   }
 
