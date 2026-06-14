@@ -161,6 +161,13 @@ model OrderItemHalfIngredient {
   @@id([orderItemHalfId, ingredientId])
 }
 
+model Store {
+  id              Int @id @default(autoincrement())
+  basePrepMinutes Int @default(10)
+  perPizzaMinutes Int @default(8)
+  deliveryMinutes Int @default(20)
+}
+
 model OrderProduct {
   id        Int     @id @default(autoincrement())
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)

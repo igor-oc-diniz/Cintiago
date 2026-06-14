@@ -31,6 +31,31 @@ export class OrdersService {
     return Number(price ?? 0);
   }
 
+  private computeEta(
+    order: {
+      deliveryType: string;
+      orderItems: { quantity: number }[];
+    },
+    store: {
+      basePrepMinutes: number;
+      perPizzaMinutes: number;
+      deliveryMinutes: number;
+    } | null,
+  ): number | null {
+    if (!store) return null;
+
+    const totalPizzas = order.orderItems.reduce(
+      (acc, item) => acc + item.quantity,
+      0,
+    );
+    const delivery =
+      order.deliveryType === 'delivery' ? store.deliveryMinutes : 0;
+
+    return (
+      store.basePrepMinutes + store.perPizzaMinutes * totalPizzas + delivery
+    );
+  }
+
   private readonly orderInclude = {
     client: true,
     payment: true,
@@ -49,18 +74,34 @@ export class OrdersService {
   };
 
   async findAll() {
-    return this.prisma.order.findMany({
-      include: this.orderInclude,
-      orderBy: { createdAt: 'desc' },
-    });
+    const [orders, store] = await Promise.all([
+      this.prisma.order.findMany({
+        include: this.orderInclude,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.store.findFirst(),
+    ]);
+
+    return orders.map((order) => ({
+      ...order,
+      estimatedDeliveryMinutes: this.computeEta(order, store),
+    }));
   }
 
   async findOne(id: number) {
     try {
-      return await this.prisma.order.findUniqueOrThrow({
-        where: { id },
-        include: this.orderInclude,
-      });
+      const [order, store] = await Promise.all([
+        this.prisma.order.findUniqueOrThrow({
+          where: { id },
+          include: this.orderInclude,
+        }),
+        this.prisma.store.findFirst(),
+      ]);
+
+      return {
+        ...order,
+        estimatedDeliveryMinutes: this.computeEta(order, store),
+      };
     } catch (error) {
       handlePrismaError(error, `Pedido ${id}`);
     }
@@ -256,10 +297,20 @@ export class OrdersService {
         return newOrder.id;
       });
 
-      return this.prisma.order.findUnique({
-        where: { id: createdOrder },
-        include: this.orderInclude,
-      });
+      const [newOrder, store] = await Promise.all([
+        this.prisma.order.findUnique({
+          where: { id: createdOrder },
+          include: this.orderInclude,
+        }),
+        this.prisma.store.findFirst(),
+      ]);
+
+      if (!newOrder) return newOrder;
+
+      return {
+        ...newOrder,
+        estimatedDeliveryMinutes: this.computeEta(newOrder, store),
+      };
     } catch (error) {
       handlePrismaError(error, 'Pedido');
     }
@@ -271,11 +322,19 @@ export class OrdersService {
         where: { userId },
       });
 
-      return await this.prisma.order.findMany({
-        where: { clientId: currentClient.id },
-        include: this.orderInclude,
-        orderBy: { createdAt: 'desc' },
-      });
+      const [orders, store] = await Promise.all([
+        this.prisma.order.findMany({
+          where: { clientId: currentClient.id },
+          include: this.orderInclude,
+          orderBy: { createdAt: 'desc' },
+        }),
+        this.prisma.store.findFirst(),
+      ]);
+
+      return orders.map((order) => ({
+        ...order,
+        estimatedDeliveryMinutes: this.computeEta(order, store),
+      }));
     } catch (error) {
       handlePrismaError(error, 'Cliente');
     }
@@ -287,10 +346,18 @@ export class OrdersService {
         where: { userId },
       });
 
-      return await this.prisma.order.findUniqueOrThrow({
-        where: { id: orderId, clientId: currentClient.id },
-        include: this.orderInclude,
-      });
+      const [order, store] = await Promise.all([
+        this.prisma.order.findUniqueOrThrow({
+          where: { id: orderId, clientId: currentClient.id },
+          include: this.orderInclude,
+        }),
+        this.prisma.store.findFirst(),
+      ]);
+
+      return {
+        ...order,
+        estimatedDeliveryMinutes: this.computeEta(order, store),
+      };
     } catch (error) {
       handlePrismaError(error, `Pedido ${orderId}`);
     }
