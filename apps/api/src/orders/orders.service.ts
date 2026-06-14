@@ -202,6 +202,7 @@ export class OrdersService {
             clientId: client.id,
             paymentId: order.paymentId,
             total,
+            deliveryType: order.deliveryType,
           },
         });
 
