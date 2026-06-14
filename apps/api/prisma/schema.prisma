@@ -114,6 +114,7 @@ model Order {
   paymentId     Int
   total         Decimal?
   status        String         @default("pending")
+  deliveryType  String         @default("delivery")
   createdAt     DateTime       @default(now())
   orderItems    OrderItem[]
   orderProducts OrderProduct[]
