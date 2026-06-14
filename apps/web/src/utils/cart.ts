@@ -24,10 +24,10 @@ export function pizzaItemCustomizations(item: CartPizzaItem): string[] {
   const parts: string[] = [];
   for (const half of item.halves) {
     for (const ing of half.ingredients) {
-      if (ing.action === "remove")
-        parts.push(`sem ${ing.ingredientName.toLowerCase()}`);
-      else parts.push(`+ ${ing.ingredientName.toLowerCase()}`);
+      parts.push(`+ ${ing.ingredientName.toLowerCase()}`);
     }
   }
-  return [...new Set(parts)];
+  const unique = [...new Set(parts)];
+  if (item.notes) unique.push(item.notes);
+  return unique;
 }

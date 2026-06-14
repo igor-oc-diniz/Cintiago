@@ -17,7 +17,6 @@ export type PizzaSize = "small" | "medium" | "large";
 export interface OrderItemHalfIngredientDTO {
   orderItemHalfId: number;
   ingredientId: number;
-  action: string;
   ingredient: IngredientDTO;
 }
 
@@ -37,6 +36,7 @@ export interface OrderItemDTO {
   size: string;
   quantity: number;
   price: string | null;
+  notes: string | null;
   crust: CrustDTO | null;
   halves: OrderItemHalfDTO[];
 }
@@ -65,7 +65,6 @@ export interface OrderDTO {
 
 export interface CreateOrderItemHalfIngredientPayloadDTO {
   ingredientId: number;
-  action: "add" | "remove";
 }
 
 export interface CreateOrderItemHalfPayloadDTO {
@@ -78,6 +77,7 @@ export interface CreateOrderItemPayloadDTO {
   size: PizzaSize;
   crustId?: number;
   quantity: number;
+  notes?: string;
   halves: CreateOrderItemHalfPayloadDTO[];
 }
 

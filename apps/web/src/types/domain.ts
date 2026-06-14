@@ -64,7 +64,6 @@ export interface Client {
 
 export interface OrderItemHalfIngredient {
   ingredientId: number;
-  action: "add" | "remove";
 }
 
 export interface OrderItemHalf {
@@ -77,6 +76,7 @@ export interface OrderItemPayload {
   size: "small" | "medium" | "large";
   crustId?: number;
   quantity: number;
+  notes?: string;
   halves: OrderItemHalf[];
 }
 
@@ -96,6 +96,7 @@ export interface OrderItem {
   id: number;
   size: string;
   quantity: number;
+  notes: string | null;
   crust: Crust | null;
   halves: {
     half: 1 | 2;

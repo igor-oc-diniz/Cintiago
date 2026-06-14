@@ -5,6 +5,7 @@ import { PizzaSection } from "@/components/molecules/PizzaSection";
 import { SizeSelector } from "@/components/molecules/SizeSelector";
 import { Stepper } from "@/components/molecules/Stepper";
 import { HalfBlock } from "@/components/organisms/HalfBlock";
+import { NotesField } from "@/components/molecules/NotesField";
 import type { PizzaDetailData } from "./usePizzaDetailData";
 
 export function PizzaDetailMobile({
@@ -22,15 +23,15 @@ export function PizzaDetailMobile({
   setSecondPizzaId,
   sheetOpen,
   setSheetOpen,
-  removedIds,
   addedIds,
+  notes,
+  setNotes,
   secondPizza,
   total,
   defaultIngs,
   addonIngs,
   secondDefaultIngs,
   secondAddonIngs,
-  toggleRemoved,
   toggleAdded,
   enableMeia,
   disableMeia,
@@ -360,9 +361,7 @@ export function PizzaDetailMobile({
                   pizzaName={pizza.name}
                   defaultIngs={defaultIngs}
                   addonIngs={addonIngs}
-                  removedIds={removedIds[0]}
                   addedIds={addedIds[0]}
-                  onRemove={(id) => toggleRemoved(0, id)}
                   onAdd={(id) => toggleAdded(0, id)}
                 />
                 <hr className="cg-divider" />
@@ -371,9 +370,7 @@ export function PizzaDetailMobile({
                   pizzaName={secondPizza.name}
                   defaultIngs={secondDefaultIngs}
                   addonIngs={secondAddonIngs}
-                  removedIds={removedIds[1]}
                   addedIds={addedIds[1]}
-                  onRemove={(id) => toggleRemoved(1, id)}
                   onAdd={(id) => toggleAdded(1, id)}
                 />
               </div>
@@ -382,12 +379,18 @@ export function PizzaDetailMobile({
                 pizzaName={pizza.name}
                 defaultIngs={defaultIngs}
                 addonIngs={addonIngs}
-                removedIds={removedIds[0]}
                 addedIds={addedIds[0]}
-                onRemove={(id) => toggleRemoved(0, id)}
                 onAdd={(id) => toggleAdded(0, id)}
               />
             )}
+          </PizzaSection>
+        </div>
+
+        {/* Observações */}
+        <hr className="cg-divider" style={{ margin: "0 16px" }} />
+        <div style={{ padding: "18px 0 8px" }}>
+          <PizzaSection title="Observações" note="Ex: sem cebola…">
+            <NotesField value={notes} onChange={setNotes} />
           </PizzaSection>
         </div>
 

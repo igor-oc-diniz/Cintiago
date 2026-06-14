@@ -85,9 +85,10 @@ export function useMyOrders() {
             ingredients: h.ingredients.map((ing) => ({
               ingredientId: ing.ingredientId,
               ingredientName: ing.ingredient.name,
-              action: ing.action as "add" | "remove",
             })),
           })),
+          notes: item.notes,
+          quantity: item.quantity,
           unitPrice: 0,
         }),
       );

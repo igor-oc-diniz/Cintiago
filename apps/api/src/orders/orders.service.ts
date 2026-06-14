@@ -151,7 +151,6 @@ export class OrdersService {
         order.items
           .flatMap((item) => item.halves)
           .flatMap((half) => half.ingredients ?? [])
-          .filter((ing) => ing.action === 'add')
           .map((ing) => ing.ingredientId),
       ),
     ];
@@ -197,10 +196,7 @@ export class OrdersService {
         let halfPrice = this.getPrice(pizza, item.size);
 
         for (const ing of half.ingredients ?? []) {
-          if (
-            ing.action === 'add' &&
-            !chargedIngredients.has(ing.ingredientId)
-          ) {
+          if (!chargedIngredients.has(ing.ingredientId)) {
             const ip = ingredientMap.get(ing.ingredientId);
             if (ip) halfPrice += this.getPrice(ip, item.size);
             chargedIngredients.add(ing.ingredientId);
@@ -260,6 +256,7 @@ export class OrdersService {
               size: item.size,
               quantity: item.quantity,
               price: itemUnitPrices.get(item),
+              notes: item.notes,
             },
           });
 
@@ -277,7 +274,6 @@ export class OrdersService {
                 data: {
                   orderItemHalfId: newHalf.id,
                   ingredientId: ing.ingredientId,
-                  action: ing.action,
                 },
               });
             }

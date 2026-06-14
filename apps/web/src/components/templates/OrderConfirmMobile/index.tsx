@@ -9,7 +9,7 @@ export function OrderConfirmMobile({
   order,
   isLoading,
   isError,
-  itemLines,
+  summaryItems,
   deliveryLabel,
   addressSub,
   paymentLabel,
@@ -102,9 +102,17 @@ export function OrderConfirmMobile({
     );
   }
 
-  const itemsNode = itemLines.map((line, i) => (
-    <span key={i} style={{ display: "block" }}>
-      {line}
+  const itemsNode = summaryItems.map((it, i) => (
+    <span key={i} style={{ display: "block", marginBottom: 4 }}>
+      <span style={{ display: "block" }}>{it.headline}</span>
+      {it.customLines.map((line, j) => (
+        <span
+          key={j}
+          style={{ display: "block", fontSize: 12.5, color: "var(--fg3)" }}
+        >
+          {line}
+        </span>
+      ))}
     </span>
   ));
 
