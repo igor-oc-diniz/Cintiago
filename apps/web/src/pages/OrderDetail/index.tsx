@@ -1,11 +1,15 @@
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import { useOrderDetail } from "@/hooks/useOrderDetail";
 import { OrderDetailDesktop } from "@/components/templates/OrderDetailDesktop";
+import { OrderDetailMobile } from "@/components/templates/OrderDetailMobile";
 
 export default function OrderDetail() {
   const data = useOrderDetail();
   const { isMobile } = useBreakpoint();
 
-  // Mobile version not yet designed — falls back to desktop layout
-  return <OrderDetailDesktop {...data} />;
+  return isMobile ? (
+    <OrderDetailMobile {...data} />
+  ) : (
+    <OrderDetailDesktop {...data} />
+  );
 }
