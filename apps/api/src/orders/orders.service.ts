@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { OrderStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/client';
 import { handlePrismaError } from '../common/prisma-errors.helper';
 
@@ -65,10 +66,10 @@ export class OrdersService {
     }
   }
 
-  async updateStatus(id: number, status: string) {
+  async updateStatus(id: number, status: OrderStatus) {
     if (!status) throw new BadRequestException('O campo status é obrigatório');
 
-    const validStatuses = ['pending', 'confirmed', 'delivered'];
+    const validStatuses = Object.values(OrderStatus);
     if (!validStatuses.includes(status)) {
       throw new BadRequestException(
         `Status inválido. Use: ${validStatuses.join(', ')}`,

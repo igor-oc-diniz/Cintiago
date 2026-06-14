@@ -11,6 +11,15 @@ enum Role {
   OPERATOR
 }
 
+enum OrderStatus {
+  pending
+  confirmed
+  preparing
+  delivering
+  delivered
+  cancelled
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   googleId  String   @unique
@@ -113,7 +122,7 @@ model Order {
   payment       Payment        @relation(fields: [paymentId], references: [id])
   paymentId     Int
   total         Decimal?
-  status        String         @default("pending")
+  status        OrderStatus    @default(pending)
   deliveryType  String         @default("delivery")
   createdAt     DateTime       @default(now())
   orderItems    OrderItem[]

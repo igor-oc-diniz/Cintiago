@@ -6,12 +6,19 @@ import type { ActiveOrderCardDesktopProps } from "./types";
 
 const STAGE_LABELS: Record<string, string> = {
   pending: "Recebido",
-  confirmed: "Preparo",
+  confirmed: "Confirmado",
+  preparing: "Em preparo",
   delivering: "A caminho",
   delivered: "Entregue",
 };
 
-const SEGMENTS = ["pending", "confirmed", "delivering", "delivered"] as const;
+const SEGMENTS = [
+  "pending",
+  "confirmed",
+  "preparing",
+  "delivering",
+  "delivered",
+] as const;
 
 export function ActiveOrderCardDesktop({
   order,

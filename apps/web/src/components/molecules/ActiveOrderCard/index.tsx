@@ -4,7 +4,7 @@ import { LeafIcon } from "@/components/atoms/Icons";
 import type { OrderStatus } from "@cintiago/shared";
 import type { ActiveOrderCardProps } from "./types";
 
-const SEGMENTS = 4;
+const SEGMENTS = 5;
 
 interface ProgressStripProps {
   filled: number;
