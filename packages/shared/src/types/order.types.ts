@@ -36,6 +36,7 @@ export interface OrderItemDTO {
   crustId: number | null;
   size: string;
   quantity: number;
+  price: string | null;
   crust: CrustDTO | null;
   halves: OrderItemHalfDTO[];
 }
