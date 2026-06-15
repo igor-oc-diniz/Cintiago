@@ -6,8 +6,10 @@ import { Avatar } from "@/components/atoms/Avatar";
 import { Button } from "@/components/atoms/Button";
 import { Divider } from "@/components/atoms/Divider";
 import { CartButton } from "@/components/molecules/CartButton";
+import { StoreStatusBadge } from "@/components/molecules/StoreStatusBadge";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { HeaderProps } from "./types";
 
 function Logo() {
@@ -66,22 +68,12 @@ function Logo() {
   );
 }
 
-function StoreStatus({ isOpen = true }: { isOpen?: boolean }) {
-  return (
-    <span className="cg-status" style={{ paddingLeft: 39 }}>
-      <span
-        className={`cg-dot ${isOpen ? "cg-dot--open" : "cg-dot--closed"}`}
-      />
-      {isOpen ? "Aberto até 23h" : "Fechado · abre às 18h"}
-    </span>
-  );
-}
-
 export function Header({ showBack, title, onBack, className }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isLoggedIn, logout } = useAuth();
   const { count: cartCount } = useCart();
+  const { isOpen } = useStoreInfo();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleBack = () => {
@@ -153,7 +145,7 @@ export function Header({ showBack, title, onBack, className }: HeaderProps) {
             }}
           >
             <Logo />
-            <StoreStatus isOpen />
+            <StoreStatusBadge isOpen={isOpen ?? true} className="pl-[39px]" />
           </div>
         )}
 

@@ -3,6 +3,7 @@ import { CartSummary } from "@/components/molecules/CartSummary";
 import { PizzaCartCard } from "@/components/molecules/PizzaCartCard";
 import { ProductCartCard } from "@/components/molecules/ProductCartCard";
 import { SelectorRow } from "@/components/molecules/SelectorRow";
+import { StoreClosedModal } from "@/components/molecules/StoreClosedModal";
 
 const chipBtn: React.CSSProperties = {
   display: "inline-flex",
@@ -33,9 +34,15 @@ export function CartMobile({
   fee,
   total,
   ready,
+  checkoutHint,
   formatPrice,
   handleQty,
   handleRemove,
+  handleCheckout,
+  checkingStatus,
+  showClosedModal,
+  closeClosedModal,
+  openingHours,
 }: CartData) {
   const header = (
     <div
@@ -182,6 +189,12 @@ export function CartMobile({
         flexDirection: "column",
       }}
     >
+      {showClosedModal && (
+        <StoreClosedModal
+          onClose={closeClosedModal}
+          openingHours={openingHours}
+        />
+      )}
       {header}
 
       {/* Scroll area */}
@@ -333,14 +346,14 @@ export function CartMobile({
       >
         <button
           type="button"
-          disabled={!ready}
-          onClick={() => navigate("/order/confirm")}
+          disabled={!ready || checkingStatus}
+          onClick={handleCheckout}
           style={{
             width: "100%",
             height: 54,
             borderRadius: "var(--radius-lg)",
             border: "none",
-            cursor: ready ? "pointer" : "not-allowed",
+            cursor: ready && !checkingStatus ? "pointer" : "not-allowed",
             background: ready ? "var(--primary)" : "var(--oat)",
             color: ready ? "var(--on-primary)" : "var(--fg4)",
             fontFamily: "var(--font-body)",
@@ -366,7 +379,7 @@ export function CartMobile({
           >
             <path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" />
           </svg>
-          Finalizar pedido
+          {checkingStatus ? "Verificando..." : "Finalizar pedido"}
         </button>
 
         {!isLoggedIn && (
@@ -409,7 +422,7 @@ export function CartMobile({
           </button>
         )}
 
-        {!ready && (
+        {!ready && checkoutHint && (
           <div
             style={{
               textAlign: "center",
@@ -418,11 +431,7 @@ export function CartMobile({
               color: "var(--fg4)",
             }}
           >
-            {!deliveryType && !paymentName
-              ? "Escolha entrega e pagamento para finalizar"
-              : !deliveryType
-                ? "Escolha a forma de entrega"
-                : "Escolha a forma de pagamento"}
+            {checkoutHint}
           </div>
         )}
       </div>

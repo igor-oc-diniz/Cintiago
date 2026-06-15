@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Avatar } from "@/components/atoms/Avatar";
 import { ReceiptIcon, UserRoundIcon } from "@/components/atoms/Icons";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { WebNavProps } from "./types";
 
 export function WebNav({
@@ -12,6 +13,8 @@ export function WebNav({
   onProfile,
 }: WebNavProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isOpen } = useStoreInfo();
+  const open = isOpen ?? true;
 
   return (
     <header
@@ -106,7 +109,7 @@ export function WebNav({
                 width: 7,
                 height: 7,
                 borderRadius: "50%",
-                background: "#22c55e",
+                background: open ? "#22c55e" : "var(--color-error, #C0392B)",
                 flexShrink: 0,
               }}
             />
@@ -117,7 +120,7 @@ export function WebNav({
                 color: "var(--fg3, #7A6A5A)",
               }}
             >
-              Aberto até 23h
+              {open ? "Aberto agora" : "Fechado agora"}
             </span>
           </div>
         </div>

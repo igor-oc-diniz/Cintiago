@@ -14,8 +14,8 @@ import { pizzaItemCustomizations } from "@/utils/cart";
 import { orderItemCustomLines } from "@/utils/order";
 import { selectUser } from "@/store/slices/authSlice";
 import { createOrder } from "@/api/orders";
-import { DELIVERY_FEE, DELIVERY_ETA, PIZZERIA } from "@/constants/delivery";
-import { formatPrice } from "@/utils/format";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
+import { formatPrice, formatEtaMinutes } from "@/utils/format";
 import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
 
 const DELIVERY_LABELS: Record<string, string> = {
@@ -33,8 +33,9 @@ export function useOrderConfirm() {
   const deliveryType = useAppSelector(selectDeliveryType);
   const payment = useAppSelector(selectPayment);
   const activeOrder = useAppSelector(selectActiveOrder);
+  const { deliveryFee, addressLines } = useStoreInfo();
 
-  const fee = deliveryType === "delivery" ? DELIVERY_FEE : 0;
+  const fee = deliveryType === "delivery" ? deliveryFee : 0;
 
   const mutation = useMutation({
     mutationFn: createOrder,
@@ -109,7 +110,7 @@ export function useOrderConfirm() {
   const addressSub =
     deliveryType === "delivery" && order
       ? `${order.client.street}, ${order.client.number}`
-      : PIZZERIA.address;
+      : (addressLines?.line1 ?? "");
 
   const paymentLabel = order?.payment.name ?? payment.name ?? "";
 
@@ -118,6 +119,9 @@ export function useOrderConfirm() {
   };
 
   const handleHome = () => navigate("/");
+
+  // ETA real do pedido, calculado pelo backend (computeEta)
+  const deliveryEta = formatEtaMinutes(order?.estimatedDeliveryMinutes ?? null);
 
   return {
     order,
@@ -129,7 +133,7 @@ export function useOrderConfirm() {
     total: order ? Number(order.total ?? 0) : fee,
     fee,
     formatPrice,
-    DELIVERY_ETA,
+    deliveryEta,
     handleTrack,
     handleHome,
     summaryItems,

@@ -17,8 +17,12 @@ export function StoreStatusBadge({
       />
       <span className="text-xs font-body text-[var(--color-on-surface-variant)]">
         {isOpen
-          ? `Aberto até ${closesAt ?? ""}`
-          : `Fechado · Abre às ${opensAt ?? ""}`}
+          ? closesAt
+            ? `Aberto até ${closesAt}`
+            : "Aberto agora"
+          : opensAt
+            ? `Fechado · Abre às ${opensAt}`
+            : "Fechado agora"}
       </span>
     </div>
   );

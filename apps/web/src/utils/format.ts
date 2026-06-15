@@ -5,6 +5,12 @@ export function formatPrice(value: number): string {
   }).format(value);
 }
 
+// Tempo estimado em minutos → "~25 min" (vazio quando não há estimativa)
+export function formatEtaMinutes(minutes: number | null): string {
+  if (minutes == null) return "";
+  return `~${minutes} min`;
+}
+
 export function formatDate(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
