@@ -16,6 +16,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { OrderStatus } from '@prisma/client';
 import type { JwtUser } from '../auth/types/jwt-payload.type';
+import { CreateRatingDto } from './dto/create-rating.dto';
+import { ReplyRatingDto } from './dto/reply-rating.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -61,5 +63,23 @@ export class OrdersController {
   @Post()
   create(@Req() req: { user: JwtUser }, @Body() dto: CreateOrderDto) {
     return this.ordersService.createOrder(req.user.userId, dto);
+  }
+
+  @Roles(Role.CLIENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post(':id/rating')
+  rateOrder(
+    @Req() req: { user: JwtUser },
+    @Param('id') id: string,
+    @Body() dto: CreateRatingDto,
+  ) {
+    return this.ordersService.rateOrder(req.user.userId, +id, dto);
+  }
+
+  @Roles(Role.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Patch(':id/rating/reply')
+  replyRating(@Param('id') id: string, @Body() dto: ReplyRatingDto) {
+    return this.ordersService.replyToRating(+id, dto);
   }
 }

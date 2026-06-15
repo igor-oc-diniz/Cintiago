@@ -51,10 +51,19 @@ export interface OrderProductDTO {
 
 export type DeliveryType = "delivery" | "pickup";
 
+export interface OrderRatingDTO {
+  id: number;
+  orderId: number;
+  stars: number;
+  comment: string | null;
+  reply: string | null;
+  createdAt: string;
+}
 export interface OrderDTO {
   id: number;
   clientId: number;
   paymentId: number;
+  rating: OrderRatingDTO | null;
   total: string | null;
   changeFor: string | null;
   status: OrderStatus;
@@ -95,4 +104,9 @@ export interface CreateOrderPayloadDTO {
   changeFor?: number;
   items: CreateOrderItemPayloadDTO[];
   products?: CreateOrderProductPayloadDTO[];
+}
+
+export interface CreateRatingPayloadDTO {
+  stars: number;
+  comment?: string;
 }

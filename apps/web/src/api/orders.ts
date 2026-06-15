@@ -1,5 +1,10 @@
 import { api } from "./client";
-import type { OrderDTO, CreateOrderPayloadDTO } from "@cintiago/shared";
+import type {
+  OrderDTO,
+  CreateOrderPayloadDTO,
+  CreateRatingPayloadDTO,
+  OrderRatingDTO,
+} from "@cintiago/shared";
 
 export const getMyOrders = () =>
   api.get<OrderDTO[]>("/orders/my").then((r) => r.data);
@@ -9,3 +14,6 @@ export const getOrderById = (id: number) =>
 
 export const createOrder = (payload: CreateOrderPayloadDTO) =>
   api.post<OrderDTO>("/orders", payload).then((r) => r.data);
+
+export const rateOrder = (id: number, payload: CreateRatingPayloadDTO) =>
+  api.post<OrderRatingDTO>(`/orders/${id}/rating`, payload).then((r) => r.data);

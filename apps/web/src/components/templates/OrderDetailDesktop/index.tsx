@@ -70,7 +70,7 @@ export function OrderDetailDesktop({
   isDelivered,
   isDelivery,
   statusLabel,
-  localRating,
+  existingRating,
   formatPrice,
   handleBack,
   handleRepeat,
@@ -366,7 +366,10 @@ export function OrderDetailDesktop({
 
             {/* Rating (only for delivered) */}
             {isDelivered && (
-              <RatingCard localRating={localRating} onSubmit={handleRate} />
+              <RatingCard
+                existingRating={existingRating}
+                onSubmit={handleRate}
+              />
             )}
           </div>
 
