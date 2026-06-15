@@ -230,7 +230,14 @@ export function usePizzaDetailData() {
         unitPrice,
       });
     }
-    navigate(-1);
+
+    // Edição: volta para o carrinho (origem). Adição: leva o usuário ao
+    // carrinho para revisar/finalizar o pedido.
+    if (isEditMode) {
+      navigate(-1);
+    } else {
+      navigate("/cart");
+    }
   };
 
   return {

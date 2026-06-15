@@ -33,6 +33,8 @@ export function CartMobile({
   deliveryLabel,
   fee,
   total,
+  changeFor,
+  isCash,
   ready,
   checkoutHint,
   formatPrice,
@@ -302,7 +304,7 @@ export function CartMobile({
                 height="19"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--accent-warm)"
+                stroke={deliveryType ? "var(--accent-warm)" : "var(--fg4)"}
                 strokeWidth="1.9"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -313,8 +315,13 @@ export function CartMobile({
             }
             label="Pagamento"
             value={paymentName}
-            placeholder="Selecionar forma de pagamento"
-            onClick={() => navigate("/cart/payment")}
+            placeholder={
+              deliveryType
+                ? "Selecionar forma de pagamento"
+                : "Selecione a entrega primeiro"
+            }
+            onClick={deliveryType ? () => navigate("/cart/payment") : undefined}
+            disabled={!deliveryType}
           />
         </div>
 
@@ -327,6 +334,8 @@ export function CartMobile({
               fee={fee}
               total={total}
               formatPrice={formatPrice}
+              changeFor={changeFor}
+              isCash={isCash}
             />
           </div>
         </div>

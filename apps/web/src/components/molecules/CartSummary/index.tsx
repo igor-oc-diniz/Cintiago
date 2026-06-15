@@ -4,6 +4,8 @@ interface CartSummaryProps {
   fee: number;
   total: number;
   formatPrice: (n: number) => string;
+  changeFor?: number | null;
+  isCash?: boolean;
 }
 
 export function CartSummary({
@@ -12,7 +14,11 @@ export function CartSummary({
   fee,
   total,
   formatPrice,
+  changeFor,
+  isCash,
 }: CartSummaryProps) {
+  const showTroco = isCash && changeFor != null && changeFor > total;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <div
@@ -100,6 +106,74 @@ export function CartSummary({
           {formatPrice(total)}
         </span>
       </div>
+
+      {showTroco && (
+        <>
+          <div
+            style={{
+              height: 1,
+              background: "var(--border)",
+              margin: "6px 0 2px",
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 400,
+                fontSize: 12.5,
+                color: "var(--fg3)",
+              }}
+            >
+              Troco para
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 500,
+                fontSize: 12.5,
+                color: "var(--fg2)",
+              }}
+            >
+              {formatPrice(changeFor!)}
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 400,
+                fontSize: 12.5,
+                color: "var(--fg3)",
+              }}
+            >
+              Seu troco
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-body)",
+                fontWeight: 600,
+                fontSize: 12.5,
+                color: "var(--fg1)",
+              }}
+            >
+              {formatPrice(changeFor! - total)}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

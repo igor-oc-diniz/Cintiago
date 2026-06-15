@@ -6,12 +6,14 @@ export function SelectorRow({
   value,
   placeholder,
   onClick,
+  disabled,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string | null;
   placeholder: string;
-  onClick: () => void;
+  onClick?: () => void;
+  disabled?: boolean;
 }) {
   const { isDesktop } = useBreakpoint();
   const empty = !value;
@@ -19,19 +21,21 @@ export function SelectorRow({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       style={{
         display: "flex",
         alignItems: "center",
         gap: 13,
         width: "100%",
         textAlign: "left",
-        cursor: "pointer",
+        cursor: disabled ? "not-allowed" : "pointer",
         padding: isDesktop ? "13px 14px" : "14px",
         borderRadius: "var(--radius-lg)",
         border: "none",
         background: "var(--surface)",
         boxShadow: "inset 0 0 0 1px var(--border)",
+        opacity: disabled ? 0.55 : 1,
       }}
     >
       <span
