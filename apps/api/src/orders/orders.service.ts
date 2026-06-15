@@ -8,6 +8,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/client';
 import { handlePrismaError } from '../common/prisma-errors.helper';
+import { CreateRatingDto } from './dto/create-rating.dto';
+import { ReplyRatingDto } from './dto/reply-rating.dto';
 
 @Injectable()
 export class OrdersService {
@@ -59,6 +61,7 @@ export class OrdersService {
   private readonly orderInclude = {
     client: true,
     payment: true,
+    rating: true,
     orderItems: {
       include: {
         crust: true,
@@ -357,6 +360,42 @@ export class OrdersService {
       };
     } catch (error) {
       handlePrismaError(error, `Pedido ${orderId}`);
+    }
+  }
+  async rateOrder(userId: number, orderId: number, dto: CreateRatingDto) {
+    const client = await this.prisma.client.findUnique({ where: { userId } });
+    if (!client) throw new NotFoundException('Cliente não encontrado');
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId, clientId: client.id },
+    });
+    if (!order) throw new NotFoundException(`Pedido ${orderId} não encontrado`);
+    if (order.status !== 'delivered') {
+      throw new BadRequestException('Só é possível avaliar pedidos entregues');
+    }
+    try {
+      return this.prisma.rating.upsert({
+        where: { orderId },
+        create: { orderId, stars: dto.stars, comment: dto.comment },
+        update: { stars: dto.stars, comment: dto.comment },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Avaliação do pedido ${orderId}`);
+    }
+  }
+
+  async replyToRating(orderId: number, dto: ReplyRatingDto) {
+    const rating = await this.prisma.rating.findUnique({ where: { orderId } });
+    if (!rating)
+      throw new NotFoundException(
+        `Avaliação do pedido ${orderId} não encontrada`,
+      );
+    try {
+      return this.prisma.rating.update({
+        where: { orderId },
+        data: { reply: dto.reply },
+      });
+    } catch (error) {
+      handlePrismaError(error, `Avaliação do pedido ${orderId}`);
     }
   }
 }

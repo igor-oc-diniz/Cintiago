@@ -67,7 +67,7 @@ export function OrderDetailMobile({
   isDelivered,
   isDelivery,
   statusLabel,
-  localRating,
+  existingRating,
   formatPrice,
   handleBack,
   handleRepeat,
@@ -339,7 +339,7 @@ export function OrderDetailMobile({
         {/* Rating */}
         {isDelivered && (
           <div style={{ marginBottom: 12 }}>
-            <RatingCard localRating={localRating} onSubmit={handleRate} />
+            <RatingCard existingRating={existingRating} onSubmit={handleRate} />
           </div>
         )}
 

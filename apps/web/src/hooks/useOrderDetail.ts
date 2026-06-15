@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
-import { getOrderById } from "@/api/orders";
+import { getOrderById, rateOrder } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import {
   formatPrice,
@@ -11,19 +10,18 @@ import {
   SIZE_LABEL,
   telHref,
 } from "@/utils/format";
-import { computeOrderItemCurrentPrice, orderItemCustomLines } from "@/utils/order";
+import {
+  computeOrderItemCurrentPrice,
+  orderItemCustomLines,
+} from "@/utils/order";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO } from "@cintiago/shared";
-
-export interface RatingPayload {
-  stars: number;
-  comment: string;
-}
 
 export function useOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const queryClientInstance = useQueryClient();
 
   const orderId = Number(id);
   const { phone } = useStoreInfo();
@@ -38,9 +36,15 @@ export function useOrderDetail() {
     enabled: !isNaN(orderId),
   });
 
-  // TODO: backend gap — POST /orders/:id/rating não existe ainda.
-  // Usando estado local para simular o envio da avaliação até o endpoint ser criado.
-  const [localRating, setLocalRating] = useState<RatingPayload | null>(null);
+  const { mutate: submitRating } = useMutation({
+    mutationFn: (payload: { stars: number; comment?: string }) =>
+      rateOrder(orderId, payload),
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({
+        queryKey: QUERY_KEYS.order(orderId),
+      });
+    },
+  });
 
   const isDelivered = order?.status === "delivered";
   const isDelivery = order?.deliveryType === "delivery";
@@ -93,10 +97,11 @@ export function useOrderDetail() {
     navigate("/cart");
   };
 
-  const handleRate = (payload: RatingPayload) => {
-    setLocalRating(payload);
-    // TODO: backend gap — when POST /orders/:id/rating is available,
-    // replace with a useMutation call and invalidate QUERY_KEYS.order(orderId).
+  const handleRate = (payload: { stars: number; comment: string }) => {
+    submitRating({
+      stars: payload.stars,
+      comment: payload.comment || undefined,
+    });
   };
 
   const getItemHeadlines = (o: OrderDTO): string[] => [
@@ -127,7 +132,7 @@ export function useOrderDetail() {
     isDelivered,
     isDelivery,
     statusLabel,
-    localRating,
+    existingRating: order?.rating ?? null,
     formatPrice,
     handleBack,
     handleContact,
