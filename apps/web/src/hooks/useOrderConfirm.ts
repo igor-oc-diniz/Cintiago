@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectActiveOrder, setActiveOrder } from "@/store/slices/orderSlice";
 import {
   selectCartItems,
+  selectCartSubtotal,
   selectDeliveryType,
   selectPayment,
   selectChangeFor,
@@ -31,6 +32,7 @@ export function useOrderConfirm() {
 
   const user = useAppSelector(selectUser);
   const items = useAppSelector(selectCartItems);
+  const subtotal = useAppSelector(selectCartSubtotal);
   const deliveryType = useAppSelector(selectDeliveryType);
   const payment = useAppSelector(selectPayment);
   const changeFor = useAppSelector(selectChangeFor);
@@ -41,7 +43,7 @@ export function useOrderConfirm() {
   // deliveryType e fee são zerados pelo clearCart, mas precisamos deles para exibição.
   const cartSnapshot = useRef<{
     deliveryType: string;
-    fee: number;
+    subtotal: number;
   } | null>(null);
 
   const mutation = useMutation({
@@ -60,7 +62,7 @@ export function useOrderConfirm() {
 
     cartSnapshot.current = {
       deliveryType,
-      fee: deliveryType === "delivery" ? deliveryFee : 0,
+      subtotal,
     };
 
     // clientId é resolvido pelo backend via JWT — não enviado no body
@@ -76,11 +78,11 @@ export function useOrderConfirm() {
   const order = activeOrder ?? mutation.data ?? null;
 
   // Após clearCart(), deliveryType do Redux é null — usar snapshot capturado antes da mutation.
+  // deliveryFee vem de useStoreInfo (staleTime: Infinity = sempre em cache), seguro usar direto.
   const effectiveDeliveryType =
     cartSnapshot.current?.deliveryType ?? deliveryType;
   const effectiveFee =
-    cartSnapshot.current?.fee ??
-    (deliveryType === "delivery" ? deliveryFee : 0);
+    effectiveDeliveryType === "delivery" ? deliveryFee : 0;
 
   const pizzaItems = items.filter(
     (i): i is CartPizzaItem => i.type === "pizza",
@@ -151,7 +153,11 @@ export function useOrderConfirm() {
     deliveryLabel,
     addressSub,
     paymentLabel,
-    total: order ? Number(order.total ?? 0) : effectiveFee,
+    // order.total = subtotal dos itens (sem taxa). Soma effectiveFee para refletir
+    // o mesmo valor exibido no carrinho (subtotal + taxa de entrega).
+    total: order
+      ? Number(order.total ?? 0) + effectiveFee
+      : (cartSnapshot.current?.subtotal ?? subtotal) + effectiveFee,
     fee: effectiveFee,
     formatPrice,
     deliveryEta,

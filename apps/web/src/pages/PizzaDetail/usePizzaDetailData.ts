@@ -81,26 +81,75 @@ export function usePizzaDetailData() {
     isMeia && secondPizza ? Math.max(sizePrice, secondSizePrice) : sizePrice;
 
   const selectedCrust = crusts.find((c) => c.id === selectedCrustId);
-  const crustPrice = selectedCrust?.additionalPrice ?? 0;
+  // Preço da borda para o tamanho selecionado — idêntico ao backend (getPrice por size)
+  const crustPrice =
+    selectedCrust?.prices.find((p) => p.size === selectedSize)?.price ?? 0;
 
-  const addedIngIds = new Set([...addedIds[0], ...addedIds[1]]);
-  const addonsTotal = [...addedIngIds].reduce((sum, ingId) => {
+  // Preço do ingrediente para o tamanho selecionado
+  const ingPriceForSize = (ingId: number): number => {
     const ing = allIngredients.find((i) => i.id === ingId);
-    return sum + (ing?.price ?? 0);
-  }, 0);
+    return ing?.prices.find((p) => p.size === selectedSize)?.price ?? 0;
+  };
 
-  const unitPrice = basePrice + crustPrice + addonsTotal;
+  // Algoritmo idêntico ao backend: acumula ingredientes por metade com deduplicação
+  // cross-half via Set, depois toma o max das metades.
+  const chargedIngIds = new Set<number>();
+  const halfPriceValues: number[] = [];
+
+  if (pizza) {
+    let hp = sizePrice;
+    for (const ingId of addedIds[0]) {
+      if (!chargedIngIds.has(ingId)) {
+        hp += ingPriceForSize(ingId);
+        chargedIngIds.add(ingId);
+      }
+    }
+    halfPriceValues.push(hp);
+  }
+
+  if (isMeia && secondPizza) {
+    let hp = secondSizePrice;
+    for (const ingId of addedIds[1]) {
+      if (!chargedIngIds.has(ingId)) {
+        hp += ingPriceForSize(ingId);
+        chargedIngIds.add(ingId);
+      }
+    }
+    halfPriceValues.push(hp);
+  }
+
+  const pizzaPrice =
+    halfPriceValues.length > 0 ? Math.max(...halfPriceValues) : 0;
+
+  const addonsTotal = [...chargedIngIds].reduce(
+    (sum, ingId) => sum + ingPriceForSize(ingId),
+    0,
+  );
+
+  const unitPrice = pizzaPrice + crustPrice;
   const total = unitPrice * qty;
 
-  const defaultIngs = pizza?.ingredients.filter((i) => i.price === 0) ?? [];
-  const addonIngs = allIngredients.filter(
-    (i) => i.price > 0 && !pizza?.ingredients.find((d) => d.id === i.id),
-  );
-  const secondDefaultIngs =
-    secondPizza?.ingredients.filter((i) => i.price === 0) ?? [];
-  const secondAddonIngs = addonIngs.filter(
-    (i) => !secondPizza?.ingredients.find((d) => d.id === i.id),
-  );
+  // Ingredientes default (sem custo) são todos os da pizza — adaptPizza seta price:0
+  const defaultIngs = pizza?.ingredients ?? [];
+  const secondDefaultIngs = secondPizza?.ingredients ?? [];
+
+  // Addons: ingredientes com preço > 0 para o tamanho selecionado, excluindo defaults da pizza.
+  // Mapeados para { id, name, price } (preço do tamanho atual) para o HalfBlock.
+  const addonIngs = allIngredients
+    .filter(
+      (i) =>
+        ingPriceForSize(i.id) > 0 &&
+        !pizza?.ingredients.find((d) => d.id === i.id),
+    )
+    .map((i) => ({ id: i.id, name: i.name, price: ingPriceForSize(i.id) }));
+
+  const secondAddonIngs = allIngredients
+    .filter(
+      (i) =>
+        ingPriceForSize(i.id) > 0 &&
+        !secondPizza?.ingredients.find((d) => d.id === i.id),
+    )
+    .map((i) => ({ id: i.id, name: i.name, price: ingPriceForSize(i.id) }));
 
   const toggleAdded = (half: 0 | 1, id: number) => {
     setAddedIds((prev) => {

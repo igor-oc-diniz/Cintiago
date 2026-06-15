@@ -6,7 +6,11 @@ function adaptIngredient(i: IngredientDTO): Ingredient {
   return {
     id: i.id,
     name: i.name,
-    price: Number(i.ingredientPrice?.priceMedium ?? 0),
+    prices: [
+      { size: "small", price: Number(i.ingredientPrice?.priceSmall ?? 0) },
+      { size: "medium", price: Number(i.ingredientPrice?.priceMedium ?? 0) },
+      { size: "large", price: Number(i.ingredientPrice?.priceLarge ?? 0) },
+    ],
     isVegetarian: false,
   };
 }

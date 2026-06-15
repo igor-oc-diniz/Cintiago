@@ -5,6 +5,7 @@ import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getMyOrders } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
+import { computeOrderItemCurrentPrice } from "@/utils/order";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 
 const ACTIVE_STATUSES: OrderStatus[] = [
@@ -89,7 +90,7 @@ export function useMyOrders() {
           })),
           notes: item.notes,
           quantity: item.quantity,
-          unitPrice: 0,
+          unitPrice: computeOrderItemCurrentPrice(item),
         }),
       );
     }

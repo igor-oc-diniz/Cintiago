@@ -13,7 +13,7 @@ export type Role = "OPERATOR" | "CLIENT";
 export interface Ingredient {
   id: number;
   name: string;
-  price: number;
+  prices: { size: "small" | "medium" | "large"; price: number }[];
   isVegetarian: boolean;
 }
 
@@ -40,7 +40,7 @@ export interface Product {
 export interface Crust {
   id: number;
   name: string;
-  additionalPrice: number;
+  prices: { size: "small" | "medium" | "large"; price: number }[];
 }
 
 export type PaymentType = "CASH" | "CREDIT" | "DEBIT" | "PIX";
