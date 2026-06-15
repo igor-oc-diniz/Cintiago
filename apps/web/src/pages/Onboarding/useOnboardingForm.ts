@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
-import { createClient } from "@/api/clients";
+import { createMyClient } from "@/api/clients";
 import { getMe } from "@/api/auth";
 import { useAuth } from "@/hooks/useAuth";
 import type { DeliveryAddress } from "@/types/domain";
@@ -83,7 +83,7 @@ export function useOnboardingForm(): OnboardingFormData {
   const [isCepLoading, setIsCepLoading] = useState(false);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createClient,
+    mutationFn: createMyClient,
     onSuccess: async () => {
       const updatedUser = await getMe();
       dispatch(setCredentials({ token: token ?? "cookie", user: updatedUser }));
@@ -149,7 +149,6 @@ export function useOnboardingForm(): OnboardingFormData {
     }
 
     mutate({
-      userId: user!.id,
       phone: phone.replace(/\D/g, ""),
       street: addr.rua,
       number: addr.number,

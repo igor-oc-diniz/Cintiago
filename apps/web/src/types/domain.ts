@@ -46,7 +46,7 @@ export interface Crust {
 export interface Payment {
   id: number;
   name: string;
-  type: string;
+  active: boolean;
 }
 
 export interface Client {

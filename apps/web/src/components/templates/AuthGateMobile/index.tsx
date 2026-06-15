@@ -1,7 +1,6 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { GoogleMark } from "@/components/atoms/GoogleMark";
-import { Spinner } from "@/components/atoms/Spinner";
 import type { AuthGateMobileProps } from "./types";
 
 function Logo() {

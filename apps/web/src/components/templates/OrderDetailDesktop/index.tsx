@@ -12,7 +12,6 @@ import {
   WalletIcon,
   RotateCcwIcon,
   LeafIcon,
-  PhoneIcon,
 } from "@/components/atoms/Icons";
 import { formatDate } from "@/utils/format";
 import type { OrderStatus } from "@cintiago/shared";
@@ -74,7 +73,6 @@ export function OrderDetailDesktop({
   localRating,
   formatPrice,
   handleBack,
-  handleContact,
   handleRepeat,
   handleRate,
   getItemCustomLines,
