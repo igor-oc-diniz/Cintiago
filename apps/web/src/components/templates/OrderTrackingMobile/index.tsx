@@ -20,6 +20,7 @@ export function OrderTrackingMobile({
   stages,
   activeIndex,
   isDelivered,
+  deliveryEta,
   handleBack,
   handleContact,
   handleRepeat,
@@ -162,7 +163,7 @@ export function OrderTrackingMobile({
                   lineHeight: 1.1,
                 }}
               >
-                {isDelivered ? "Entregue" : "30–45 min"}
+                {isDelivered ? "Entregue" : deliveryEta || "–"}
               </div>
             </div>
 

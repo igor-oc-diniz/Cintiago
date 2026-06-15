@@ -6,6 +6,7 @@ import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import {
   formatPrice,
+  formatEtaMinutes,
   ORDER_STATUS_LABEL,
   SIZE_LABEL,
   telHref,
@@ -110,6 +111,8 @@ export function useOrderTracking() {
     ? (ORDER_STATUS_LABEL[order.status] ?? order.status)
     : "";
 
+  const deliveryEta = formatEtaMinutes(order?.estimatedDeliveryMinutes ?? null);
+
   const handleBack = () => navigate("/orders");
 
   const handleContact = () => {
@@ -184,6 +187,7 @@ export function useOrderTracking() {
     activeIndex,
     isDelivered,
     statusLabel,
+    deliveryEta,
     formatPrice,
     handleBack,
     handleContact,
