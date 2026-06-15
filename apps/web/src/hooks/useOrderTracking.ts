@@ -139,9 +139,7 @@ export function useOrderTracking() {
           })),
           notes: item.notes,
           quantity: item.quantity,
-          // TODO: backend gap — OrderItemDTO doesn't expose per-item price;
-          // using 0 as placeholder. See TODO.md.
-          unitPrice: 0,
+          unitPrice: Number(item.price ?? 0),
         }),
       );
     }
