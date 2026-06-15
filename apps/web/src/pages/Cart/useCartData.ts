@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { formatPrice } from "@/utils/format";
 import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
-import { DELIVERY_FEE } from "@/constants/delivery";
 
 const DELIVERY_LABELS: Record<string, string> = {
   delivery: "Delivery",
@@ -14,6 +15,8 @@ const DELIVERY_LABELS: Record<string, string> = {
 export function useCartData() {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
+  const { deliveryFee, minOrderValue, openingHours, fetchFreshStatus } =
+    useStoreInfo();
   const {
     items,
     subtotal,
@@ -31,16 +34,54 @@ export function useCartData() {
   );
   const isEmpty = items.length === 0;
 
-  const fee = deliveryType === "delivery" ? DELIVERY_FEE : 0;
+  const fee = deliveryType === "delivery" ? deliveryFee : 0;
   const total = subtotal + fee;
-  const ready = !isEmpty && !!deliveryType && !!paymentName;
+
+  // Pedido mínimo do estabelecimento (quando configurado) sobre o subtotal
+  const meetsMinimum = minOrderValue == null || subtotal >= minOrderValue;
+  const ready = !isEmpty && !!deliveryType && !!paymentName && meetsMinimum;
 
   const deliveryLabel = deliveryType
     ? (DELIVERY_LABELS[deliveryType] ?? null)
     : null;
 
+  // Mensagem única do que falta para finalizar — mínimo tem prioridade
+  const checkoutHint = !meetsMinimum
+    ? `Pedido mínimo de ${formatPrice(minOrderValue!)} — faltam ${formatPrice(minOrderValue! - subtotal)}`
+    : !deliveryType && !paymentName
+      ? "Escolha entrega e pagamento para finalizar"
+      : !deliveryType
+        ? "Escolha a forma de entrega"
+        : !paymentName
+          ? "Escolha a forma de pagamento"
+          : null;
+
   const handleQty = (id: string, v: number) => updateQuantity(id, v);
   const handleRemove = (id: string) => removeItem(id);
+
+  // Estado do modal "loja fechada" + verificação no clique de finalizar
+  const [showClosedModal, setShowClosedModal] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(false);
+
+  const handleCheckout = async () => {
+    if (checkingStatus) return;
+    setCheckingStatus(true);
+    try {
+      const open = await fetchFreshStatus();
+      if (open) {
+        navigate("/order/confirm");
+      } else {
+        setShowClosedModal(true);
+      }
+    } catch {
+      // falha na consulta não deve travar o usuário — segue para a confirmação
+      navigate("/order/confirm");
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
+
+  const closeClosedModal = () => setShowClosedModal(false);
 
   return {
     navigate,
@@ -55,9 +96,15 @@ export function useCartData() {
     fee,
     total,
     ready,
+    checkoutHint,
     formatPrice,
     handleQty,
     handleRemove,
+    handleCheckout,
+    checkingStatus,
+    showClosedModal,
+    closeClosedModal,
+    openingHours,
   };
 }
 

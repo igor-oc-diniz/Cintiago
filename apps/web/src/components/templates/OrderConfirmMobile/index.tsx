@@ -14,7 +14,7 @@ export function OrderConfirmMobile({
   addressSub,
   paymentLabel,
   total,
-  DELIVERY_ETA,
+  deliveryEta,
   formatPrice,
   handleTrack,
   handleHome,
@@ -202,7 +202,7 @@ export function OrderConfirmMobile({
               margin: "4px 0 14px",
             }}
           >
-            {DELIVERY_ETA}
+            {deliveryEta}
           </div>
           <span
             style={{

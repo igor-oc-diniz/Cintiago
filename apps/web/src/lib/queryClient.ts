@@ -22,4 +22,5 @@ export const QUERY_KEYS = {
   myOrders: ["orders", "my"] as const,
   order: (id: number) => ["orders", id] as const,
   myProfile: ["clients", "me"] as const,
+  storeInfo: ["store", "info"] as const,
 };

@@ -1,4 +1,5 @@
 import { MapPin, Clock, Phone } from "lucide-react";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 
 function FooterColumn({
   icon,
@@ -110,6 +111,8 @@ function Logo() {
 }
 
 export function Footer() {
+  const { info, addressLines } = useStoreInfo();
+
   return (
     <footer style={{ background: "var(--basil-900)", marginTop: 72 }}>
       <div className="web-bamboo" style={{ height: 12 }} />
@@ -143,25 +146,39 @@ export function Footer() {
             icon={<MapPin size={19} color="var(--gold-200)" />}
             title="Endereço"
           >
-            Rua das Oliveiras, 112
-            <br />
-            Vila Madalena · São Paulo, SP
+            {addressLines ? (
+              <>
+                {addressLines.line1}
+                <br />
+                {addressLines.line2}
+              </>
+            ) : (
+              <>
+                Rua das Oliveiras, 112
+                <br />
+                Vila Madalena · São Paulo, SP
+              </>
+            )}
           </FooterColumn>
           <FooterColumn
             icon={<Clock size={19} color="var(--gold-200)" />}
             title="Horário"
           >
-            Terça a domingo · 18h–23h
-            <br />
-            Segunda fechado
+            {info?.openingHours ?? (
+              <>
+                Terça a domingo · 18h–23h
+                <br />
+                Segunda fechado
+              </>
+            )}
           </FooterColumn>
           <FooterColumn
             icon={<Phone size={19} color="var(--gold-200)" />}
             title="Contato"
           >
-            (11) 4002-8922
+            {info?.phone ?? "(11) 4002-8922"}
             <br />
-            olá@cintiago.com.br
+            {info?.email ?? "olá@cintiago.com.br"}
           </FooterColumn>
         </div>
       </div>

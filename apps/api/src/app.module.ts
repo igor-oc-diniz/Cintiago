@@ -12,6 +12,7 @@ import { ClientsModule } from './clients/clients.module';
 import { OrdersModule } from './orders/orders.module';
 import { IngredientPricesModule } from './ingredient-prices/ingredient-prices.module';
 import { AuthModule } from './auth/auth.module';
+import { StoreModule } from './store/store.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     OrdersModule,
     IngredientPricesModule,
     AuthModule,
+    StoreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

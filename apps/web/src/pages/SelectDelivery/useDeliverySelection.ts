@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
-import {
-  ADDRESS_DEFAULT,
-  DELIVERY_ETA,
-  DELIVERY_FEE,
-  PIZZERIA,
-} from "@/constants/delivery";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
+import { ADDRESS_DEFAULT } from "@/constants/delivery";
+import { formatPrice, formatEtaMinutes } from "@/utils/format";
 import type { DeliveryAddress } from "@/types/domain";
 
 export type DeliveryOption = "delivery" | "pickup";
+
+export interface Pizzeria {
+  address: string;
+  neighborhood: string;
+  ready: string;
+}
 
 export interface DeliverySelectionData {
   sel: DeliveryOption;
@@ -22,14 +25,23 @@ export interface DeliverySelectionData {
   line2: string;
   deliveryEta: string;
   deliveryFee: string;
-  pizzeria: typeof PIZZERIA;
+  pizzeria: Pizzeria;
   handleConfirm: () => void;
   handleBack: () => void;
 }
 
 export function useDeliverySelection(): DeliverySelectionData {
   const navigate = useNavigate();
-  const { deliveryType, setDelivery } = useCart();
+  const { items, deliveryType, setDelivery } = useCart();
+  const {
+    deliveryFee: storeDeliveryFee,
+    addressLines,
+    computeEtaMinutes,
+  } = useStoreInfo();
+
+  const pizzaCount = items
+    .filter((i) => i.type === "pizza")
+    .reduce((acc, i) => acc + i.quantity, 0);
 
   const [sel, setSel] = useState<DeliveryOption>(
     deliveryType === "pickup" ? "pickup" : "delivery",
@@ -46,7 +58,13 @@ export function useDeliverySelection(): DeliverySelectionData {
   const line1 = `${addr.rua}, ${addr.number}${addr.complement ? " · " + addr.complement : ""}`;
   const line2 = `${addr.neighborhood} · ${addr.city}`;
 
-  const deliveryFee = `R$ ${DELIVERY_FEE.toFixed(2).replace(".", ",")}`;
+  const deliveryFee = formatPrice(storeDeliveryFee);
+
+  const pizzeria: Pizzeria = {
+    address: addressLines?.line1 ?? "",
+    neighborhood: addressLines?.line2 ?? "",
+    ready: formatEtaMinutes(computeEtaMinutes(pizzaCount, "pickup")),
+  };
 
   const handleConfirm = () => {
     setDelivery(sel);
@@ -67,9 +85,9 @@ export function useDeliverySelection(): DeliverySelectionData {
     onFieldChange,
     line1,
     line2,
-    deliveryEta: DELIVERY_ETA,
+    deliveryEta: formatEtaMinutes(computeEtaMinutes(pizzaCount, "delivery")),
     deliveryFee,
-    pizzeria: PIZZERIA,
+    pizzeria,
     handleConfirm,
     handleBack,
   };

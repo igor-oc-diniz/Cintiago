@@ -1,15 +1,7 @@
 import type { DeliveryAddress } from "@/types/domain";
 
-export const DELIVERY_FEE = 8.9;
-
-export const DELIVERY_ETA = "30–45 min";
-
-export const PIZZERIA = {
-  address: "Rua das Oliveiras, 112",
-  neighborhood: "Vila Madalena · São Paulo",
-  ready: "~20 min",
-} as const;
-
+// Taxa, endereço e ETA agora vêm do backend (GET /store/info, via useStoreInfo).
+// Aqui resta apenas o endereço padrão do formulário de entrega do cliente.
 export const ADDRESS_DEFAULT: DeliveryAddress = {
   cep: "05435-040",
   rua: "Rua Aspicuelta",

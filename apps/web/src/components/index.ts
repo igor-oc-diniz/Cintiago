@@ -14,6 +14,7 @@ export * from "./molecules/ProductCard";
 export * from "./molecules/CategoryFilter";
 export * from "./molecules/QuantitySelector";
 export * from "./molecules/StoreStatusBadge";
+export * from "./molecules/StoreClosedModal";
 export * from "./molecules/CartButton";
 export * from "./molecules/StarRating";
 export * from "./molecules/EmptyState";

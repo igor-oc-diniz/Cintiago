@@ -162,10 +162,31 @@ model OrderItemHalfIngredient {
 }
 
 model Store {
-  id              Int @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
+  name          String   @default("")
+  description   String?
+  phone         String   @default("")
+  email         String?
+  isOpen        Boolean  @default(true)
+  deliveryFee   Decimal  @default(0)
+  minOrderValue Decimal?
+  openingHours  String?
+
+  // Localização
+  street       String  @default("")
+  number       String  @default("")
+  complement   String?
+  neighborhood String  @default("")
+  city         String  @default("")
+  zipCode      String  @default("")
+
+  // Tempo estimado de entrega (usado em computeEta nos pedidos)
   basePrepMinutes Int @default(10)
   perPizzaMinutes Int @default(8)
   deliveryMinutes Int @default(20)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model OrderProduct {
