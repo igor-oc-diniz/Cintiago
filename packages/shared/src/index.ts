@@ -20,7 +20,7 @@ export type {
   CreateOrderItemHalfIngredientPayloadDTO,
   CreateOrderProductPayloadDTO,
 } from "./types/order.types";
-export type { PaymentDTO } from "./types/payment.types";
+export type { PaymentDTO, PaymentType } from "./types/payment.types";
 export type { PizzaDTO } from "./types/pizza.types";
 export type { ProductDTO } from "./types/product.types";
 export type {

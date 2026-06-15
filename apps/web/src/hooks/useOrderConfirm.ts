@@ -7,6 +7,7 @@ import {
   selectCartItems,
   selectDeliveryType,
   selectPayment,
+  selectChangeFor,
   clearCart,
   serializeCartToOrderPayload,
 } from "@/store/slices/cartSlice";
@@ -32,6 +33,7 @@ export function useOrderConfirm() {
   const items = useAppSelector(selectCartItems);
   const deliveryType = useAppSelector(selectDeliveryType);
   const payment = useAppSelector(selectPayment);
+  const changeFor = useAppSelector(selectChangeFor);
   const activeOrder = useAppSelector(selectActiveOrder);
   const { deliveryFee, addressLines } = useStoreInfo();
 
@@ -53,7 +55,7 @@ export function useOrderConfirm() {
 
     // clientId é resolvido pelo backend via JWT — não enviado no body
     const payload = {
-      ...serializeCartToOrderPayload(items, payment.id),
+      ...serializeCartToOrderPayload(items, payment.id, changeFor),
       deliveryType: deliveryType as "delivery" | "pickup",
     };
 

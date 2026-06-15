@@ -43,9 +43,12 @@ export interface Crust {
   additionalPrice: number;
 }
 
+export type PaymentType = "CASH" | "CREDIT" | "DEBIT" | "PIX";
+
 export interface Payment {
   id: number;
   name: string;
+  type: PaymentType;
   active: boolean;
 }
 
@@ -88,6 +91,7 @@ export interface OrderProductPayload {
 export interface CreateOrderPayload {
   paymentId: number;
   deliveryType: DeliveryType;
+  changeFor?: number;
   items: OrderItemPayload[];
   products: OrderProductPayload[];
 }
@@ -110,6 +114,7 @@ export interface Order {
   status: OrderStatus;
   deliveryType: DeliveryType;
   total: number | string;
+  changeFor: number | string | null;
   createdAt: string;
   client: {
     id: number;

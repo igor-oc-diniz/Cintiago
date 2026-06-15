@@ -54,6 +54,7 @@ export interface OrderDTO {
   clientId: number;
   paymentId: number;
   total: string | null;
+  changeFor: string | null;
   status: OrderStatus;
   estimatedDeliveryMinutes: number | null;
   createdAt: string;
@@ -88,6 +89,7 @@ export interface CreateOrderProductPayloadDTO {
 
 export interface CreateOrderPayloadDTO {
   paymentId: number;
+  changeFor?: number;
   items: CreateOrderItemPayloadDTO[];
   products?: CreateOrderProductPayloadDTO[];
 }

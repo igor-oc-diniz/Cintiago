@@ -5,12 +5,14 @@ import {
   selectCartCount,
   selectDeliveryType,
   selectPayment,
+  selectChangeFor,
   addPizza,
   addProduct,
   updateQuantity,
   removeItem,
   setDelivery,
   setPayment,
+  setChangeFor,
   clearCart,
 } from "@/store/slices/cartSlice";
 import type {
@@ -25,6 +27,7 @@ export function useCart() {
   const count = useAppSelector(selectCartCount);
   const deliveryType = useAppSelector(selectDeliveryType);
   const payment = useAppSelector(selectPayment);
+  const changeFor = useAppSelector(selectChangeFor);
 
   return {
     items,
@@ -33,6 +36,7 @@ export function useCart() {
     deliveryType,
     paymentId: payment.id,
     paymentName: payment.name,
+    changeFor,
     addPizza: (payload: AddPizzaPayload) => dispatch(addPizza(payload)),
     addProduct: (payload: AddProductPayload) => dispatch(addProduct(payload)),
     updateQuantity: (id: string, quantity: number) =>
@@ -42,6 +46,7 @@ export function useCart() {
       dispatch(setDelivery({ type })),
     setPayment: (id: number, name: string) =>
       dispatch(setPayment({ id, name })),
+    setChangeFor: (value: number | null) => dispatch(setChangeFor(value)),
     clearCart: () => dispatch(clearCart()),
   };
 }
