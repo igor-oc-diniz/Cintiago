@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/hooks/useCart";
 import { getPizzas } from "@/api/pizzas";
@@ -30,6 +31,7 @@ export function useHomeData() {
       productName: product.name,
       unitPrice: parseFloat(product.price),
     });
+    toast.success(`${product.name} adicionado ao carrinho`);
   };
 
   return {
