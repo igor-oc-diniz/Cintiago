@@ -11,6 +11,10 @@ export function formatEtaMinutes(minutes: number | null): string {
   return `~${minutes} min`;
 }
 
+// Telefone (string livre) → href "tel:" sanitizado, preservando DDI
+export const telHref = (phone: string): string =>
+  `tel:${phone.replace(/[^\d+]/g, "")}`;
+
 export function formatDate(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
