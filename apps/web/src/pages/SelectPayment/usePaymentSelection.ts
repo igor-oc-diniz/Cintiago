@@ -17,9 +17,19 @@ export interface PaymentSelectionData {
   handleBack: () => void;
 }
 
+// "R$ 12,50" → 12.5 (null se vazio/ inválido)
+function parseTroco(value: string): number | null {
+  const cleaned = value
+    .replace(/[^\d,.-]/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const num = Number.parseFloat(cleaned);
+  return Number.isFinite(num) && num > 0 ? num : null;
+}
+
 export function usePaymentSelection(): PaymentSelectionData {
   const navigate = useNavigate();
-  const { paymentId, setPayment } = useCart();
+  const { paymentId, changeFor, setPayment, setChangeFor } = useCart();
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: QUERY_KEYS.payments,
@@ -29,12 +39,20 @@ export function usePaymentSelection(): PaymentSelectionData {
   const [selectedId, setSelectedId] = useState<number | null>(
     paymentId ?? null,
   );
-  const [troco, setTroco] = useState("");
+  // String local só para o input; o valor numérico vive no cart (changeFor)
+  const [troco, setTrocoInput] = useState<string>(
+    changeFor != null ? String(changeFor).replace(".", ",") : "",
+  );
+
+  const setTroco = (value: string) => {
+    setTrocoInput(value);
+    setChangeFor(parseTroco(value));
+  };
 
   const handleSelect = (id: number, name: string) => {
     setSelectedId(id);
-    setPayment(id, name);
-    if (id !== selectedId) setTroco("");
+    setPayment(id, name); // o slice zera o changeFor quando o método muda
+    if (id !== selectedId) setTrocoInput("");
   };
 
   const handleConfirm = () => navigate(-1);

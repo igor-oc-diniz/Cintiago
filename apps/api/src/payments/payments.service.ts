@@ -31,11 +31,11 @@ export class PaymentsService {
   }
 
   async updatePayment(id: number, payment: UpdatePaymentDto) {
-    const { name, active } = payment;
+    const { name, type, active } = payment;
     try {
       return await this.prisma.payment.update({
         where: { id },
-        data: { name, active },
+        data: { name, type, active },
       });
     } catch (error) {
       handlePrismaError(error, `Payment ${id}`);

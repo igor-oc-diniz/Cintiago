@@ -48,6 +48,7 @@ interface CartState {
   deliveryType: "delivery" | "pickup" | "dine_in" | null;
   paymentId: number | null;
   paymentName: string | null;
+  changeFor: number | null; // "troco para" — só relevante p/ pagamento em dinheiro
 }
 
 // ─── Payload de actions ──────────────────────────────────────────────────────
@@ -97,6 +98,7 @@ const initialState: CartState = {
   deliveryType: null,
   paymentId: null,
   paymentName: null,
+  changeFor: null,
 };
 
 const cartSlice = createSlice({
@@ -207,8 +209,16 @@ const cartSlice = createSlice({
     },
 
     setPayment(state, action: PayloadAction<{ id: number; name: string }>) {
+      // Troca de método zera o troco de um possível pagamento em dinheiro anterior
+      if (state.paymentId !== action.payload.id) {
+        state.changeFor = null;
+      }
       state.paymentId = action.payload.id;
       state.paymentName = action.payload.name;
+    },
+
+    setChangeFor(state, action: PayloadAction<number | null>) {
+      state.changeFor = action.payload;
     },
 
     clearCart(state) {
@@ -217,6 +227,7 @@ const cartSlice = createSlice({
       state.deliveryType = null;
       state.paymentId = null;
       state.paymentName = null;
+      state.changeFor = null;
     },
   },
 });
@@ -229,6 +240,7 @@ export const {
   updateHalfIngredients,
   setDelivery,
   setPayment,
+  setChangeFor,
   clearCart,
 } = cartSlice.actions;
 
@@ -247,6 +259,7 @@ export const selectPayment = (state: RootState) => ({
   id: state.cart.paymentId,
   name: state.cart.paymentName,
 });
+export const selectChangeFor = (state: RootState) => state.cart.changeFor;
 
 // ─── Serialização para POST /orders ──────────────────────────────────────────
 //
@@ -274,6 +287,7 @@ export const selectPayment = (state: RootState) => ({
 export function serializeCartToOrderPayload(
   items: CartItem[],
   paymentId: number,
+  changeFor?: number | null,
 ) {
   const pizzaItems = items.filter(
     (i): i is CartPizzaItem => i.type === "pizza",
@@ -284,6 +298,7 @@ export function serializeCartToOrderPayload(
 
   return {
     paymentId,
+    ...(changeFor ? { changeFor } : {}),
     items: pizzaItems.map((item) => ({
       size: item.size,
       ...(item.crustId ? { crustId: item.crustId } : {}),

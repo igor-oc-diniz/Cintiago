@@ -2,7 +2,9 @@ import {
   IsArray,
   IsEnum,
   IsInt,
+  IsNumber,
   IsOptional,
+  IsPositive,
   ValidateNested,
 } from 'class-validator';
 import { CreateOrderItemDto } from './create-order-item.dto';
@@ -15,6 +17,11 @@ export class CreateOrderDto {
 
   @IsEnum(['delivery', 'pickup'])
   deliveryType: 'delivery' | 'pickup';
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  changeFor?: number;
 
   @IsArray()
   @ValidateNested({ each: true })
