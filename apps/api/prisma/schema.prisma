@@ -129,6 +129,8 @@ model Order {
   clientId      Int
   payment       Payment        @relation(fields: [paymentId], references: [id])
   paymentId     Int
+  subtotal      Decimal?
+  deliveryFee   Decimal?
   total         Decimal?
   changeFor     Decimal?
   status        OrderStatus    @default(pending)

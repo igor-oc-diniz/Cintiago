@@ -64,6 +64,8 @@ export interface OrderDTO {
   clientId: number;
   paymentId: number;
   rating: OrderRatingDTO | null;
+  subtotal: string | null;
+  deliveryFee: string | null;
   total: string | null;
   changeFor: string | null;
   status: OrderStatus;

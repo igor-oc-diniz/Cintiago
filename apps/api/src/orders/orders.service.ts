@@ -180,7 +180,7 @@ export class OrdersService {
     );
     const productMap = new Map(products.map((p) => [p.id, p]));
 
-    let total = 0;
+    let subtotal = 0;
     const itemUnitPrices = new Map<(typeof order.items)[number], number>();
 
     for (const item of order.items) {
@@ -224,7 +224,7 @@ export class OrdersService {
       const unitPrice = pizzaPrice + crustPrice;
       itemUnitPrices.set(item, unitPrice);
 
-      total += unitPrice * item.quantity;
+      subtotal += unitPrice * item.quantity;
     }
 
     for (const orderProduct of order.products ?? []) {
@@ -237,8 +237,13 @@ export class OrdersService {
         throw new BadRequestException(
           `Produto ${orderProduct.productId} esta inativo`,
         );
-      total += Number(product.price) * orderProduct.quantity;
+      subtotal += Number(product.price) * orderProduct.quantity;
     }
+
+    const store = await this.prisma.store.findFirst();
+    const deliveryFee =
+      order.deliveryType === 'delivery' ? Number(store?.deliveryFee ?? 0) : 0;
+    const total = subtotal + deliveryFee;
 
     try {
       const createdOrder = await this.prisma.$transaction(async (tx) => {
@@ -246,6 +251,8 @@ export class OrdersService {
           data: {
             clientId: client.id,
             paymentId: order.paymentId,
+            subtotal,
+            deliveryFee,
             total,
             changeFor: order.changeFor,
             deliveryType: order.deliveryType,
@@ -297,13 +304,10 @@ export class OrdersService {
         return newOrder.id;
       });
 
-      const [newOrder, store] = await Promise.all([
-        this.prisma.order.findUnique({
-          where: { id: createdOrder },
-          include: this.orderInclude,
-        }),
-        this.prisma.store.findFirst(),
-      ]);
+      const newOrder = await this.prisma.order.findUnique({
+        where: { id: createdOrder },
+        include: this.orderInclude,
+      });
 
       if (!newOrder) return newOrder;
 

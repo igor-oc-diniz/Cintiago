@@ -71,6 +71,8 @@ export function OrderDetailDesktop({
   isDelivery,
   statusLabel,
   existingRating,
+  derivedSubtotal,
+  derivedDeliveryFee,
   formatPrice,
   handleBack,
   handleRepeat,
@@ -404,14 +406,11 @@ export function OrderDetailDesktop({
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-              <FinRow
-                label="Subtotal"
-                value={formatPrice(Number(order.total ?? 0))}
-              />
+              <FinRow label="Subtotal" value={formatPrice(derivedSubtotal)} />
               <FinRow
                 label="Taxa de entrega"
-                value={isDelivery ? "–" : "Grátis"}
-                muted={!isDelivery}
+                value={isDelivery ? formatPrice(derivedDeliveryFee) : "Grátis"}
+                muted={!isDelivery || derivedDeliveryFee === 0}
               />
               <hr
                 style={{

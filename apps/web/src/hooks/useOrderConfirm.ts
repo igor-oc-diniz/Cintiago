@@ -81,8 +81,7 @@ export function useOrderConfirm() {
   // deliveryFee vem de useStoreInfo (staleTime: Infinity = sempre em cache), seguro usar direto.
   const effectiveDeliveryType =
     cartSnapshot.current?.deliveryType ?? deliveryType;
-  const effectiveFee =
-    effectiveDeliveryType === "delivery" ? deliveryFee : 0;
+  const effectiveFee = effectiveDeliveryType === "delivery" ? deliveryFee : 0;
 
   const pizzaItems = items.filter(
     (i): i is CartPizzaItem => i.type === "pizza",
@@ -153,10 +152,10 @@ export function useOrderConfirm() {
     deliveryLabel,
     addressSub,
     paymentLabel,
-    // order.total = subtotal dos itens (sem taxa). Soma effectiveFee para refletir
-    // o mesmo valor exibido no carrinho (subtotal + taxa de entrega).
+    // order.total já inclui a taxa de entrega (calculada no backend).
+    // O fallback pré-resposta soma effectiveFee ao subtotal do carrinho.
     total: order
-      ? Number(order.total ?? 0) + effectiveFee
+      ? Number(order.total ?? 0)
       : (cartSnapshot.current?.subtotal ?? subtotal) + effectiveFee,
     fee: effectiveFee,
     formatPrice,
