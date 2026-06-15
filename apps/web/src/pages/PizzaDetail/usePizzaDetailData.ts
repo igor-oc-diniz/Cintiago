@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPizzaById, getPizzas } from "@/api/pizzas";
 import { getCrusts } from "@/api/crusts";
 import { getIngredients } from "@/api/ingredients";
 import { useCart } from "@/hooks/useCart";
+import { useAppDispatch } from "@/store/hooks";
+import { updatePizzaItem } from "@/store/slices/cartSlice";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { Pizza, Ingredient, Crust } from "@/types/domain";
+import type { CartPizzaItem } from "@/store/slices/cartSlice";
 
 export function usePizzaDetailData() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
   const { addPizza } = useCart();
+
+  const editItem =
+    (location.state as { item?: CartPizzaItem } | null)?.item ?? null;
+  const isEditMode = editItem !== null;
 
   const pizzaQuery = useQuery({
     queryKey: QUERY_KEYS.pizza(Number(id)),
@@ -37,14 +46,27 @@ export function usePizzaDetailData() {
 
   const [selectedSize, setSelectedSize] = useState<
     "small" | "medium" | "large"
-  >("medium");
-  const [selectedCrustId, setSelectedCrustId] = useState<number | null>(null);
-  const [qty, setQty] = useState(1);
-  const [isMeia, setIsMeia] = useState(false);
-  const [secondPizzaId, setSecondPizzaId] = useState<number | null>(null);
+  >(editItem?.size ?? "medium");
+  const [selectedCrustId, setSelectedCrustId] = useState<number | null>(
+    editItem?.crustId ?? null,
+  );
+  const [qty, setQty] = useState(editItem?.quantity ?? 1);
+  const [isMeia, setIsMeia] = useState(
+    isEditMode && editItem!.halves.length === 2,
+  );
+  const [secondPizzaId, setSecondPizzaId] = useState<number | null>(
+    editItem?.halves[1]?.pizzaId ?? null,
+  );
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [addedIds, setAddedIds] = useState<[number[], number[]]>([[], []]);
-  const [notes, setNotes] = useState("");
+  const [addedIds, setAddedIds] = useState<[number[], number[]]>(
+    editItem
+      ? [
+          editItem.halves[0]?.ingredients.map((i) => i.ingredientId) ?? [],
+          editItem.halves[1]?.ingredients.map((i) => i.ingredientId) ?? [],
+        ]
+      : [[], []],
+  );
+  const [notes, setNotes] = useState(editItem?.notes ?? "");
 
   const secondPizza =
     isMeia && secondPizzaId
@@ -135,20 +157,37 @@ export function usePizzaDetailData() {
             },
           ];
 
-    addPizza({
-      size: selectedSize,
-      crustId: selectedCrustId,
-      crustName: selectedCrust?.name ?? null,
-      halves,
-      notes,
-      quantity: qty,
-      unitPrice,
-    });
+    if (isEditMode && editItem) {
+      dispatch(
+        updatePizzaItem({
+          id: editItem.id,
+          size: selectedSize,
+          crustId: selectedCrustId,
+          crustName: selectedCrust?.name ?? null,
+          halves,
+          notes: notes || null,
+          quantity: qty,
+          unitPrice,
+        }),
+      );
+    } else {
+      addPizza({
+        size: selectedSize,
+        crustId: selectedCrustId,
+        crustName: selectedCrust?.name ?? null,
+        halves,
+        notes,
+        quantity: qty,
+        unitPrice,
+      });
+    }
     navigate(-1);
   };
 
   return {
     isLoading: pizzaQuery.isLoading,
+    isEditMode,
+    confirmLabel: isEditMode ? "Atualizar" : "Adicionar ao carrinho",
     pizza,
     crusts,
     allIngredients,

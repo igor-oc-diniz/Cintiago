@@ -74,6 +74,17 @@ interface UpdateQuantityPayload {
   quantity: number;
 }
 
+interface UpdatePizzaItemPayload {
+  id: string;
+  size: Size;
+  crustId: number | null;
+  crustName: string | null;
+  halves: PizzaHalf[];
+  notes: string | null;
+  quantity: number;
+  unitPrice: number;
+}
+
 interface UpdateHalfIngredientsPayload {
   itemId: string;
   half: 1 | 2;
@@ -184,6 +195,34 @@ const cartSlice = createSlice({
       state.subtotal = calcSubtotal(state.items);
     },
 
+    updatePizzaItem(state, action: PayloadAction<UpdatePizzaItemPayload>) {
+      const {
+        id,
+        size,
+        crustId,
+        crustName,
+        halves,
+        notes,
+        quantity,
+        unitPrice,
+      } = action.payload;
+      const idx = state.items.findIndex((i) => i.id === id);
+      if (idx === -1) return;
+      const normalizedNotes = notes?.trim() ? notes.trim() : null;
+      state.items[idx] = {
+        id,
+        type: "pizza",
+        size,
+        crustId,
+        crustName,
+        halves,
+        notes: normalizedNotes,
+        quantity,
+        unitPrice,
+      };
+      state.subtotal = calcSubtotal(state.items);
+    },
+
     /** Permite editar os ingredientes de uma metade específica já no carrinho */
     updateHalfIngredients(
       state,
@@ -236,6 +275,7 @@ export const {
   addPizza,
   addProduct,
   updateQuantity,
+  updatePizzaItem,
   removeItem,
   updateHalfIngredients,
   setDelivery,

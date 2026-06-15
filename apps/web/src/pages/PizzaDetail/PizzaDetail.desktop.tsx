@@ -36,6 +36,7 @@ export function PizzaDetailDesktop({
   enableMeia,
   disableMeia,
   handleAddToCart,
+  confirmLabel,
   navigate,
 }: PizzaDetailData) {
   if (!pizza) return null;
@@ -589,7 +590,7 @@ export function PizzaDetailDesktop({
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
-            Adicionar ao carrinho
+            {confirmLabel}
           </button>
         </div>
       </div>
