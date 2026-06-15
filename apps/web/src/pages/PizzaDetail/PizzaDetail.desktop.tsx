@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppLayout } from "@/components/templates/AppLayout";
 import { Footer } from "@/components/organisms/Footer";
 import { formatPrice } from "@/utils/format";
@@ -8,7 +9,11 @@ import { SizeSelector } from "@/components/molecules/SizeSelector";
 import { Stepper } from "@/components/molecules/Stepper";
 import { HalfBlock } from "@/components/organisms/HalfBlock";
 import { NotesField } from "@/components/molecules/NotesField";
+import { InfoTooltip } from "@/components/atoms/InfoTooltip";
 import type { PizzaDetailData } from "./usePizzaDetailData";
+
+const MEIA_PRICE_TOOLTIP =
+  "No meia a meia, o preço cobrado é o da pizza mais cara entre as duas metades. Se a 2ª metade for mais cara que a 1ª, a diferença é acrescentada ao total.";
 
 export function PizzaDetailDesktop({
   pizza,
@@ -39,9 +44,34 @@ export function PizzaDetailDesktop({
   confirmLabel,
   navigate,
 }: PizzaDetailData) {
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   if (!pizza) return null;
 
   const meia = isMeia && !!secondPizza;
+
+  const firstSizePrice =
+    pizza.prices.find((p) => p.size === selectedSize)?.price ?? 0;
+
+  const secondSizePrice =
+    secondPizza?.prices.find((p) => p.size === selectedSize)?.price ?? 0;
+
+  const priceDiff = meia ? secondSizePrice - firstSizePrice : 0;
+
+  const handleEnableMeia = () => {
+    enableMeia();
+    setPickerOpen(true);
+  };
+
+  const handleDisableMeia = () => {
+    disableMeia();
+    setPickerOpen(false);
+  };
+
+  const handleSelectSecond = (id: number) => {
+    setSecondPizzaId(id);
+    setPickerOpen(false);
+  };
 
   return (
     <AppLayout variant="desktop" footer={<Footer />}>
@@ -235,7 +265,7 @@ export function PizzaDetailDesktop({
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   gap: 14,
                   padding: "14px 16px",
                   borderRadius: "var(--radius-lg)",
@@ -254,23 +284,90 @@ export function PizzaDetailDesktop({
                   >
                     Quero dois sabores
                   </div>
-                  <div
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: 13,
-                      color: "var(--fg3)",
-                    }}
-                  >
-                    {meia
-                      ? `2ª metade: ${secondPizza.name}`
-                      : "Escolha um segundo sabor — vale o preço do mais caro"}
-                  </div>
+
+                  {meia ? (
+                    <div style={{ marginTop: 4 }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontSize: 13,
+                          color: "var(--fg3)",
+                        }}
+                      >
+                        2ª metade: {secondPizza.name}
+                      </div>
+                      {secondPizza.description && (
+                        <div
+                          style={{
+                            fontFamily: "var(--font-body)",
+                            fontSize: 12,
+                            color: "var(--fg4)",
+                            marginTop: 1,
+                          }}
+                        >
+                          {secondPizza.description}
+                        </div>
+                      )}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 5,
+                          marginTop: 4,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: "var(--font-body)",
+                            fontWeight: 700,
+                            fontSize: 13,
+                            color: "var(--success)",
+                          }}
+                        >
+                          {priceDiff > 0
+                            ? `+ ${formatPrice(priceDiff)}`
+                            : "Grátis"}
+                        </span>
+                        <InfoTooltip text={MEIA_PRICE_TOOLTIP} />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setPickerOpen((v) => !v)}
+                        style={{
+                          marginTop: 6,
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          fontFamily: "var(--font-body)",
+                          fontWeight: 600,
+                          fontSize: 12,
+                          color: "var(--primary)",
+                          padding: 0,
+                        }}
+                      >
+                        {pickerOpen ? "Fechar" : "Trocar 2ª metade"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        fontSize: 13,
+                        color: "var(--fg3)",
+                        marginTop: 2,
+                      }}
+                    >
+                      Escolha um segundo sabor — vale o preço do mais caro
+                    </div>
+                  )}
                 </div>
                 <button
                   type="button"
                   role="switch"
                   aria-checked={isMeia}
-                  onClick={() => (isMeia ? disableMeia() : enableMeia())}
+                  onClick={() =>
+                    isMeia ? handleDisableMeia() : handleEnableMeia()
+                  }
                   style={{
                     width: 52,
                     height: 31,
@@ -301,8 +398,8 @@ export function PizzaDetailDesktop({
                 </button>
               </div>
 
-              {/* Inline second flavor picker — no sheet on desktop */}
-              {isMeia && (
+              {/* Inline second flavor picker — collapsed after selection */}
+              {isMeia && pickerOpen && (
                 <div
                   style={{
                     display: "grid",
@@ -315,11 +412,15 @@ export function PizzaDetailDesktop({
                     .filter((p) => p.id !== pizza.id)
                     .map((p) => {
                       const on = secondPizzaId === p.id;
+                      const pPrice =
+                        p.prices.find((pr) => pr.size === selectedSize)
+                          ?.price ?? 0;
+                      const diff = pPrice - firstSizePrice;
                       return (
                         <button
                           key={p.id}
                           type="button"
-                          onClick={() => setSecondPizzaId(p.id)}
+                          onClick={() => handleSelectSecond(p.id)}
                           style={{
                             display: "flex",
                             alignItems: "center",
@@ -377,16 +478,17 @@ export function PizzaDetailDesktop({
                             </span>
                             <span
                               style={{
-                                display: "block",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 4,
                                 fontFamily: "var(--font-body)",
+                                fontWeight: 600,
                                 fontSize: 12,
-                                color: "var(--fg4)",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
+                                color: "var(--success)",
                               }}
                             >
-                              {p.description}
+                              {diff > 0 ? `+ ${formatPrice(diff)}` : "Grátis"}
+                              <InfoTooltip text={MEIA_PRICE_TOOLTIP} />
                             </span>
                           </span>
                           {on && (
@@ -445,6 +547,8 @@ export function PizzaDetailDesktop({
                     addonIngs={addonIngs}
                     addedIds={addedIds[0]}
                     onAdd={(id) => toggleAdded(0, id)}
+                    crossHalfIds={addedIds[1]}
+                    isPrimary
                   />
                   <div
                     style={{
@@ -462,6 +566,7 @@ export function PizzaDetailDesktop({
                     addonIngs={secondAddonIngs}
                     addedIds={addedIds[1]}
                     onAdd={(id) => toggleAdded(1, id)}
+                    crossHalfIds={addedIds[0]}
                   />
                 </div>
               ) : (
