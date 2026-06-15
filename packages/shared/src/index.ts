@@ -13,6 +13,7 @@ export type {
   OrderItemHalfIngredientDTO,
   OrderProductDTO,
   OrderStatus,
+  DeliveryType,
   PizzaSize,
   CreateOrderPayloadDTO,
   CreateOrderItemPayloadDTO,

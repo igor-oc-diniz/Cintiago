@@ -33,7 +33,7 @@ export function OrderMiniSummary({ order }: OrderMiniSummaryProps) {
     })),
   ];
 
-  const isPickup = order.client.street === null;
+  const isPickup = order.deliveryType === "pickup";
   const deliveryLabel = isPickup ? "Retirada" : "Delivery";
   const addressSub = isPickup
     ? "Retirar no balcão"

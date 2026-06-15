@@ -43,7 +43,7 @@ export function useOrderDetail() {
   const [localRating, setLocalRating] = useState<RatingPayload | null>(null);
 
   const isDelivered = order?.status === "delivered";
-  const isDelivery = true; // TODO: backend gap — OrderDTO não expõe deliveryType; assumindo delivery.
+  const isDelivery = order?.deliveryType === "delivery";
 
   const statusLabel = order
     ? (ORDER_STATUS_LABEL[order.status] ?? order.status)
