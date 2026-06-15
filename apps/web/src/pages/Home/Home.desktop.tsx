@@ -25,18 +25,17 @@ export function HomeDesktop({
       <div className="px-12 pt-8 pb-24">
         <HomeBanner />
 
-        {/* Section header: eyebrow + title on left, toggle on right */}
+        {/* Section header: eyebrow + title + toggle, all centered */}
         <div
           style={{
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "space-between",
             gap: 20,
             margin: "36px 0 24px",
-            flexWrap: "wrap",
           }}
         >
-          <div>
+          <div style={{ textAlign: "center" }}>
             <div
               style={{
                 fontFamily: "var(--font-body)",
@@ -50,6 +49,7 @@ export function HomeDesktop({
             >
               O cardápio
             </div>
+            <CategoryToggle value={activeTab} onChange={setActiveTab} />
             <h2
               style={{
                 fontFamily: "var(--font-display)",
@@ -64,7 +64,6 @@ export function HomeDesktop({
               {activeTab === "pizzas" ? "Nossas pizzas" : "Para acompanhar"}
             </h2>
           </div>
-          <CategoryToggle value={activeTab} onChange={setActiveTab} />
         </div>
 
         {activeTab === "pizzas" ? (
