@@ -25,6 +25,8 @@ export function useCartData() {
     subtotal,
     deliveryType,
     paymentName,
+    paymentType,
+    changeFor,
     updateQuantity,
     removeItem,
   } = useCart();
@@ -48,16 +50,16 @@ export function useCartData() {
     ? (DELIVERY_LABELS[deliveryType] ?? null)
     : null;
 
-  // Mensagem única do que falta para finalizar — mínimo tem prioridade
+  // Mensagem única do que falta para finalizar — mínimo tem prioridade.
+  // Segue a ordem do fluxo (entrega → pagamento), pois o pagamento só é
+  // habilitado após a entrega; o label avança conforme o usuário progride.
   const checkoutHint = !meetsMinimum
     ? `Pedido mínimo de ${formatPrice(minOrderValue!)} — faltam ${formatPrice(minOrderValue! - subtotal)}`
-    : !deliveryType && !paymentName
-      ? "Escolha entrega e pagamento para finalizar"
-      : !deliveryType
-        ? "Escolha a forma de entrega"
-        : !paymentName
-          ? "Escolha a forma de pagamento"
-          : null;
+    : !deliveryType
+      ? "Escolha a forma de entrega"
+      : !paymentName
+        ? "Escolha a forma de pagamento"
+        : null;
 
   const handleQty = (id: string, v: number) => updateQuantity(id, v);
   const handleRemove = (id: string) => removeItem(id);
@@ -88,6 +90,8 @@ export function useCartData() {
 
   const closeClosedModal = () => setShowClosedModal(false);
 
+  const isCash = paymentType === "CASH";
+
   return {
     navigate,
     isLoggedIn,
@@ -100,6 +104,8 @@ export function useCartData() {
     deliveryLabel,
     fee,
     total,
+    changeFor,
+    isCash,
     ready,
     checkoutHint,
     formatPrice,

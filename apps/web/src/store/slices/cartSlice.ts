@@ -48,6 +48,7 @@ interface CartState {
   deliveryType: "delivery" | "pickup" | "dine_in" | null;
   paymentId: number | null;
   paymentName: string | null;
+  paymentType: string | null;
   changeFor: number | null; // "troco para" — só relevante p/ pagamento em dinheiro
 }
 
@@ -109,6 +110,7 @@ const initialState: CartState = {
   deliveryType: null,
   paymentId: null,
   paymentName: null,
+  paymentType: null,
   changeFor: null,
 };
 
@@ -244,16 +246,26 @@ const cartSlice = createSlice({
       state,
       action: PayloadAction<{ type: CartState["deliveryType"] }>,
     ) {
+      if (state.deliveryType !== action.payload.type) {
+        state.paymentId = null;
+        state.paymentName = null;
+        state.paymentType = null;
+        state.changeFor = null;
+      }
       state.deliveryType = action.payload.type;
     },
 
-    setPayment(state, action: PayloadAction<{ id: number; name: string }>) {
+    setPayment(
+      state,
+      action: PayloadAction<{ id: number; name: string; type?: string }>,
+    ) {
       // Troca de método zera o troco de um possível pagamento em dinheiro anterior
       if (state.paymentId !== action.payload.id) {
         state.changeFor = null;
       }
       state.paymentId = action.payload.id;
       state.paymentName = action.payload.name;
+      state.paymentType = action.payload.type ?? null;
     },
 
     setChangeFor(state, action: PayloadAction<number | null>) {
@@ -266,6 +278,7 @@ const cartSlice = createSlice({
       state.deliveryType = null;
       state.paymentId = null;
       state.paymentName = null;
+      state.paymentType = null;
       state.changeFor = null;
     },
   },
@@ -300,6 +313,7 @@ export const selectPayment = (state: RootState) => ({
   name: state.cart.paymentName,
 });
 export const selectChangeFor = (state: RootState) => state.cart.changeFor;
+export const selectPaymentType = (state: RootState) => state.cart.paymentType;
 
 // ─── Serialização para POST /orders ──────────────────────────────────────────
 //

@@ -6,6 +6,7 @@ import {
   selectDeliveryType,
   selectPayment,
   selectChangeFor,
+  selectPaymentType,
   addPizza,
   addProduct,
   updateQuantity,
@@ -28,6 +29,7 @@ export function useCart() {
   const deliveryType = useAppSelector(selectDeliveryType);
   const payment = useAppSelector(selectPayment);
   const changeFor = useAppSelector(selectChangeFor);
+  const paymentType = useAppSelector(selectPaymentType);
 
   return {
     items,
@@ -36,6 +38,7 @@ export function useCart() {
     deliveryType,
     paymentId: payment.id,
     paymentName: payment.name,
+    paymentType,
     changeFor,
     addPizza: (payload: AddPizzaPayload) => dispatch(addPizza(payload)),
     addProduct: (payload: AddProductPayload) => dispatch(addProduct(payload)),
@@ -44,8 +47,8 @@ export function useCart() {
     removeItem: (id: string) => dispatch(removeItem(id)),
     setDelivery: (type: "delivery" | "pickup" | "dine_in") =>
       dispatch(setDelivery({ type })),
-    setPayment: (id: number, name: string) =>
-      dispatch(setPayment({ id, name })),
+    setPayment: (id: number, name: string, type?: string) =>
+      dispatch(setPayment({ id, name, type })),
     setChangeFor: (value: number | null) => dispatch(setChangeFor(value)),
     clearCart: () => dispatch(clearCart()),
   };

@@ -39,24 +39,31 @@ interface PaymentMethodCardProps {
   payment: Payment;
   selected: boolean;
   troco: string;
+  total: number;
   onTroco: (value: string) => void;
-  onSelect: (id: number, name: string) => void;
+  onSelect: (id: number, name: string, type: string) => void;
 }
 
 function PaymentMethodCard({
   payment,
   selected,
   troco,
+  total,
   onTroco,
   onSelect,
 }: PaymentMethodCardProps) {
   const { tone, sub } = getPaymentMeta(payment);
   const showTroco = selected && isCash(payment);
 
+  const formattedTotal = total.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   return (
     <OptionCard
       selected={selected}
-      onClick={() => onSelect(payment.id, payment.name)}
+      onClick={() => onSelect(payment.id, payment.name, payment.type)}
     >
       <div style={{ padding: 16 }}>
         <CardHead
@@ -74,6 +81,38 @@ function PaymentMethodCard({
             onKeyDown={(e) => e.stopPropagation()}
             role="presentation"
           >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 10,
+                padding: "8px 12px",
+                borderRadius: "var(--radius-md)",
+                background: "var(--surface-inset)",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "var(--fg3)",
+                }}
+              >
+                Total do pedido
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "var(--fg1)",
+                }}
+              >
+                {formattedTotal}
+              </span>
+            </div>
             <label
               style={{
                 display: "block",
@@ -128,6 +167,7 @@ export function PaymentSelectionMobile({
   isLoading,
   selectedId,
   troco,
+  total,
   setTroco,
   handleSelect,
   handleConfirm,
@@ -227,6 +267,7 @@ export function PaymentSelectionMobile({
                 payment={payment}
                 selected={selectedId === payment.id}
                 troco={troco}
+                total={total}
                 onTroco={setTroco}
                 onSelect={handleSelect}
               />

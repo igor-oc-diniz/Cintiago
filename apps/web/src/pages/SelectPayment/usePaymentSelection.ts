@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPayments } from "@/api/payments";
 import { useCart } from "@/hooks/useCart";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { Payment } from "@/types/domain";
 
@@ -11,8 +12,9 @@ export interface PaymentSelectionData {
   isLoading: boolean;
   selectedId: number | null;
   troco: string;
+  total: number;
   setTroco: (value: string) => void;
-  handleSelect: (id: number, name: string) => void;
+  handleSelect: (id: number, name: string, type: string) => void;
   handleConfirm: () => void;
   handleBack: () => void;
 }
@@ -29,7 +31,17 @@ function parseTroco(value: string): number | null {
 
 export function usePaymentSelection(): PaymentSelectionData {
   const navigate = useNavigate();
-  const { paymentId, changeFor, setPayment, setChangeFor } = useCart();
+  const {
+    paymentId,
+    subtotal,
+    deliveryType,
+    changeFor,
+    setPayment,
+    setChangeFor,
+  } = useCart();
+  const { deliveryFee } = useStoreInfo();
+  const fee = deliveryType === "delivery" ? deliveryFee : 0;
+  const total = subtotal + fee;
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: QUERY_KEYS.payments,
@@ -49,9 +61,9 @@ export function usePaymentSelection(): PaymentSelectionData {
     setChangeFor(parseTroco(value));
   };
 
-  const handleSelect = (id: number, name: string) => {
+  const handleSelect = (id: number, name: string, type: string) => {
     setSelectedId(id);
-    setPayment(id, name); // o slice zera o changeFor quando o método muda
+    setPayment(id, name, type); // o slice zera o changeFor quando o método muda
     if (id !== selectedId) setTrocoInput("");
   };
 
@@ -63,6 +75,7 @@ export function usePaymentSelection(): PaymentSelectionData {
     isLoading,
     selectedId,
     troco,
+    total,
     setTroco,
     handleSelect,
     handleConfirm,
