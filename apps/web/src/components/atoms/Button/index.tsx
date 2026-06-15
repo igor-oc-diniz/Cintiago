@@ -31,11 +31,12 @@ export function Button({
     <button
       disabled={disabled || loading}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded font-body font-semibold transition-all",
+        "inline-flex items-center justify-center gap-2 rounded font-body font-semibold transition-all cursor-pointer active:scale-95",
         variantClasses[variant],
         sizeClasses[size],
         fullWidth && "w-full",
-        (disabled || loading) && "opacity-40 cursor-not-allowed",
+        (disabled || loading) &&
+          "opacity-40 cursor-not-allowed active:scale-100",
         loading && "pointer-events-none",
         className,
       )}

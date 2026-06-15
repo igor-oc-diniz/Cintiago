@@ -38,7 +38,7 @@ export function ProductCard({
             {description}
           </p>
         </div>
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex flex-col gap-2 mt-2">
           <span className="font-body font-semibold text-[var(--color-primary)]">
             {formatPrice(price)}
           </span>
