@@ -222,6 +222,7 @@ export function CartMobile({
               key={item.id}
               item={item}
               onQty={(v) => handleQty(item.id, v)}
+              onRemove={() => handleRemove(item.id)}
             />
           ))}
         </div>
