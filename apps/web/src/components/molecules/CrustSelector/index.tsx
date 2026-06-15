@@ -5,12 +5,14 @@ import type { Crust } from "@/types/domain";
 interface CrustSelectorProps {
   crusts: Crust[];
   selectedCrustId: number | null;
+  selectedSize: "small" | "medium" | "large";
   onSelect: (id: number | null) => void;
 }
 
 export function CrustSelector({
   crusts,
   selectedCrustId,
+  selectedSize,
   onSelect,
 }: CrustSelectorProps) {
   const { isMobile } = useBreakpoint();
@@ -32,6 +34,7 @@ export function CrustSelector({
     >
       {crusts.map((c) => {
         const on = selectedCrustId === c.id;
+        const price = c.prices.find((p) => p.size === selectedSize)?.price ?? 0;
         return (
           <button
             key={c.id}
@@ -71,9 +74,7 @@ export function CrustSelector({
                 color: "var(--fg3)",
               }}
             >
-              {c.additionalPrice === 0
-                ? "Grátis"
-                : `+ ${formatPrice(c.additionalPrice)}`}
+              {price === 0 ? "Grátis" : `+ ${formatPrice(price)}`}
             </span>
           </button>
         );

@@ -352,7 +352,7 @@ export function OrderDetailDesktop({
                   }
                   label={isDelivery ? "Entrega" : "Retirada"}
                   value={isDelivery ? "Delivery" : "Retirar no balcão"}
-                  sub={deliveryAddress}
+                  sub={isDelivery ? deliveryAddress : undefined}
                 />
                 <InfoBlock
                   icon={

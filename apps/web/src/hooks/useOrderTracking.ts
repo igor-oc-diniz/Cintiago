@@ -11,7 +11,7 @@ import {
   SIZE_LABEL,
   telHref,
 } from "@/utils/format";
-import { orderItemCustomLines } from "@/utils/order";
+import { computeOrderItemCurrentPrice, orderItemCustomLines } from "@/utils/order";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 import type { ReactNode } from "react";
@@ -139,7 +139,7 @@ export function useOrderTracking() {
           })),
           notes: item.notes,
           quantity: item.quantity,
-          unitPrice: Number(item.price ?? 0),
+          unitPrice: computeOrderItemCurrentPrice(item),
         }),
       );
     }

@@ -12,7 +12,11 @@ function adaptPizza(p: PizzaDTO): Pizza {
   const ingredients = (p.pizzaIngredients ?? []).map((pi) => ({
     id: pi.ingredient.id,
     name: pi.ingredient.name,
-    price: 0,
+    prices: [
+      { size: "small" as const, price: 0 },
+      { size: "medium" as const, price: 0 },
+      { size: "large" as const, price: 0 },
+    ],
     isVegetarian: false,
   }));
 

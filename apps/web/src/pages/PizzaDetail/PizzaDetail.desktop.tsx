@@ -222,6 +222,7 @@ export function PizzaDetailDesktop({
                   <CrustSelector
                     crusts={crusts}
                     selectedCrustId={selectedCrustId}
+                    selectedSize={selectedSize}
                     onSelect={setSelectedCrustId}
                   />
                 </PizzaSection>

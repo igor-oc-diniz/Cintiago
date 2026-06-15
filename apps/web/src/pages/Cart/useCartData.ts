@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
+import { useAppDispatch } from "@/store/hooks";
+import { clearActiveOrder } from "@/store/slices/orderSlice";
 import { formatPrice } from "@/utils/format";
 import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
 
@@ -14,6 +16,7 @@ const DELIVERY_LABELS: Record<string, string> = {
 
 export function useCartData() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { isLoggedIn } = useAuth();
   const { deliveryFee, minOrderValue, openingHours, fetchFreshStatus } =
     useStoreInfo();
@@ -69,12 +72,14 @@ export function useCartData() {
     try {
       const open = await fetchFreshStatus();
       if (open) {
+        dispatch(clearActiveOrder());
         navigate("/order/confirm");
       } else {
         setShowClosedModal(true);
       }
     } catch {
       // falha na consulta não deve travar o usuário — segue para a confirmação
+      dispatch(clearActiveOrder());
       navigate("/order/confirm");
     } finally {
       setCheckingStatus(false);

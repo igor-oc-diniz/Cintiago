@@ -11,7 +11,7 @@ import {
   SIZE_LABEL,
   telHref,
 } from "@/utils/format";
-import { orderItemCustomLines } from "@/utils/order";
+import { computeOrderItemCurrentPrice, orderItemCustomLines } from "@/utils/order";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO } from "@cintiago/shared";
 
@@ -75,7 +75,7 @@ export function useOrderDetail() {
           })),
           notes: item.notes,
           quantity: item.quantity,
-          unitPrice: 0,
+          unitPrice: computeOrderItemCurrentPrice(item),
         }),
       );
     }

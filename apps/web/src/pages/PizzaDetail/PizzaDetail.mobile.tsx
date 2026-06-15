@@ -224,6 +224,7 @@ export function PizzaDetailMobile({
                 <CrustSelector
                   crusts={crusts}
                   selectedCrustId={selectedCrustId}
+                  selectedSize={selectedSize}
                   onSelect={setSelectedCrustId}
                 />
               </PizzaSection>
