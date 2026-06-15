@@ -49,6 +49,8 @@ export interface OrderProductDTO {
   product: ProductDTO;
 }
 
+export type DeliveryType = "delivery" | "pickup";
+
 export interface OrderDTO {
   id: number;
   clientId: number;
@@ -56,6 +58,7 @@ export interface OrderDTO {
   total: string | null;
   changeFor: string | null;
   status: OrderStatus;
+  deliveryType: DeliveryType;
   estimatedDeliveryMinutes: number | null;
   createdAt: string;
   client: ClientDTO;
