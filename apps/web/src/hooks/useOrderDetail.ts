@@ -49,6 +49,27 @@ export function useOrderDetail() {
   const isDelivered = order?.status === "delivered";
   const isDelivery = order?.deliveryType === "delivery";
 
+  const itemsTotal = order
+    ? (order.orderItems ?? []).reduce(
+        (acc, item) => acc + computeOrderItemCurrentPrice(item) * item.quantity,
+        0,
+      ) +
+      (order.orderProducts ?? []).reduce(
+        (acc, p) => acc + Number(p.product.price ?? 0) * p.quantity,
+        0,
+      )
+    : 0;
+
+  const derivedSubtotal =
+    order?.subtotal != null ? Number(order.subtotal) : itemsTotal;
+
+  const derivedDeliveryFee =
+    order?.deliveryFee != null
+      ? Number(order.deliveryFee)
+      : isDelivery
+        ? Math.max(0, Number(order?.total ?? 0) - derivedSubtotal)
+        : 0;
+
   const statusLabel = order
     ? (ORDER_STATUS_LABEL[order.status] ?? order.status)
     : "";
@@ -133,6 +154,8 @@ export function useOrderDetail() {
     isDelivery,
     statusLabel,
     existingRating: order?.rating ?? null,
+    derivedSubtotal,
+    derivedDeliveryFee,
     formatPrice,
     handleBack,
     handleContact,
