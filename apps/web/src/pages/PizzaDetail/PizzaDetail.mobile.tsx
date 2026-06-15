@@ -6,7 +6,11 @@ import { SizeSelector } from "@/components/molecules/SizeSelector";
 import { Stepper } from "@/components/molecules/Stepper";
 import { HalfBlock } from "@/components/organisms/HalfBlock";
 import { NotesField } from "@/components/molecules/NotesField";
+import { InfoTooltip } from "@/components/atoms/InfoTooltip";
 import type { PizzaDetailData } from "./usePizzaDetailData";
+
+const MEIA_PRICE_TOOLTIP =
+  "No meia a meia, o preço cobrado é o da pizza mais cara entre as duas metades. Se a 2ª metade for mais cara que a 1ª, a diferença é acrescentada ao total.";
 
 export function PizzaDetailMobile({
   pizza,
@@ -40,6 +44,14 @@ export function PizzaDetailMobile({
   navigate,
 }: PizzaDetailData) {
   if (!pizza) return null;
+
+  const firstSizePrice =
+    pizza.prices.find((p) => p.size === selectedSize)?.price ?? 0;
+
+  const secondSizePrice =
+    secondPizza?.prices.find((p) => p.size === selectedSize)?.price ?? 0;
+
+  const priceDiff = secondPizza ? secondSizePrice - firstSizePrice : 0;
 
   return (
     <div
@@ -239,7 +251,7 @@ export function PizzaDetailMobile({
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: "flex-start",
                 gap: 12,
                 padding: "12px 14px",
                 borderRadius: "var(--radius-lg)",
@@ -258,17 +270,65 @@ export function PizzaDetailMobile({
                 >
                   Quero meia a meia
                 </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-body)",
-                    fontSize: 12,
-                    color: "var(--fg3)",
-                  }}
-                >
-                  {isMeia && secondPizza
-                    ? `2ª metade: ${secondPizza.name}`
-                    : "Escolha um segundo sabor"}
-                </div>
+
+                {isMeia && secondPizza ? (
+                  <div style={{ marginTop: 3 }}>
+                    <div
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        fontSize: 12,
+                        color: "var(--fg3)",
+                      }}
+                    >
+                      2ª metade: {secondPizza.name}
+                    </div>
+                    {secondPizza.description && (
+                      <div
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontSize: 11,
+                          color: "var(--fg4)",
+                          marginTop: 1,
+                        }}
+                      >
+                        {secondPizza.description}
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 4,
+                        marginTop: 3,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontWeight: 700,
+                          fontSize: 12,
+                          color: "var(--success)",
+                        }}
+                      >
+                        {priceDiff > 0
+                          ? `+ ${formatPrice(priceDiff)}`
+                          : "Grátis"}
+                      </span>
+                      <InfoTooltip text={MEIA_PRICE_TOOLTIP} />
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: 12,
+                      color: "var(--fg3)",
+                      marginTop: 2,
+                    }}
+                  >
+                    Escolha um segundo sabor
+                  </div>
+                )}
               </div>
               <button
                 type="button"
@@ -321,7 +381,7 @@ export function PizzaDetailMobile({
                   padding: "2px 2px",
                 }}
               >
-                Trocar 2ª metade
+                {secondPizza ? "Trocar 2ª metade" : "Escolher 2ª metade"}
               </button>
             )}
           </PizzaSection>
@@ -365,6 +425,8 @@ export function PizzaDetailMobile({
                   addonIngs={addonIngs}
                   addedIds={addedIds[0]}
                   onAdd={(id) => toggleAdded(0, id)}
+                  crossHalfIds={addedIds[1]}
+                  isPrimary
                 />
                 <hr className="cg-divider" />
                 <HalfBlock
@@ -374,6 +436,7 @@ export function PizzaDetailMobile({
                   addonIngs={secondAddonIngs}
                   addedIds={addedIds[1]}
                   onAdd={(id) => toggleAdded(1, id)}
+                  crossHalfIds={addedIds[0]}
                 />
               </div>
             ) : (
@@ -513,6 +576,9 @@ export function PizzaDetailMobile({
                 .filter((p) => p.id !== pizza.id)
                 .map((p) => {
                   const on = secondPizzaId === p.id;
+                  const pPrice =
+                    p.prices.find((pr) => pr.size === selectedSize)?.price ?? 0;
+                  const diff = pPrice - firstSizePrice;
                   return (
                     <button
                       key={p.id}
@@ -579,16 +645,17 @@ export function PizzaDetailMobile({
                         </span>
                         <span
                           style={{
-                            display: "block",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
                             fontFamily: "var(--font-body)",
+                            fontWeight: 600,
                             fontSize: 12,
-                            color: "var(--fg3)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
+                            color: "var(--success)",
                           }}
                         >
-                          {p.description}
+                          {diff > 0 ? `+ ${formatPrice(diff)}` : "Grátis"}
+                          <InfoTooltip text={MEIA_PRICE_TOOLTIP} />
                         </span>
                       </span>
                       {on && (

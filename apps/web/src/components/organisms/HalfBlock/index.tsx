@@ -11,6 +11,8 @@ export function HalfBlock({
   addonIngs,
   addedIds,
   onAdd,
+  crossHalfIds,
+  isPrimary,
 }: {
   label?: string;
   pizzaName: string;
@@ -18,6 +20,8 @@ export function HalfBlock({
   addonIngs: Ingredient[];
   addedIds: number[];
   onAdd: (id: number) => void;
+  crossHalfIds?: number[];
+  isPrimary?: boolean;
 }) {
   const { isDesktop } = useBreakpoint();
 
@@ -121,6 +125,12 @@ export function HalfBlock({
                 price={ing.price}
                 active={addedIds.includes(ing.id)}
                 onToggle={() => onAdd(ing.id)}
+                isFree={
+                  isPrimary
+                    ? crossHalfIds?.includes(ing.id) &&
+                      !addedIds.includes(ing.id)
+                    : crossHalfIds?.includes(ing.id)
+                }
               />
             ))}
           </div>

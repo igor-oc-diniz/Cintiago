@@ -6,11 +6,13 @@ export function AddonRow({
   price,
   active,
   onToggle,
+  isFree,
 }: {
   name: string;
   price: number;
   active: boolean;
   onToggle: () => void;
+  isFree?: boolean;
 }) {
   const { isDesktop } = useBreakpoint();
 
@@ -77,10 +79,14 @@ export function AddonRow({
           fontFamily: "var(--font-body)",
           fontWeight: 600,
           fontSize: 13,
-          color: active ? "var(--success-hover)" : "var(--fg3)",
+          color: isFree
+            ? "var(--success)"
+            : active
+              ? "var(--success-hover)"
+              : "var(--fg3)",
         }}
       >
-        + {formatPrice(price)}
+        {isFree ? "Grátis" : `+ ${formatPrice(price)}`}
       </span>
     </button>
   );
