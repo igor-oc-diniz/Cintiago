@@ -36,6 +36,7 @@ export function PizzaDetailMobile({
   enableMeia,
   disableMeia,
   handleAddToCart,
+  confirmLabel,
   navigate,
 }: PizzaDetailData) {
   if (!pizza) return null;
@@ -456,7 +457,7 @@ export function PizzaDetailMobile({
             boxShadow: "var(--shadow-md)",
           }}
         >
-          Adicionar ao carrinho
+          {confirmLabel}
           <span style={{ opacity: 0.55, margin: "0 2px" }}>·</span>
           {formatPrice(total)}
         </button>

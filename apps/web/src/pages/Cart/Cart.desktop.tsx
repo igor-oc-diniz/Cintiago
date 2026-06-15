@@ -153,7 +153,11 @@ export function CartDesktop({
                     item={item}
                     onQty={(v) => handleQty(item.id, v)}
                     onRemove={() => handleRemove(item.id)}
-                    onEdit={() => navigate(`/pizza/${item.halves[0].pizzaId}`)}
+                    onEdit={() =>
+                      navigate(`/pizza/${item.halves[0].pizzaId}`, {
+                        state: { item },
+                      })
+                    }
                   />
                 ))}
                 {productItems.map((item) => (
