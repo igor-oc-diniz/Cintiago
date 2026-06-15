@@ -11,6 +11,10 @@ export const getMyProfile = () =>
 export const createClient = (payload: CreateClientPayloadDTO) =>
   api.post<ClientDTO>("/clients", payload).then((r) => r.data);
 
+// Auto-cadastro do próprio cliente — userId é derivado do token no backend.
+export const createMyClient = (payload: CreateClientPayloadDTO) =>
+  api.post<ClientDTO>("/clients/me", payload).then((r) => r.data);
+
 export const updateClient = (id: number, payload: UpdateClientPayloadDTO) =>
   api.patch<ClientDTO>(`/clients/${id}`, payload).then((r) => r.data);
 

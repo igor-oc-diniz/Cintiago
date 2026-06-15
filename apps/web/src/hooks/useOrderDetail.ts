@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
@@ -7,7 +7,7 @@ import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
 import { orderItemCustomLines } from "@/utils/order";
-import type { OrderDTO, OrderStatus } from "@cintiago/shared";
+import type { OrderDTO } from "@cintiago/shared";
 
 export interface RatingPayload {
   stars: number;
@@ -18,7 +18,6 @@ export function useOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
 
   const orderId = Number(id);
 

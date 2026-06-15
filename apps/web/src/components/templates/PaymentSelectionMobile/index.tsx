@@ -10,29 +10,29 @@ import {
 import type { PaymentSelectionData } from "@/pages/SelectPayment/usePaymentSelection";
 import type { Payment } from "@/types/domain";
 
-function getPaymentIcon(type: string) {
+function getPaymentIcon() {
   return <CreditCardIcon color="currentColor" />;
 }
 
-function getPaymentMeta(type: string | undefined): {
+// TODO: detecção de tipo de pagamento via string match no nome é frágil.
+// Substituir por `payment.type` (enum CASH | CARD | PIX) quando o backend
+// expor o campo — ver tarefa "Pagamento Dinheiro" no TODO.md da api.
+function getPaymentMeta(name: string): {
   tone: "gold" | "terra" | "basil";
   sub: string;
 } {
-  const normalized = (type ?? "").toLowerCase();
+  const normalized = name.toLowerCase();
   if (normalized.includes("débito")) return { tone: "basil", sub: "Débito" };
   if (normalized.includes("crédito")) return { tone: "terra", sub: "Crédito" };
   if (normalized.includes("pix"))
     return { tone: "basil", sub: "Transferência instantânea" };
   if (normalized.includes("dinheiro"))
     return { tone: "gold", sub: "Pagamento em espécie" };
-  return { tone: "gold", sub: type ?? "" };
+  return { tone: "gold", sub: name };
 }
 
 function isCash(payment: Payment): boolean {
-  return (
-    (payment.type ?? "").toLowerCase().includes("dinheiro") ||
-    payment.name.toLowerCase().includes("dinheiro")
-  );
+  return payment.name.toLowerCase().includes("dinheiro");
 }
 
 interface PaymentMethodCardProps {
@@ -50,7 +50,7 @@ function PaymentMethodCard({
   onTroco,
   onSelect,
 }: PaymentMethodCardProps) {
-  const { tone, sub } = getPaymentMeta(payment.type);
+  const { tone, sub } = getPaymentMeta(payment.name);
   const showTroco = selected && isCash(payment);
 
   return (
@@ -60,7 +60,7 @@ function PaymentMethodCard({
     >
       <div style={{ padding: 16 }}>
         <CardHead
-          icon={getPaymentIcon(payment.type)}
+          icon={getPaymentIcon()}
           tone={tone}
           title={payment.name}
           sub={sub}

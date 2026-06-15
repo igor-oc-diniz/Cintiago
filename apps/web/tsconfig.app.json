@@ -23,11 +23,10 @@
     "noUncheckedSideEffectImports": true,
 
     /* Path aliases */
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.example.ts", "src/**/*.example.tsx"]
 }

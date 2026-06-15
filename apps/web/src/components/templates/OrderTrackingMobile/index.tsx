@@ -20,8 +20,6 @@ export function OrderTrackingMobile({
   stages,
   activeIndex,
   isDelivered,
-  statusLabel,
-  formatPrice,
   handleBack,
   handleContact,
   handleRepeat,
