@@ -5,9 +5,11 @@ import { Stepper } from "@/components/molecules/Stepper";
 export function ProductCartCard({
   item,
   onQty,
+  onRemove,
 }: {
   item: CartProductItem;
   onQty: (v: number) => void;
+  onRemove?: () => void;
 }) {
   const { isDesktop } = useBreakpoint();
 
@@ -81,6 +83,40 @@ export function ProductCartCard({
         onChange={onQty}
         size={isDesktop ? "md" : "sm"}
       />
+      {onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="Remover item"
+          style={{
+            flexShrink: 0,
+            width: isDesktop ? 36 : 32,
+            height: isDesktop ? 36 : 32,
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            cursor: "pointer",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--fg3)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4h6v2" />
+          </svg>
+        </button>
+      )}
       {isDesktop && (
         <div
           style={{
