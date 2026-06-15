@@ -8,3 +8,4 @@ dist/
 *.js.map
 CLAUDE.md
 .DS_Store
+**/NOTES.local.md
