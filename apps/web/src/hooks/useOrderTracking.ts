@@ -4,8 +4,14 @@ import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
-import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
+import {
+  formatPrice,
+  ORDER_STATUS_LABEL,
+  SIZE_LABEL,
+  telHref,
+} from "@/utils/format";
 import { orderItemCustomLines } from "@/utils/order";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 import type { ReactNode } from "react";
 import {
@@ -83,6 +89,7 @@ export function useOrderTracking() {
   const dispatch = useAppDispatch();
 
   const orderId = Number(id);
+  const { phone } = useStoreInfo();
 
   const {
     data: order,
@@ -106,7 +113,7 @@ export function useOrderTracking() {
   const handleBack = () => navigate("/orders");
 
   const handleContact = () => {
-    window.location.href = "tel:+551130612200";
+    if (phone) window.location.href = telHref(phone);
   };
 
   const handleRepeat = (order: OrderDTO) => {

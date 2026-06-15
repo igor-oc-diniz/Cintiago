@@ -50,6 +50,7 @@ export function useStoreInfo() {
     isLoading,
     isError,
     isOpen: info?.isOpen ?? null,
+    phone: info?.phone ?? null,
     openingHours: info?.openingHours ?? null,
     deliveryFee: Number(info?.deliveryFee ?? 0),
     minOrderValue:

@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getMyProfile, updateMyProfile } from "@/api/clients";
 import { useAuth } from "@/hooks/useAuth";
+import { useStoreInfo } from "@/hooks/useStoreInfo";
+import { telHref } from "@/utils/format";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { UpdateClientPayloadDTO } from "@cintiago/shared";
 
@@ -49,6 +51,7 @@ export function useProfile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { phone: storePhone } = useStoreInfo();
 
   const { data: profile, isLoading } = useQuery({
     queryKey: QUERY_KEYS.myProfile,
@@ -124,7 +127,7 @@ export function useProfile() {
 
   const handleGoOrders = () => navigate("/orders");
   const handleContact = () => {
-    window.location.href = "tel:+551130612200";
+    if (storePhone) window.location.href = telHref(storePhone);
   };
 
   return {
