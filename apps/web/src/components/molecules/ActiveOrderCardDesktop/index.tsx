@@ -32,18 +32,32 @@ export function ActiveOrderCardDesktop({
   const filled = progressSegment(order.status as OrderStatus);
   const headlines = getItemHeadlines(order);
   const itemsText = headlines.join(" · ");
+  const isDelivered = order.status === "delivered";
+  const isCancelled = order.status === "cancelled";
+  const isTerminal = isDelivered || isCancelled;
+
+  const cardTitle = isDelivered
+    ? "Pedido concluído"
+    : isCancelled
+      ? "Pedido Cancelado"
+      : "Pedido em andamento";
+
+  const boxShadow = isDelivered
+    ? "inset 0 0 0 2px var(--basil-500, #5A8F5A), 0 0 8px 1px rgba(90,143,90,0.1), 0 1px 3px rgba(0,0,0,0.06)"
+    : isCancelled
+      ? "inset 0 0 0 2px var(--border), 0 1px 3px rgba(0,0,0,0.06)"
+      : "inset 0 0 0 2px var(--primary, #C0522A), 0 0 8px 1px rgba(192,82,42,0.1), 0 1px 3px rgba(0,0,0,0.06)";
 
   return (
     <div
       className="cg-card cg-grain"
       onClick={() => onOpen(order.id)}
       role="button"
-      aria-label={`Pedido #${order.id} em andamento`}
+      aria-label={`Pedido #${order.id}`}
       style={{
         padding: 24,
         cursor: "pointer",
-        boxShadow:
-          "inset 0 0 0 2px var(--primary, #C0522A), 0 0 8px 1px rgba(192,82,42,0.1), 0 1px 3px rgba(0,0,0,0.06)",
+        boxShadow,
       }}
     >
       <div
@@ -71,10 +85,12 @@ export function ActiveOrderCardDesktop({
                 fontWeight: 600,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "var(--primary, #C0522A)",
+                color: isDelivered
+                  ? "var(--basil-500, #5A8F5A)"
+                  : "var(--primary, #C0522A)",
               }}
             >
-              Pedido em andamento
+              {cardTitle}
             </span>
             <Badge variant={order.status}>
               {getStatusLabel(order.status as OrderStatus)}
@@ -122,7 +138,9 @@ export function ActiveOrderCardDesktop({
                     borderRadius: 999,
                     background:
                       i < filled
-                        ? "var(--primary, #C0522A)"
+                        ? isDelivered
+                          ? "var(--basil-500, #5A8F5A)"
+                          : "var(--primary, #C0522A)"
                         : "var(--border-strong, #D4C8B8)",
                     transition: "background 0.3s ease",
                   }}
@@ -133,7 +151,9 @@ export function ActiveOrderCardDesktop({
                     fontSize: 11,
                     color:
                       i === filled - 1
-                        ? "var(--primary, #C0522A)"
+                        ? isDelivered
+                          ? "var(--basil-500, #5A8F5A)"
+                          : "var(--primary, #C0522A)"
                         : "var(--fg4, #B0A090)",
                     fontWeight: i === filled - 1 ? 600 : 500,
                     marginTop: 6,
@@ -181,17 +201,19 @@ export function ActiveOrderCardDesktop({
               {formatPrice(Number(order.total ?? 0))}
             </div>
           </div>
-          <Button
-            size="sm"
-            variant="primary"
-            onClick={(e) => {
-              e.stopPropagation();
-              onTrack(order.id);
-            }}
-          >
-            <MapPinIcon size={16} />
-            Acompanhar
-          </Button>
+          {!isTerminal && (
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={(e) => {
+                e.stopPropagation();
+                onTrack(order.id);
+              }}
+            >
+              <MapPinIcon size={16} />
+              Acompanhar
+            </Button>
+          )}
         </div>
       </div>
     </div>
