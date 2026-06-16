@@ -8,6 +8,9 @@
 dist/
 dist-ssr/
 
+# Vite cache
+.vite/
+
 # Dependencies
 node_modules/
 
