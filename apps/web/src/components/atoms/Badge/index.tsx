@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR } from "@/utils/format";
+import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR } from "@/constants/order";
 import type { BadgeProps } from "./types";
 
 const extraColors: Record<string, string> = {

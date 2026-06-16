@@ -4,7 +4,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getMyOrders } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
-import { formatPrice, ORDER_STATUS_LABEL, SIZE_LABEL } from "@/utils/format";
+import { formatPrice } from "@/utils/format";
+import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
+import { orderStatusLabel, progressSegment } from "@/constants/order";
+import { ROUTES } from "@/constants/routes";
 import { computeOrderItemCurrentPrice } from "@/utils/order";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 
@@ -15,23 +18,6 @@ const ACTIVE_STATUSES: OrderStatus[] = [
   "delivering",
   "delivered",
 ];
-
-export function progressSegment(status: OrderStatus): number {
-  switch (status) {
-    case "pending":
-      return 1;
-    case "confirmed":
-      return 2;
-    case "preparing":
-      return 3;
-    case "delivering":
-      return 4;
-    case "delivered":
-      return 5;
-    default:
-      return 0;
-  }
-}
 
 export function useMyOrders() {
   const navigate = useNavigate();
@@ -56,19 +42,20 @@ export function useMyOrders() {
   );
 
   const handleTrack = (orderId: number) =>
-    navigate(`/order/${orderId}/tracking`);
+    navigate(ROUTES.orderTracking(orderId));
 
-  const handleOpenDetail = (orderId: number) => navigate(`/orders/${orderId}`);
+  const handleOpenDetail = (orderId: number) =>
+    navigate(ROUTES.orderDetail(orderId));
 
   const handleOpenOrder = (orderId: number, status: OrderStatus) => {
     if (status === "delivered") {
-      navigate(`/orders/${orderId}`);
+      navigate(ROUTES.orderDetail(orderId));
     } else {
-      navigate(`/order/${orderId}/tracking`);
+      navigate(ROUTES.orderTracking(orderId));
     }
   };
 
-  const handleBack = () => navigate("/");
+  const handleBack = () => navigate(ROUTES.home);
 
   const handleRepeat = (order: OrderDTO) => {
     dispatch(clearCart());
@@ -105,7 +92,7 @@ export function useMyOrders() {
       );
     }
 
-    navigate("/cart");
+    navigate(ROUTES.cart);
   };
 
   const getItemHeadlines = (order: OrderDTO): string[] => [
@@ -113,7 +100,7 @@ export function useMyOrders() {
       const name =
         item.halves.length === 2
           ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-          : (item.halves[0]?.pizza.name ?? "Pizza");
+          : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
       const size = SIZE_LABEL[item.size] ?? item.size;
       return `${item.quantity}× ${name} · ${size}`;
     }),
@@ -123,7 +110,7 @@ export function useMyOrders() {
   ];
 
   const getStatusLabel = (status: OrderStatus): string =>
-    ORDER_STATUS_LABEL[status] ?? status;
+    orderStatusLabel(status);
 
   return {
     activeOrders,

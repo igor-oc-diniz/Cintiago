@@ -12,6 +12,7 @@ import {
   LockIcon,
   LeafIcon,
 } from "@/components/atoms/Icons";
+import { ROUTES } from "@/constants/routes";
 import type { ProfileDesktopProps } from "./types";
 
 function LogoutModal({
@@ -119,7 +120,7 @@ export function ProfileDesktop({
         userName={user?.name ?? ""}
         userEmail={user?.email ?? ""}
         userInitials={(user?.name ?? "U").slice(0, 2).toUpperCase()}
-        onHome={() => navigate("/")}
+        onHome={() => navigate(ROUTES.home)}
         onOrders={handleGoOrders}
         onProfile={() => {}}
       />

@@ -8,6 +8,7 @@ import {
   CheckIcon,
 } from "@/components/atoms/Icons";
 import type { PaymentSelectionData } from "@/pages/SelectPayment/usePaymentSelection";
+import { PAYMENT_TYPE } from "@/constants/payment";
 import type { Payment, PaymentType } from "@/types/domain";
 
 function getPaymentIcon() {
@@ -32,7 +33,7 @@ function getPaymentMeta(payment: Payment): {
 }
 
 function isCash(payment: Payment): boolean {
-  return payment.type === "CASH";
+  return payment.type === PAYMENT_TYPE.cash;
 }
 
 interface PaymentMethodCardProps {

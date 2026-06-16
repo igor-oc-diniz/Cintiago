@@ -6,6 +6,8 @@ import { setCredentials } from "@/store/slices/authSlice";
 import { createMyClient } from "@/api/clients";
 import { getMe } from "@/api/auth";
 import { useAuth } from "@/hooks/useAuth";
+import { COOKIE_TOKEN } from "@/constants/auth";
+import { ROUTES } from "@/constants/routes";
 import type { DeliveryAddress } from "@/types/domain";
 import type { FormErrors } from "@/components/templates/OnboardingTemplate/types";
 
@@ -86,10 +88,12 @@ export function useOnboardingForm(): OnboardingFormData {
     mutationFn: createMyClient,
     onSuccess: async () => {
       const updatedUser = await getMe();
-      dispatch(setCredentials({ token: token ?? "cookie", user: updatedUser }));
+      dispatch(
+        setCredentials({ token: token ?? COOKIE_TOKEN, user: updatedUser }),
+      );
       const from =
         (location.state as { from?: { pathname: string } })?.from?.pathname ??
-        "/cart";
+        ROUTES.cart;
       navigate(from, { replace: true });
     },
   });

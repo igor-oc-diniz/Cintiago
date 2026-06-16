@@ -4,12 +4,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById, rateOrder } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
-import {
-  formatPrice,
-  ORDER_STATUS_LABEL,
-  SIZE_LABEL,
-  telHref,
-} from "@/utils/format";
+import { formatPrice, telHref } from "@/utils/format";
+import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
+import { orderStatusLabel } from "@/constants/order";
+import { ROUTES } from "@/constants/routes";
 import {
   computeOrderItemCurrentPrice,
   orderItemCustomLines,
@@ -70,11 +68,9 @@ export function useOrderDetail() {
         ? Math.max(0, Number(order?.total ?? 0) - derivedSubtotal)
         : 0;
 
-  const statusLabel = order
-    ? (ORDER_STATUS_LABEL[order.status] ?? order.status)
-    : "";
+  const statusLabel = order ? orderStatusLabel(order.status) : "";
 
-  const handleBack = () => navigate("/orders");
+  const handleBack = () => navigate(ROUTES.myOrders);
 
   const handleContact = () => {
     if (phone) window.location.href = telHref(phone);
@@ -115,7 +111,7 @@ export function useOrderDetail() {
       );
     }
 
-    navigate("/cart");
+    navigate(ROUTES.cart);
   };
 
   const handleRate = (payload: { stars: number; comment: string }) => {
@@ -130,7 +126,7 @@ export function useOrderDetail() {
       const name =
         item.halves.length === 2
           ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-          : (item.halves[0]?.pizza.name ?? "Pizza");
+          : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
       const size = SIZE_LABEL[item.size] ?? item.size;
       return `${item.quantity}× ${name} · ${size}`;
     }),

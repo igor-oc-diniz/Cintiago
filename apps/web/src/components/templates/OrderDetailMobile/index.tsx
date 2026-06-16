@@ -11,6 +11,7 @@ import {
   LeafIcon,
 } from "@/components/atoms/Icons";
 import { formatDate } from "@/utils/format";
+import { PIZZA_NAME_FALLBACK } from "@/constants/pizza";
 import type { OrderStatus } from "@cintiago/shared";
 import type { OrderDetailDesktopProps } from "@/components/templates/OrderDetailDesktop/types";
 
@@ -152,7 +153,7 @@ export function OrderDetailMobile({
               const names =
                 item.halves.length === 2
                   ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-                  : (item.halves[0]?.pizza.name ?? "Pizza");
+                  : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
 
               return (
                 <div

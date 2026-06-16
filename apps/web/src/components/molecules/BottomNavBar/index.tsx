@@ -1,12 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, UtensilsCrossed, ClipboardList, User } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { ROUTES } from "@/constants/routes";
 
 const NAV_ITEMS = [
-  { label: "Home", icon: Home, path: "/" },
-  { label: "Menu", icon: UtensilsCrossed, path: "/menu" },
-  { label: "Pedidos", icon: ClipboardList, path: "/orders" },
-  { label: "Perfil", icon: User, path: "/profile" },
+  { label: "Home", icon: Home, path: ROUTES.home },
+  { label: "Menu", icon: UtensilsCrossed, path: ROUTES.menu },
+  { label: "Pedidos", icon: ClipboardList, path: ROUTES.myOrders },
+  { label: "Perfil", icon: User, path: ROUTES.profile },
 ];
 
 export function BottomNavBar() {

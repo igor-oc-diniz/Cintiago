@@ -4,14 +4,18 @@ import { useAppDispatch } from "@/store/hooks";
 import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
+import { formatPrice, formatEtaMinutes, telHref } from "@/utils/format";
+import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
 import {
-  formatPrice,
-  formatEtaMinutes,
-  ORDER_STATUS_LABEL,
-  SIZE_LABEL,
-  telHref,
-} from "@/utils/format";
-import { computeOrderItemCurrentPrice, orderItemCustomLines } from "@/utils/order";
+  ORDER_STATUS,
+  orderStatusLabel,
+  progressIndex,
+} from "@/constants/order";
+import { ROUTES } from "@/constants/routes";
+import {
+  computeOrderItemCurrentPrice,
+  orderItemCustomLines,
+} from "@/utils/order";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 import type { ReactNode } from "react";
@@ -31,55 +35,29 @@ export interface TrackingStage {
   icon: ReactNode;
 }
 
-function buildStages(): TrackingStage[] {
-  return [
-    {
-      key: "pending",
-      label: "Aguardando confirmação",
-      icon: createElement(ReceiptIcon, { size: 17, strokeWidth: 1.9 }),
-    },
-    {
-      key: "confirmed",
-      label: "Confirmado",
-      icon: createElement(ReceiptIcon, { size: 17, strokeWidth: 1.9 }),
-    },
-    {
-      key: "preparing",
-      label: "Em preparo",
-      icon: createElement(FlameIcon, { size: 17, strokeWidth: 1.9 }),
-    },
-    {
-      key: "delivering",
-      label: "Saiu para entrega",
-      icon: createElement(BikeIcon, { size: 17, strokeWidth: 1.9 }),
-    },
-    {
-      key: "delivered",
-      label: "Entregue",
-      icon: createElement(CircleCheckBigIcon, {
-        size: 17,
-        strokeWidth: 1.9,
-      }),
-    },
-  ];
-}
+// Ícones da timeline por status (os rótulos vêm de ORDER_STATUS.trackingLabel).
+const STAGE_ICONS: Record<string, ReactNode> = {
+  pending: createElement(ReceiptIcon, { size: 17, strokeWidth: 1.9 }),
+  confirmed: createElement(ReceiptIcon, { size: 17, strokeWidth: 1.9 }),
+  preparing: createElement(FlameIcon, { size: 17, strokeWidth: 1.9 }),
+  delivering: createElement(BikeIcon, { size: 17, strokeWidth: 1.9 }),
+  delivered: createElement(CircleCheckBigIcon, { size: 17, strokeWidth: 1.9 }),
+};
 
-// Maps API status → timeline active index (0-based)
-function progressIndex(status: OrderStatus): number {
-  switch (status) {
-    case "pending":
-      return 0;
-    case "confirmed":
-      return 1;
-    case "preparing":
-      return 2;
-    case "delivering":
-      return 3;
-    case "delivered":
-      return 4;
-    default:
-      return 0;
-  }
+const STAGE_KEYS: OrderStatus[] = [
+  "pending",
+  "confirmed",
+  "preparing",
+  "delivering",
+  "delivered",
+];
+
+function buildStages(): TrackingStage[] {
+  return STAGE_KEYS.map((key) => ({
+    key,
+    label: ORDER_STATUS[key].trackingLabel,
+    icon: STAGE_ICONS[key],
+  }));
 }
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
@@ -107,13 +85,11 @@ export function useOrderTracking() {
   const activeIndex = order ? progressIndex(order.status) : 0;
   const isDelivered = order?.status === "delivered";
 
-  const statusLabel = order
-    ? (ORDER_STATUS_LABEL[order.status] ?? order.status)
-    : "";
+  const statusLabel = order ? orderStatusLabel(order.status) : "";
 
   const deliveryEta = formatEtaMinutes(order?.estimatedDeliveryMinutes ?? null);
 
-  const handleBack = () => navigate("/orders");
+  const handleBack = () => navigate(ROUTES.myOrders);
 
   const handleContact = () => {
     if (phone) window.location.href = telHref(phone);
@@ -154,7 +130,7 @@ export function useOrderTracking() {
       );
     }
 
-    navigate("/cart");
+    navigate(ROUTES.cart);
   };
 
   const summaryItems: { headline: string; customLines: string[] }[] = order
@@ -163,7 +139,7 @@ export function useOrderTracking() {
           const name =
             item.halves.length === 2
               ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-              : (item.halves[0]?.pizza.name ?? "Pizza");
+              : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
           const size = SIZE_LABEL[item.size] ?? item.size;
           return {
             headline: `${item.quantity}× ${name} · ${size}`,

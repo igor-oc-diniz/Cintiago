@@ -6,13 +6,10 @@ import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { useAppDispatch } from "@/store/hooks";
 import { clearActiveOrder } from "@/store/slices/orderSlice";
 import { formatPrice } from "@/utils/format";
+import { DELIVERY_LABEL } from "@/constants/delivery";
+import { PAYMENT_TYPE } from "@/constants/payment";
+import { ROUTES } from "@/constants/routes";
 import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
-
-const DELIVERY_LABELS: Record<string, string> = {
-  delivery: "Delivery",
-  pickup: "Retirar no balcão",
-  dine_in: "Comer no salão",
-};
 
 export function useCartData() {
   const navigate = useNavigate();
@@ -47,7 +44,7 @@ export function useCartData() {
   const ready = !isEmpty && !!deliveryType && !!paymentName && meetsMinimum;
 
   const deliveryLabel = deliveryType
-    ? (DELIVERY_LABELS[deliveryType] ?? null)
+    ? (DELIVERY_LABEL[deliveryType] ?? null)
     : null;
 
   // Mensagem única do que falta para finalizar — mínimo tem prioridade.
@@ -75,14 +72,14 @@ export function useCartData() {
       const open = await fetchFreshStatus();
       if (open) {
         dispatch(clearActiveOrder());
-        navigate("/order/confirm");
+        navigate(ROUTES.orderConfirm);
       } else {
         setShowClosedModal(true);
       }
     } catch {
       // falha na consulta não deve travar o usuário — segue para a confirmação
       dispatch(clearActiveOrder());
-      navigate("/order/confirm");
+      navigate(ROUTES.orderConfirm);
     } finally {
       setCheckingStatus(false);
     }
@@ -90,7 +87,7 @@ export function useCartData() {
 
   const closeClosedModal = () => setShowClosedModal(false);
 
-  const isCash = paymentType === "CASH";
+  const isCash = paymentType === PAYMENT_TYPE.cash;
 
   return {
     navigate,

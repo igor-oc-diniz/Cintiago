@@ -13,6 +13,7 @@ import {
   RotateCcwIcon,
   LeafIcon,
 } from "@/components/atoms/Icons";
+import { ROUTES } from "@/constants/routes";
 import type { OrderTrackingDesktopProps } from "./types";
 import type { OrderStatus } from "@cintiago/shared";
 
@@ -141,9 +142,9 @@ export function OrderTrackingDesktop({
         userName={user?.name ?? ""}
         userEmail={user?.email ?? ""}
         userInitials={(user?.name ?? "U").slice(0, 2).toUpperCase()}
-        onHome={() => navigate("/")}
+        onHome={() => navigate(ROUTES.home)}
         onOrders={handleBack}
-        onProfile={() => navigate("/profile")}
+        onProfile={() => navigate(ROUTES.profile)}
       />
 
       <div

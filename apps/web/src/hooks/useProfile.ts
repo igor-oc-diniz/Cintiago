@@ -5,6 +5,7 @@ import { getMyProfile, updateMyProfile } from "@/api/clients";
 import { useAuth } from "@/hooks/useAuth";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { telHref } from "@/utils/format";
+import { ROUTES } from "@/constants/routes";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { UpdateClientPayloadDTO } from "@cintiago/shared";
 
@@ -122,10 +123,10 @@ export function useProfile() {
   const handleLogout = async () => {
     await logout();
     setShowLogoutModal(false);
-    navigate("/");
+    navigate(ROUTES.home);
   };
 
-  const handleGoOrders = () => navigate("/orders");
+  const handleGoOrders = () => navigate(ROUTES.myOrders);
   const handleContact = () => {
     if (storePhone) window.location.href = telHref(storePhone);
   };

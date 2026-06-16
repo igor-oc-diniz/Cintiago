@@ -5,6 +5,7 @@ node_modules/
 **/.env
 dist/
 **/dist/
+**/.vite/
 *.js.map
 CLAUDE.md
 .DS_Store
