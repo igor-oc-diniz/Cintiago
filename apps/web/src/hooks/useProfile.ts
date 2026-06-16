@@ -5,6 +5,7 @@ import { getMyProfile, updateMyProfile } from "@/api/clients";
 import { useAuth } from "@/hooks/useAuth";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { telHref } from "@/utils/format";
+import { lookupCep } from "@/utils/cep";
 import { ROUTES } from "@/constants/routes";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { UpdateClientPayloadDTO } from "@cintiago/shared";
@@ -17,25 +18,6 @@ export interface ProfileForm {
   complement: string;
   neighborhood: string;
   city: string;
-}
-
-async function fetchAddressByCep(
-  cep: string,
-): Promise<Partial<ProfileForm> | null> {
-  const digits = cep.replace(/\D/g, "");
-  if (digits.length !== 8) return null;
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${digits}/json/`);
-    const data = await res.json();
-    if (data.erro) return null;
-    return {
-      street: data.logradouro ?? "",
-      neighborhood: data.bairro ?? "",
-      city: data.localidade ?? "",
-    };
-  } catch {
-    return null;
-  }
 }
 
 const EMPTY_FORM: ProfileForm = {
@@ -99,12 +81,20 @@ export function useProfile() {
     const digits = value.replace(/\D/g, "");
     if (digits.length === 8) {
       setCepLoading(true);
-      const addr = await fetchAddressByCep(value);
-      if (addr) {
-        setForm((prev) => ({ ...prev, ...addr }));
+      try {
+        const addr = await lookupCep(value);
+        setForm((prev) => ({
+          ...prev,
+          street: addr.street,
+          neighborhood: addr.neighborhood,
+          city: addr.city,
+        }));
         setDirty(true);
+      } catch {
+        /* CEP inválido/não encontrado — permite preenchimento manual */
+      } finally {
+        setCepLoading(false);
       }
-      setCepLoading(false);
     }
   };
 

@@ -6,6 +6,7 @@ import { setCredentials } from "@/store/slices/authSlice";
 import { createMyClient } from "@/api/clients";
 import { getMe } from "@/api/auth";
 import { useAuth } from "@/hooks/useAuth";
+import { lookupCep } from "@/utils/cep";
 import { COOKIE_TOKEN } from "@/constants/auth";
 import { ROUTES } from "@/constants/routes";
 import type { DeliveryAddress } from "@/types/domain";
@@ -112,25 +113,15 @@ export function useOnboardingForm(): OnboardingFormData {
       const digits = formatted.replace(/\D/g, "");
       if (digits.length === 8) {
         setIsCepLoading(true);
-        fetch(`https://viacep.com.br/ws/${digits}/json/`)
-          .then((res) => res.json())
-          .then(
-            (data: {
-              logradouro?: string;
-              bairro?: string;
-              localidade?: string;
-              erro?: boolean;
-            }) => {
-              if (!data.erro) {
-                setAddr((prev) => ({
-                  ...prev,
-                  rua: data.logradouro ?? prev.rua,
-                  neighborhood: data.bairro ?? prev.neighborhood,
-                  city: data.localidade ?? prev.city,
-                }));
-              }
-            },
-          )
+        lookupCep(formatted)
+          .then((addr) => {
+            setAddr((prev) => ({
+              ...prev,
+              rua: addr.street || prev.rua,
+              neighborhood: addr.neighborhood || prev.neighborhood,
+              city: addr.city || prev.city,
+            }));
+          })
           .catch(() => {
             /* allow manual entry */
           })

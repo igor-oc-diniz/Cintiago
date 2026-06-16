@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch } from "@/store/hooks";
-import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, formatEtaMinutes, telHref } from "@/utils/format";
@@ -12,12 +10,10 @@ import {
   progressIndex,
 } from "@/constants/order";
 import { ROUTES } from "@/constants/routes";
-import {
-  computeOrderItemCurrentPrice,
-  orderItemCustomLines,
-} from "@/utils/order";
+import { orderItemCustomLines } from "@/utils/order";
+import { useRepeatOrder } from "@/hooks/useRepeatOrder";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
-import type { OrderDTO, OrderStatus } from "@cintiago/shared";
+import type { OrderStatus } from "@cintiago/shared";
 import type { ReactNode } from "react";
 import {
   ReceiptIcon,
@@ -65,7 +61,7 @@ function buildStages(): TrackingStage[] {
 export function useOrderTracking() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const handleRepeat = useRepeatOrder();
 
   const orderId = Number(id);
   const { phone } = useStoreInfo();
@@ -93,44 +89,6 @@ export function useOrderTracking() {
 
   const handleContact = () => {
     if (phone) window.location.href = telHref(phone);
-  };
-
-  const handleRepeat = (order: OrderDTO) => {
-    dispatch(clearCart());
-
-    for (const item of order.orderItems) {
-      dispatch(
-        addPizza({
-          size: item.size as "small" | "medium" | "large",
-          crustId: item.crustId,
-          crustName: item.crust?.name ?? null,
-          halves: item.halves.map((h) => ({
-            pizzaId: h.pizzaId,
-            pizzaName: h.pizza.name,
-            half: h.half as 1 | 2,
-            ingredients: h.ingredients.map((ing) => ({
-              ingredientId: ing.ingredientId,
-              ingredientName: ing.ingredient.name,
-            })),
-          })),
-          notes: item.notes,
-          quantity: item.quantity,
-          unitPrice: computeOrderItemCurrentPrice(item),
-        }),
-      );
-    }
-
-    for (const p of order.orderProducts) {
-      dispatch(
-        addProduct({
-          productId: p.productId,
-          productName: p.product.name,
-          unitPrice: Number(p.product.price),
-        }),
-      );
-    }
-
-    navigate(ROUTES.cart);
   };
 
   const summaryItems: { headline: string; customLines: string[] }[] = order
