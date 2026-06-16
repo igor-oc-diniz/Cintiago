@@ -6,6 +6,7 @@ import { ActiveOrderCardDesktop } from "@/components/molecules/ActiveOrderCardDe
 import { PastOrderCard } from "@/components/molecules/PastOrderCard";
 import { EmptyState } from "@/components/molecules/EmptyState";
 import { RefreshCwIcon, ReceiptIcon } from "@/components/atoms/Icons";
+import { ROUTES } from "@/constants/routes";
 import type { MyOrdersDesktopProps } from "./types";
 
 export function MyOrdersDesktop({
@@ -41,9 +42,9 @@ export function MyOrdersDesktop({
         userName={user?.name ?? ""}
         userEmail={user?.email ?? ""}
         userInitials={(user?.name ?? "U").slice(0, 2).toUpperCase()}
-        onHome={() => navigate("/")}
-        onOrders={() => navigate("/orders")}
-        onProfile={() => navigate("/profile")}
+        onHome={() => navigate(ROUTES.home)}
+        onOrders={() => navigate(ROUTES.myOrders)}
+        onProfile={() => navigate(ROUTES.profile)}
       />
 
       <div
@@ -128,7 +129,10 @@ export function MyOrdersDesktop({
               icon={<ReceiptIcon size={38} color="var(--fg4, #B0A090)" />}
               title="Você ainda não fez nenhum pedido."
               description="Quando o forno acender por você, seus pedidos aparecem aqui."
-              action={{ label: "Ver o cardápio", onClick: () => navigate("/") }}
+              action={{
+                label: "Ver o cardápio",
+                onClick: () => navigate(ROUTES.home),
+              }}
             />
           </div>
         ) : (

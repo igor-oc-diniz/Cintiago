@@ -18,13 +18,9 @@ import { selectUser } from "@/store/slices/authSlice";
 import { createOrder } from "@/api/orders";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import { formatPrice, formatEtaMinutes } from "@/utils/format";
+import { DELIVERY_LABEL } from "@/constants/delivery";
+import { ROUTES } from "@/constants/routes";
 import type { CartPizzaItem, CartProductItem } from "@/store/slices/cartSlice";
-
-const DELIVERY_LABELS: Record<string, string> = {
-  delivery: "Delivery",
-  pickup: "Retirada no local",
-  dine_in: "Comer no salão",
-};
 
 export function useOrderConfirm() {
   const dispatch = useAppDispatch();
@@ -127,7 +123,7 @@ export function useOrderConfirm() {
       ];
 
   const deliveryLabel = effectiveDeliveryType
-    ? DELIVERY_LABELS[effectiveDeliveryType]
+    ? DELIVERY_LABEL[effectiveDeliveryType]
     : null;
   const addressSub =
     effectiveDeliveryType === "delivery" && order
@@ -137,10 +133,10 @@ export function useOrderConfirm() {
   const paymentLabel = order?.payment.name ?? payment.name ?? "";
 
   const handleTrack = () => {
-    if (order) navigate(`/order/${order.id}/tracking`);
+    if (order) navigate(ROUTES.orderTracking(order.id));
   };
 
-  const handleHome = () => navigate("/");
+  const handleHome = () => navigate(ROUTES.home);
 
   // ETA real do pedido, calculado pelo backend (computeEta)
   const deliveryEta = formatEtaMinutes(order?.estimatedDeliveryMinutes ?? null);

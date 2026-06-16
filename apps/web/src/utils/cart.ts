@@ -1,19 +1,14 @@
 import type { CartPizzaItem } from "@/store/slices/cartSlice";
-
-export const SIZE_LABELS: Record<string, string> = {
-  small: "Pequena",
-  medium: "Média",
-  large: "Grande",
-};
+import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
 
 export function pizzaItemLabel(item: CartPizzaItem): string {
   if (item.halves.length === 2)
     return `${item.halves[0].pizzaName} / ${item.halves[1].pizzaName}`;
-  return item.halves[0]?.pizzaName ?? "Pizza";
+  return item.halves[0]?.pizzaName ?? PIZZA_NAME_FALLBACK;
 }
 
 export function pizzaItemSub(item: CartPizzaItem): string {
-  const size = SIZE_LABELS[item.size] ?? item.size;
+  const size = SIZE_LABEL[item.size] ?? item.size;
   const crust = item.crustName
     ? ` · borda ${item.crustName.toLowerCase()}`
     : "";

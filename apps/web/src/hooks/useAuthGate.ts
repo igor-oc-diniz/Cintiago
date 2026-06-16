@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials, setLoading } from "@/store/slices/authSlice";
 import { getGoogleAuthUrl, getMe } from "@/api/auth";
+import { COOKIE_TOKEN } from "@/constants/auth";
+import { ROUTES } from "@/constants/routes";
 import { useAuth } from "./useAuth";
 
 export interface UseAuthGateReturn {
@@ -31,7 +33,7 @@ export function useAuthGate(): UseAuthGateReturn {
 
     getMe()
       .then((user) => {
-        dispatch(setCredentials({ token: "cookie", user }));
+        dispatch(setCredentials({ token: COOKIE_TOKEN, user }));
         redirectAfterLogin(!!user.clientId);
       })
       .catch(() => {
@@ -41,9 +43,9 @@ export function useAuthGate(): UseAuthGateReturn {
 
   function redirectAfterLogin(hasProfile: boolean) {
     if (!hasProfile) {
-      navigate("/onboarding", { replace: true });
+      navigate(ROUTES.onboarding, { replace: true });
     } else {
-      navigate(from ?? "/", { replace: true });
+      navigate(from ?? ROUTES.home, { replace: true });
     }
   }
 
@@ -57,7 +59,7 @@ export function useAuthGate(): UseAuthGateReturn {
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate("/", { replace: true });
+      navigate(ROUTES.home, { replace: true });
     }
   }
 

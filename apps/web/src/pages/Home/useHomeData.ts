@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/hooks/useCart";
 import { getPizzas } from "@/api/pizzas";
 import { getProducts } from "@/api/products";
+import { ROUTES } from "@/constants/routes";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { ProductDTO } from "@cintiago/shared";
 
@@ -52,7 +53,7 @@ export function useHomeData() {
     refetchProducts: productsQuery.refetch,
 
     // Handlers
-    onPizzaClick: (id: number) => navigate(`/pizza/${id}`),
+    onPizzaClick: (id: number) => navigate(ROUTES.pizza(id)),
     onAddProduct: handleAddProduct,
   };
 }

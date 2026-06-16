@@ -14,6 +14,8 @@ import {
   LeafIcon,
 } from "@/components/atoms/Icons";
 import { formatDate } from "@/utils/format";
+import { PIZZA_NAME_FALLBACK } from "@/constants/pizza";
+import { ROUTES } from "@/constants/routes";
 import type { OrderStatus } from "@cintiago/shared";
 import type { OrderDetailDesktopProps } from "./types";
 
@@ -124,9 +126,9 @@ export function OrderDetailDesktop({
         userName={user?.name ?? ""}
         userEmail={user?.email ?? ""}
         userInitials={(user?.name ?? "U").slice(0, 2).toUpperCase()}
-        onHome={() => navigate("/")}
+        onHome={() => navigate(ROUTES.home)}
         onOrders={handleBack}
-        onProfile={() => navigate("/profile")}
+        onProfile={() => navigate(ROUTES.profile)}
       />
 
       <div
@@ -223,7 +225,7 @@ export function OrderDetailDesktop({
                   const names =
                     item.halves.length === 2
                       ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-                      : (item.halves[0]?.pizza.name ?? "Pizza");
+                      : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
 
                   return (
                     <div

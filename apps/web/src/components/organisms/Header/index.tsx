@@ -8,6 +8,7 @@ import { StoreStatusBadge } from "@/components/molecules/StoreStatusBadge";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
+import { ROUTES } from "@/constants/routes";
 import type { HeaderProps } from "./types";
 
 function Logo() {
@@ -162,7 +163,7 @@ export function Header({ showBack, title, onBack, className }: HeaderProps) {
           <div style={{ position: "relative" }}>
             <button
               type="button"
-              onClick={() => navigate("/cart")}
+              onClick={() => navigate(ROUTES.cart)}
               aria-label="Carrinho"
               style={{
                 width: 40,
@@ -274,7 +275,7 @@ export function Header({ showBack, title, onBack, className }: HeaderProps) {
                       color: "var(--fg1)",
                     }}
                     onClick={() => {
-                      navigate("/orders");
+                      navigate(ROUTES.myOrders);
                       setDropdownOpen(false);
                     }}
                   >
@@ -299,7 +300,7 @@ export function Header({ showBack, title, onBack, className }: HeaderProps) {
                       color: "var(--fg1)",
                     }}
                     onClick={() => {
-                      navigate("/profile");
+                      navigate(ROUTES.profile);
                       setDropdownOpen(false);
                     }}
                   >
@@ -334,7 +335,9 @@ export function Header({ showBack, title, onBack, className }: HeaderProps) {
           ) : (
             <button
               type="button"
-              onClick={() => navigate("/login", { state: { from: location } })}
+              onClick={() =>
+                navigate(ROUTES.login, { state: { from: location } })
+              }
               style={{
                 height: 40,
                 padding: "0 16px",

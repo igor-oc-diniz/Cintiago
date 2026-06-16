@@ -7,6 +7,7 @@ import { getIngredients } from "@/api/ingredients";
 import { useCart } from "@/hooks/useCart";
 import { useAppDispatch } from "@/store/hooks";
 import { updatePizzaItem } from "@/store/slices/cartSlice";
+import { ROUTES } from "@/constants/routes";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import type { Pizza, Ingredient, Crust } from "@/types/domain";
 import type { CartPizzaItem } from "@/store/slices/cartSlice";
@@ -236,7 +237,7 @@ export function usePizzaDetailData() {
     if (isEditMode) {
       navigate(-1);
     } else {
-      navigate("/cart");
+      navigate(ROUTES.cart);
     }
   };
 

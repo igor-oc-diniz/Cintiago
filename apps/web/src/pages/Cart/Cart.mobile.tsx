@@ -4,6 +4,7 @@ import { PizzaCartCard } from "@/components/molecules/PizzaCartCard";
 import { ProductCartCard } from "@/components/molecules/ProductCartCard";
 import { SelectorRow } from "@/components/molecules/SelectorRow";
 import { StoreClosedModal } from "@/components/molecules/StoreClosedModal";
+import { ROUTES } from "@/constants/routes";
 
 const chipBtn: React.CSSProperties = {
   display: "inline-flex",
@@ -164,7 +165,7 @@ export function CartMobile({
           </div>
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(ROUTES.home)}
             style={{
               ...chipBtn,
               height: 44,
@@ -217,7 +218,7 @@ export function CartMobile({
               onQty={(v) => handleQty(item.id, v)}
               onRemove={() => handleRemove(item.id)}
               onEdit={() =>
-                navigate(`/pizza/${item.halves[0].pizzaId}`, {
+                navigate(ROUTES.pizza(item.halves[0].pizzaId), {
                   state: { item },
                 })
               }
@@ -235,7 +236,7 @@ export function CartMobile({
 
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate(ROUTES.home)}
           style={{
             width: "100%",
             marginTop: 12,
@@ -295,7 +296,7 @@ export function CartMobile({
             label="Entrega"
             value={deliveryLabel}
             placeholder="Selecionar forma de entrega"
-            onClick={() => navigate("/cart/delivery")}
+            onClick={() => navigate(ROUTES.delivery)}
           />
           <SelectorRow
             icon={
@@ -320,7 +321,7 @@ export function CartMobile({
                 ? "Selecionar forma de pagamento"
                 : "Selecione a entrega primeiro"
             }
-            onClick={deliveryType ? () => navigate("/cart/payment") : undefined}
+            onClick={deliveryType ? () => navigate(ROUTES.payment) : undefined}
             disabled={!deliveryType}
           />
         </div>
@@ -399,7 +400,7 @@ export function CartMobile({
         {!isLoggedIn && (
           <button
             type="button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate(ROUTES.login)}
             style={{
               width: "100%",
               height: 46,

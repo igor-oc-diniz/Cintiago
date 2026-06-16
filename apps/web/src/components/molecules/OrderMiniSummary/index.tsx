@@ -1,7 +1,8 @@
 import { SumLine } from "@/components/molecules/SumLine";
 import { LeafIcon } from "@/components/atoms/Icons";
 import { Divider } from "@/components/atoms/Divider";
-import { formatPrice, SIZE_LABEL } from "@/utils/format";
+import { formatPrice } from "@/utils/format";
+import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
 import { orderItemCustomLines } from "@/utils/order";
 import type { OrderDTO } from "@cintiago/shared";
 
@@ -20,7 +21,7 @@ export function OrderMiniSummary({ order }: OrderMiniSummaryProps) {
       const name =
         item.halves.length === 2
           ? `${item.halves[0].pizza.name} / ${item.halves[1].pizza.name}`
-          : (item.halves[0]?.pizza.name ?? "Pizza");
+          : (item.halves[0]?.pizza.name ?? PIZZA_NAME_FALLBACK);
       const sizeLabel = SIZE_LABEL[item.size] ?? item.size;
       return {
         headline: `${item.quantity}× ${name} · ${sizeLabel}`,

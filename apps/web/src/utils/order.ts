@@ -29,8 +29,7 @@ export function computeOrderItemCurrentPrice(item: OrderItem): number {
     return halfPrice;
   });
 
-  const pizzaPrice =
-    halfPrices.length > 0 ? Math.max(...halfPrices) : 0;
+  const pizzaPrice = halfPrices.length > 0 ? Math.max(...halfPrices) : 0;
   const crustPrice = item.crust ? Number(item.crust[key] ?? 0) : 0;
 
   return pizzaPrice + crustPrice;

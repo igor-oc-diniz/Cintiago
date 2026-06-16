@@ -1,22 +1,8 @@
 import { formatPrice } from "@/utils/format";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
+import { SIZE_LABEL, SIZE_DESC, SIZE_ORDER } from "@/constants/pizza";
+import type { PizzaSize } from "@/constants/pizza";
 import type { Pizza } from "@/types/domain";
-
-export const SIZE_LABELS: Record<string, string> = {
-  small: "Pequena",
-  medium: "Média",
-  large: "Grande",
-};
-
-export const SIZE_DESC: Record<string, string> = {
-  small: "4 fatias · 25cm",
-  medium: "6 fatias · 30cm",
-  large: "8 fatias · 35cm",
-};
-
-export const SIZE_ORDER = ["small", "medium", "large"] as const;
-
-type PizzaSize = "small" | "medium" | "large";
 
 interface SizeSelectorProps {
   pizza: Pizza;
@@ -78,7 +64,7 @@ export function SizeSelector({
                 color: on ? "var(--primary)" : "var(--fg1)",
               }}
             >
-              {SIZE_LABELS[size]}
+              {SIZE_LABEL[size]}
             </span>
             <span
               style={{

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { store } from "@/store/store";
+import { COOKIE_TOKEN } from "@/constants/auth";
 import { refreshTokenApi } from "./refreshToken";
 
 export const api = axios.create({
@@ -9,10 +10,10 @@ export const api = axios.create({
 });
 
 // Injeta o JWT Bearer token automaticamente em toda request
-// Ignora o valor sentinela "cookie" — auth via cookie httpOnly não precisa de header
+// Ignora o valor sentinela COOKIE_TOKEN — auth via cookie httpOnly não precisa de header
 api.interceptors.request.use((config) => {
   const token = store.getState().auth.token;
-  if (token && token !== "cookie") {
+  if (token && token !== COOKIE_TOKEN) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

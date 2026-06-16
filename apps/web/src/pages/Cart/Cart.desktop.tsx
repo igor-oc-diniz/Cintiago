@@ -5,6 +5,7 @@ import { PizzaCartCard } from "@/components/molecules/PizzaCartCard";
 import { ProductCartCard } from "@/components/molecules/ProductCartCard";
 import { SelectorRow } from "@/components/molecules/SelectorRow";
 import { StoreClosedModal } from "@/components/molecules/StoreClosedModal";
+import { ROUTES } from "@/constants/routes";
 import type { CartData } from "./useCartData";
 
 const chipBtn: React.CSSProperties = {
@@ -122,7 +123,7 @@ export function CartDesktop({
             </div>
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(ROUTES.home)}
               style={{
                 ...chipBtn,
                 height: 48,
@@ -156,7 +157,7 @@ export function CartDesktop({
                     onQty={(v) => handleQty(item.id, v)}
                     onRemove={() => handleRemove(item.id)}
                     onEdit={() =>
-                      navigate(`/pizza/${item.halves[0].pizzaId}`, {
+                      navigate(ROUTES.pizza(item.halves[0].pizzaId), {
                         state: { item },
                       })
                     }
@@ -173,7 +174,7 @@ export function CartDesktop({
               </div>
               <button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(ROUTES.home)}
                 style={{
                   width: "100%",
                   marginTop: 14,
@@ -246,7 +247,7 @@ export function CartDesktop({
                   label="Entrega"
                   value={deliveryLabel}
                   placeholder="Selecionar forma de entrega"
-                  onClick={() => navigate("/cart/delivery")}
+                  onClick={() => navigate(ROUTES.delivery)}
                 />
                 <SelectorRow
                   icon={
@@ -274,7 +275,7 @@ export function CartDesktop({
                       : "Selecione a entrega primeiro"
                   }
                   onClick={
-                    deliveryType ? () => navigate("/cart/payment") : undefined
+                    deliveryType ? () => navigate(ROUTES.payment) : undefined
                   }
                   disabled={!deliveryType}
                 />
@@ -342,7 +343,7 @@ export function CartDesktop({
                 {!isLoggedIn && (
                   <button
                     type="button"
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate(ROUTES.login)}
                     style={{
                       width: "100%",
                       height: 50,
