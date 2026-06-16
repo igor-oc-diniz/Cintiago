@@ -213,10 +213,10 @@ Regras:
 | Método  | Rota                       | Papel      | Descrição                                            |
 | ------- | -------------------------- | ---------- | ---------------------------------------------------- |
 | `POST`  | `/orders`                  | `CLIENT`   | Cria pedido — `clientId` vem do JWT, total calculado |
-| `GET`   | `/orders/my`               | `CLIENT`   | Lista os pedidos do cliente autenticado              |
+| `GET`   | `/orders/my`               | `CLIENT`   | Lista paginada dos pedidos do cliente autenticado    |
 | `GET`   | `/orders/my/:id`           | `CLIENT`   | Detalha um pedido próprio                            |
 | `POST`  | `/orders/:id/rating`       | `CLIENT`   | Avalia (upsert) um pedido próprio entregue           |
-| `GET`   | `/orders`                  | `OPERATOR` | Lista **todos** os pedidos (mais recentes primeiro)  |
+| `GET`   | `/orders`                  | `OPERATOR` | Lista paginada de todos os pedidos (recentes primeiro) |
 | `GET`   | `/orders/:id`              | `OPERATOR` | Detalha qualquer pedido                              |
 | `PATCH` | `/orders/:id/status`       | `OPERATOR` | Atualiza o status                                    |
 | `PATCH` | `/orders/:id/rating/reply` | `OPERATOR` | Responde a avaliação de um pedido                    |
@@ -225,5 +225,34 @@ Todas as leituras incluem a árvore completa (`client`, `payment`, `rating`,
 itens com metades/pizzas/ingredientes, produtos) e o campo
 `estimatedDeliveryMinutes`.
 
-> ⚠️ `GET /orders` retorna **todos** os pedidos sem paginação nem filtro. Filtros
-> por status/cliente/data estão anotados no `TODO.md`.
+### Paginação e filtros (`GET /orders` e `GET /orders/my`)
+
+Ambas as listagens são paginadas e aceitam os mesmos filtros via query string:
+
+| Param       | Tipo               | Padrão | Descrição                                              |
+| ----------- | ------------------ | ------ | ------------------------------------------------------ |
+| `page`      | inteiro ≥ 1        | `1`    | Página (offset = `(page - 1) * limit`)                 |
+| `limit`     | inteiro 1–100      | `20`   | Itens por página                                       |
+| `status`    | `OrderStatus`      | —      | Filtra por status do pedido                            |
+| `startDate` | data/ISO 8601      | —      | `createdAt >= startDate`                               |
+| `endDate`   | data/ISO 8601      | —      | `createdAt <= endDate` (inclui o dia inteiro se só data) |
+
+`GET /orders` (OPERATOR) aceita também `clientId` (inteiro) para filtrar por
+cliente. Em `GET /orders/my` o `clientId` é sempre o do JWT — qualquer valor
+enviado é ignorado e o escopo permanece restrito ao cliente autenticado.
+
+A resposta passa a ter o formato:
+
+```jsonc
+{
+  "data": [ /* OrderDTO[] da página atual */ ],
+  "meta": {
+    "total": 137,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 7,
+    "hasNext": true,
+    "hasPrev": false
+  }
+}
+```

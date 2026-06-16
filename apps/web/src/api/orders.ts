@@ -4,10 +4,11 @@ import type {
   CreateOrderPayloadDTO,
   CreateRatingPayloadDTO,
   OrderRatingDTO,
+  PaginatedOrdersDTO,
 } from "@cintiago/shared";
 
 export const getMyOrders = () =>
-  api.get<OrderDTO[]>("/orders/my").then((r) => r.data);
+  api.get<PaginatedOrdersDTO>("/orders/my").then((r) => r.data.data);
 
 export const getOrderById = (id: number) =>
   api.get<OrderDTO>(`/orders/my/${id}`).then((r) => r.data);

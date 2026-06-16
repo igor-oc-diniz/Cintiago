@@ -20,6 +20,12 @@ export type {
   CreateOrderItemHalfPayloadDTO,
   CreateOrderItemHalfIngredientPayloadDTO,
   CreateOrderProductPayloadDTO,
+  CreateRatingPayloadDTO,
+  OrderRatingDTO,
+  PaginationMetaDTO,
+  OrderListQueryDTO,
+  OrderListAdminQueryDTO,
+  PaginatedOrdersDTO,
 } from "./types/order.types";
 export type { PaymentDTO, PaymentType } from "./types/payment.types";
 export type { PizzaDTO } from "./types/pizza.types";

@@ -112,3 +112,29 @@ export interface CreateRatingPayloadDTO {
   stars: number;
   comment?: string;
 }
+
+export interface PaginationMetaDTO {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface OrderListQueryDTO {
+  page?: number;
+  limit?: number;
+  status?: OrderStatus;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface OrderListAdminQueryDTO extends OrderListQueryDTO {
+  clientId?: number;
+}
+
+export interface PaginatedOrdersDTO {
+  data: OrderDTO[];
+  meta: PaginationMetaDTO;
+}
