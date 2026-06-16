@@ -10,10 +10,52 @@ import { Decimal } from '@prisma/client/runtime/client';
 import { handlePrismaError } from '../common/prisma-errors.helper';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { ReplyRatingDto } from './dto/reply-rating.dto';
+import { FindOrdersQueryDto } from './dto/find-orders-query.dto';
+import { FindOrdersAdminQueryDto } from './dto/find-orders-admin-query.dto';
+import type { Prisma } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private buildOrderWhere(
+    query: FindOrdersAdminQueryDto,
+    clientId?: number,
+  ): Prisma.OrderWhereInput {
+    const where: Prisma.OrderWhereInput = {};
+
+    if (clientId !== undefined) where.clientId = clientId;
+    else if (query.clientId !== undefined) where.clientId = query.clientId;
+
+    if (query.status) where.status = query.status;
+
+    if (query.startDate || query.endDate) {
+      where.createdAt = {};
+      if (query.startDate) where.createdAt.gte = new Date(query.startDate);
+      if (query.endDate) {
+        // inclui o dia inteiro quando vier apenas a data (sem horário)
+        const end = new Date(query.endDate);
+        if (/^\d{4}-\d{2}-\d{2}$/.test(query.endDate)) {
+          end.setUTCHours(23, 59, 59, 999);
+        }
+        where.createdAt.lte = end;
+      }
+    }
+
+    return where;
+  }
+
+  private buildPaginationMeta(total: number, page: number, limit: number) {
+    const totalPages = limit > 0 ? Math.ceil(total / limit) : 0;
+    return {
+      total,
+      page,
+      limit,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
 
   private getPrice(
     pizzaValue: {
@@ -76,19 +118,30 @@ export class OrdersService {
     orderProducts: { include: { product: true } },
   };
 
-  async findAll() {
-    const [orders, store] = await Promise.all([
+  async findAll(query: FindOrdersAdminQueryDto) {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const where = this.buildOrderWhere(query);
+
+    const [orders, total, store] = await Promise.all([
       this.prisma.order.findMany({
+        where,
         include: this.orderInclude,
         orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
       }),
+      this.prisma.order.count({ where }),
       this.prisma.store.findFirst(),
     ]);
 
-    return orders.map((order) => ({
-      ...order,
-      estimatedDeliveryMinutes: this.computeEta(order, store),
-    }));
+    return {
+      data: orders.map((order) => ({
+        ...order,
+        estimatedDeliveryMinutes: this.computeEta(order, store),
+      })),
+      meta: this.buildPaginationMeta(total, page, limit),
+    };
   }
 
   async findOne(id: number) {
@@ -320,25 +373,35 @@ export class OrdersService {
     }
   }
 
-  async findMyOrders(userId: number) {
+  async findMyOrders(userId: number, query: FindOrdersQueryDto) {
     try {
       const currentClient = await this.prisma.client.findUniqueOrThrow({
         where: { userId },
       });
 
-      const [orders, store] = await Promise.all([
+      const page = query.page ?? 1;
+      const limit = query.limit ?? 20;
+      const where = this.buildOrderWhere(query, currentClient.id);
+
+      const [orders, total, store] = await Promise.all([
         this.prisma.order.findMany({
-          where: { clientId: currentClient.id },
+          where,
           include: this.orderInclude,
           orderBy: { createdAt: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit,
         }),
+        this.prisma.order.count({ where }),
         this.prisma.store.findFirst(),
       ]);
 
-      return orders.map((order) => ({
-        ...order,
-        estimatedDeliveryMinutes: this.computeEta(order, store),
-      }));
+      return {
+        data: orders.map((order) => ({
+          ...order,
+          estimatedDeliveryMinutes: this.computeEta(order, store),
+        })),
+        meta: this.buildPaginationMeta(total, page, limit),
+      };
     } catch (error) {
       handlePrismaError(error, 'Cliente');
     }

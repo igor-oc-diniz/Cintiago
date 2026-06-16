@@ -5,11 +5,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { FindOrdersQueryDto } from './dto/find-orders-query.dto';
+import { FindOrdersAdminQueryDto } from './dto/find-orders-admin-query.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -26,15 +29,18 @@ export class OrdersController {
   @Roles(Role.OPERATOR)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
-  findAll() {
-    return this.ordersService.findAll();
+  findAll(@Query() query: FindOrdersAdminQueryDto) {
+    return this.ordersService.findAll(query);
   }
 
   @Roles(Role.CLIENT)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/my')
-  findMyOrders(@Req() req: { user: JwtUser }) {
-    return this.ordersService.findMyOrders(req.user.userId);
+  findMyOrders(
+    @Req() req: { user: JwtUser },
+    @Query() query: FindOrdersQueryDto,
+  ) {
+    return this.ordersService.findMyOrders(req.user.userId, query);
   }
 
   @Roles(Role.CLIENT)
