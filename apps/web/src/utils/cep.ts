@@ -3,7 +3,6 @@ export interface CepResult {
   neighborhood: string;
   city: string;
   state: string;
-  error: boolean;
 }
 
 export async function lookupCep(cep: string): Promise<CepResult> {
@@ -16,10 +15,9 @@ export async function lookupCep(cep: string): Promise<CepResult> {
   if (data.erro) throw new Error("CEP não encontrado");
 
   return {
-    street: data.logradouro,
-    neighborhood: data.bairro,
-    city: data.localidade,
-    state: data.uf,
-    error: false,
+    street: data.logradouro ?? "",
+    neighborhood: data.bairro ?? "",
+    city: data.localidade ?? "",
+    state: data.uf ?? "",
   };
 }

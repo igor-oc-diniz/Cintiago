@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch } from "@/store/hooks";
-import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getOrderById, rateOrder } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice, telHref } from "@/utils/format";
@@ -12,14 +10,15 @@ import {
   computeOrderItemCurrentPrice,
   orderItemCustomLines,
 } from "@/utils/order";
+import { useRepeatOrder } from "@/hooks/useRepeatOrder";
 import { useStoreInfo } from "@/hooks/useStoreInfo";
 import type { OrderDTO } from "@cintiago/shared";
 
 export function useOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const queryClientInstance = useQueryClient();
+  const handleRepeat = useRepeatOrder();
 
   const orderId = Number(id);
   const { phone } = useStoreInfo();
@@ -74,44 +73,6 @@ export function useOrderDetail() {
 
   const handleContact = () => {
     if (phone) window.location.href = telHref(phone);
-  };
-
-  const handleRepeat = (o: OrderDTO) => {
-    dispatch(clearCart());
-
-    for (const item of o.orderItems) {
-      dispatch(
-        addPizza({
-          size: item.size as "small" | "medium" | "large",
-          crustId: item.crustId,
-          crustName: item.crust?.name ?? null,
-          halves: item.halves.map((h) => ({
-            pizzaId: h.pizzaId,
-            pizzaName: h.pizza.name,
-            half: h.half as 1 | 2,
-            ingredients: h.ingredients.map((ing) => ({
-              ingredientId: ing.ingredientId,
-              ingredientName: ing.ingredient.name,
-            })),
-          })),
-          notes: item.notes,
-          quantity: item.quantity,
-          unitPrice: computeOrderItemCurrentPrice(item),
-        }),
-      );
-    }
-
-    for (const p of o.orderProducts ?? []) {
-      dispatch(
-        addProduct({
-          productId: p.productId,
-          productName: p.product.name,
-          unitPrice: Number(p.product.price),
-        }),
-      );
-    }
-
-    navigate(ROUTES.cart);
   };
 
   const handleRate = (payload: { stars: number; comment: string }) => {

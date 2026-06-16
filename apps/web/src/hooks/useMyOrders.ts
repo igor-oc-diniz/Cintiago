@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/store/hooks";
-import { addPizza, addProduct, clearCart } from "@/store/slices/cartSlice";
 import { getMyOrders } from "@/api/orders";
 import { QUERY_KEYS } from "@/lib/queryClient";
 import { formatPrice } from "@/utils/format";
 import { SIZE_LABEL, PIZZA_NAME_FALLBACK } from "@/constants/pizza";
 import { orderStatusLabel, progressSegment } from "@/constants/order";
 import { ROUTES } from "@/constants/routes";
-import { computeOrderItemCurrentPrice } from "@/utils/order";
+import { useRepeatOrder } from "@/hooks/useRepeatOrder";
 import type { OrderDTO, OrderStatus } from "@cintiago/shared";
 
 const ACTIVE_STATUSES: OrderStatus[] = [
@@ -21,7 +19,7 @@ const ACTIVE_STATUSES: OrderStatus[] = [
 
 export function useMyOrders() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const handleRepeat = useRepeatOrder();
 
   const {
     data: orders = [],
@@ -56,44 +54,6 @@ export function useMyOrders() {
   };
 
   const handleBack = () => navigate(ROUTES.home);
-
-  const handleRepeat = (order: OrderDTO) => {
-    dispatch(clearCart());
-
-    for (const item of order.orderItems) {
-      dispatch(
-        addPizza({
-          size: item.size as "small" | "medium" | "large",
-          crustId: item.crustId,
-          crustName: item.crust?.name ?? null,
-          halves: item.halves.map((h) => ({
-            pizzaId: h.pizzaId,
-            pizzaName: h.pizza.name,
-            half: h.half as 1 | 2,
-            ingredients: h.ingredients.map((ing) => ({
-              ingredientId: ing.ingredientId,
-              ingredientName: ing.ingredient.name,
-            })),
-          })),
-          notes: item.notes,
-          quantity: item.quantity,
-          unitPrice: computeOrderItemCurrentPrice(item),
-        }),
-      );
-    }
-
-    for (const p of order.orderProducts ?? []) {
-      dispatch(
-        addProduct({
-          productId: p.productId,
-          productName: p.product.name,
-          unitPrice: Number(p.product.price),
-        }),
-      );
-    }
-
-    navigate(ROUTES.cart);
-  };
 
   const getItemHeadlines = (order: OrderDTO): string[] => [
     ...(order.orderItems ?? []).map((item) => {
