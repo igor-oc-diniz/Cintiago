@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderStatus } from '@prisma/client';
+import { OrderStatus, DeliveryType, PizzaSize } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/client';
 import { handlePrismaError } from '../common/prisma-errors.helper';
 import { CreateRatingDto } from './dto/create-rating.dto';
@@ -63,7 +63,7 @@ export class OrdersService {
       priceMedium?: Decimal | null;
       priceLarge?: Decimal | null;
     },
-    size: string,
+    size: PizzaSize,
   ): number {
     const price =
       size === 'small'
@@ -72,12 +72,17 @@ export class OrdersService {
           ? pizzaValue.priceMedium
           : pizzaValue.priceLarge;
 
-    return Number(price ?? 0);
+    if (price == null) {
+      throw new BadRequestException(
+        `Item sem preço cadastrado para o tamanho "${size}"`,
+      );
+    }
+    return Number(price);
   }
 
   private computeEta(
     order: {
-      deliveryType: string;
+      deliveryType: DeliveryType;
       orderItems: { quantity: number }[];
     },
     store: {
@@ -213,7 +218,7 @@ export class OrdersService {
 
     const productIds = (order.products ?? []).map((p) => p.productId);
 
-    const [client, pizzas, crusts, ingredientPrices, products] =
+    const [client, pizzas, crusts, ingredientPrices, products, payment, store] =
       await Promise.all([
         this.prisma.client.findUnique({ where: { userId: userId } }),
         this.prisma.pizza.findMany({ where: { id: { in: pizzaIds } } }),
@@ -222,9 +227,23 @@ export class OrdersService {
           where: { ingredientId: { in: ingredientIds } },
         }),
         this.prisma.product.findMany({ where: { id: { in: productIds } } }),
+        this.prisma.payment.findUnique({ where: { id: order.paymentId } }),
+        this.prisma.store.findFirst(),
       ]);
 
     if (!client) throw new NotFoundException(`Cliente nao encontrado`);
+
+    if (!payment)
+      throw new NotFoundException(
+        `Pagamento ${order.paymentId} nao encontrado`,
+      );
+    if (!payment.active)
+      throw new BadRequestException(
+        `Pagamento ${order.paymentId} esta inativo`,
+      );
+
+    if (store && !store.isOpen)
+      throw new BadRequestException('A loja está fechada no momento');
 
     const pizzaMap = new Map(pizzas.map((p) => [p.id, p]));
     const crustsMap = new Map(crusts.map((c) => [c.id, c]));
@@ -293,10 +312,21 @@ export class OrdersService {
       subtotal += Number(product.price) * orderProduct.quantity;
     }
 
-    const store = await this.prisma.store.findFirst();
     const deliveryFee =
       order.deliveryType === 'delivery' ? Number(store?.deliveryFee ?? 0) : 0;
     const total = subtotal + deliveryFee;
+
+    // Troco só faz sentido para pagamento em dinheiro: nos demais métodos é
+    // ignorado silenciosamente. Quando em dinheiro, precisa cobrir o total.
+    let changeFor: number | null = null;
+    if (payment.type === 'CASH' && order.changeFor != null) {
+      if (order.changeFor < total) {
+        throw new BadRequestException(
+          'O valor do troco não pode ser menor que o total do pedido',
+        );
+      }
+      changeFor = order.changeFor;
+    }
 
     try {
       const createdOrder = await this.prisma.$transaction(async (tx) => {
@@ -307,7 +337,7 @@ export class OrdersService {
             subtotal,
             deliveryFee,
             total,
-            changeFor: order.changeFor,
+            changeFor,
             deliveryType: order.deliveryType,
           },
         });

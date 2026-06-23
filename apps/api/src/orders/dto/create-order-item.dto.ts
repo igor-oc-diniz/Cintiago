@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsIn,
+  IsEnum,
   IsInt,
   IsOptional,
   Min,
@@ -12,11 +12,11 @@ import {
   MaxLength,
 } from 'class-validator';
 import { CreateOrderItemHalfDto } from './create-order-item-half.dto';
+import { PizzaSize } from '@prisma/client';
 
 export class CreateOrderItemDto {
-  @IsString()
-  @IsIn(['small', 'medium', 'large'])
-  size: string;
+  @IsEnum(PizzaSize)
+  size: PizzaSize;
 
   @IsOptional()
   @IsInt()

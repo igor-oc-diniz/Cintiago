@@ -33,7 +33,7 @@ export interface OrderItemDTO {
   id: number;
   orderId: number;
   crustId: number | null;
-  size: string;
+  size: PizzaSize;
   quantity: number;
   price: string | null;
   notes: string | null;

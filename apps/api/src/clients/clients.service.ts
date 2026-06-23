@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
+import { CreateMyClientDto } from './dto/create-my-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { handlePrismaError } from '../common/prisma-errors.helper';
 
@@ -20,10 +21,11 @@ export class ClientsService {
     }
   }
 
-  async createMyClient(userId: number, createClientDto: CreateClientDto) {
-    createClientDto.userId = userId;
+  async createMyClient(userId: number, createClientDto: CreateMyClientDto) {
     try {
-      return await this.prisma.client.create({ data: createClientDto });
+      return await this.prisma.client.create({
+        data: { ...createClientDto, userId },
+      });
     } catch (error) {
       handlePrismaError(error, 'Cliente');
     }

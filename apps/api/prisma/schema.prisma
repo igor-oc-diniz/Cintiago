@@ -27,6 +27,17 @@ enum PaymentType {
   PIX
 }
 
+enum DeliveryType {
+  delivery
+  pickup
+}
+
+enum PizzaSize {
+  small
+  medium
+  large
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   googleId     String   @unique
@@ -134,7 +145,7 @@ model Order {
   total         Decimal?
   changeFor     Decimal?
   status        OrderStatus    @default(pending)
-  deliveryType  String         @default("delivery")
+  deliveryType  DeliveryType   @default(delivery)
   createdAt     DateTime       @default(now())
   orderItems    OrderItem[]
   orderProducts OrderProduct[]
@@ -147,7 +158,7 @@ model OrderItem {
   orderId  Int
   crust    Crust?          @relation(fields: [crustId], references: [id])
   crustId  Int?
-  size     String
+  size     PizzaSize
   quantity Int             @default(1)
   price    Decimal?
   notes    String?
