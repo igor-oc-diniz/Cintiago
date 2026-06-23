@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
+import { CreateMyClientDto } from './dto/create-my-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -34,7 +35,7 @@ export class ClientsController {
   @Post('/me')
   createMyClient(
     @Req() req: { user: JwtUser },
-    @Body() createClientDto: CreateClientDto,
+    @Body() createClientDto: CreateMyClientDto,
   ) {
     return this.clientsService.createMyClient(req.user.userId, createClientDto);
   }

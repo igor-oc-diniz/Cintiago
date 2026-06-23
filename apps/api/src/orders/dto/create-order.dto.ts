@@ -10,13 +10,14 @@ import {
 import { CreateOrderItemDto } from './create-order-item.dto';
 import { Type } from 'class-transformer';
 import { CreateOrderProductDto } from './create-order-product.dto';
+import { DeliveryType } from '@prisma/client';
 
 export class CreateOrderDto {
   @IsInt()
   paymentId: number;
 
-  @IsEnum(['delivery', 'pickup'])
-  deliveryType: 'delivery' | 'pickup';
+  @IsEnum(DeliveryType)
+  deliveryType: DeliveryType;
 
   @IsOptional()
   @IsNumber()

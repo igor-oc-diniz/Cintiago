@@ -1,28 +1,7 @@
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt } from 'class-validator';
+import { CreateMyClientDto } from './create-my-client.dto';
 
-export class CreateClientDto {
+export class CreateClientDto extends CreateMyClientDto {
   @IsInt()
   userId!: number;
-
-  @IsString()
-  phone!: string;
-
-  @IsString()
-  street!: string;
-
-  @IsString()
-  number!: string;
-
-  @IsOptional()
-  @IsString()
-  complement?: string;
-
-  @IsString()
-  neighborhood!: string;
-
-  @IsString()
-  city!: string;
-
-  @IsString()
-  zipCode!: string;
 }
