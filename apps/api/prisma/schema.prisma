@@ -76,6 +76,7 @@ model Ingredient {
   id               Int                       @id @default(autoincrement())
   name             String                    @unique
   category         String?
+  active           Boolean                   @default(true)
   createdAt        DateTime                  @default(now())
   pizzaIngredients PizzaIngredient[]
   ingredientPrice  IngredientPrice?
