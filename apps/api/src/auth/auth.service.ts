@@ -42,11 +42,22 @@ export class AuthService {
     });
   }
 
-  generateDevToken() {
+  async generateDevToken() {
+    const devUser = await this.prisma.user.upsert({
+      where: { email: 'dev@dev.com' },
+      update: {},
+      create: {
+        googleId: 'dev-token-operator',
+        email: 'dev@dev.com',
+        name: 'Dev Operator',
+        role: Role.OPERATOR,
+      },
+    });
+
     return this.jwt.sign({
-      sub: 0,
-      email: 'dev@dev.com',
-      role: Role.OPERATOR,
+      sub: devUser.id,
+      email: devUser.email,
+      role: devUser.role,
       hasAddress: true,
     });
   }

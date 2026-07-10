@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserWithClient } from './types/user-with-client.type';
@@ -23,8 +31,11 @@ export class AuthController {
   googleLogin() {}
 
   @Get('dev-token')
-  devToken() {
-    const token = this.authService.generateDevToken();
+  async devToken() {
+    if (process.env.NODE_ENV === 'production') {
+      throw new NotFoundException();
+    }
+    const token = await this.authService.generateDevToken();
     return { token };
   }
 
@@ -54,7 +65,7 @@ export class AuthController {
       sameSite: 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
-    res.redirect(baseUrl); // sem query params
+    res.redirect(baseUrl); // no query params
   }
 
   @Post('refresh')
