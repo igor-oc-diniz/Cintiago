@@ -1,0 +1,538 @@
+/*
+ * cintiago-tokens.css
+ * Cintiago — Design System Tokens
+ * Generated from DESIGN.md (Artisanal Italian Heritage)
+ *
+ * How to use:
+ *   1. Import at the top of your index.css: @import './cintiago-tokens.css';
+ *   2. Attach to the Claude Design setup so it automatically applies the
+ *      tokens to every generated artifact.
+ *
+ * Google Fonts — add to the <head> of index.html:
+ *   <link rel="preconnect" href="https://fonts.googleapis.com">
+ *   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+ */
+
+:root {
+  /* ── Fonts ──────────────────────────────────────────────────────────────── */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Be Vietnam Pro", system-ui, sans-serif;
+
+  /* ── Color: Surfaces (Parchment family) ─────────────────────────────────── */
+  --color-background: #fdf9ef;
+  --color-surface: #f1eee4;
+  --color-surface-dim: #dddad0;
+  --color-surface-bright: #fdf9ef;
+  --color-surface-lowest: #ffffff;
+  --color-surface-low: #f7f3e9;
+  --color-surface-high: #ece8de;
+  --color-surface-highest: #e6e2d8;
+  --color-surface-variant: #e6e2d8;
+  --color-inverse-surface: #31312a;
+
+  /* ── Color: On-Surface (text over surfaces) ──────────────────────────────── */
+  --color-on-background: #1c1c16;
+  --color-on-surface: #1c1c16;
+  --color-on-surface-variant: #58413e;
+  --color-on-inverse-surface: #f4f0e7;
+  --color-charcoal: #2d2926; /* high-legibility primary text */
+
+  /* ── Color: Outline ──────────────────────────────────────────────────────── */
+  --color-outline: #8b716c;
+  --color-outline-variant: #dfbfba;
+  --color-bamboo-accent: rgba(135, 95, 17, 0.3); /* thin artisanal border */
+
+  /* ── Color: Primary — Terracotta Red ────────────────────────────────────── */
+  --color-primary: #922719;
+  --color-primary-tint: #a83727;
+  --color-primary-container: #b33f2e;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffded8;
+  --color-inverse-primary: #ffb4a7;
+  --color-primary-fixed: #ffdad4;
+  --color-primary-fixed-dim: #ffb4a7;
+  --color-on-primary-fixed: #400200;
+  --color-on-primary-fixed-variant: #872012;
+
+  /* ── Color: Secondary — Basil Green ─────────────────────────────────────── */
+  --color-secondary: #4d6545;
+  --color-secondary-container: #cfebc2;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #536b4a;
+  --color-secondary-fixed: #cfebc2;
+  --color-secondary-fixed-dim: #b3cea7;
+  --color-on-secondary-fixed: #0b2007;
+  --color-on-secondary-fixed-variant: #364d2f;
+
+  /* ── Color: Tertiary — Bamboo Gold ──────────────────────────────────────── */
+  --color-tertiary: #6a4800;
+  --color-tertiary-container: #875f11;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #ffe1b7;
+  --color-tertiary-fixed: #ffdead;
+  --color-tertiary-fixed-dim: #f2be69;
+  --color-on-tertiary-fixed: #281900;
+  --color-on-tertiary-fixed-variant: #604100;
+
+  /* ── Color: Error ────────────────────────────────────────────────────────── */
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  /* ── Typography: Scale ───────────────────────────────────────────────────── */
+  /* Headlines — Playfair Display */
+  --text-headline-lg-size: 40px;
+  --text-headline-lg-line: 48px;
+  --text-headline-lg-weight: 700;
+
+  --text-headline-lg-mobile-size: 32px;
+  --text-headline-lg-mobile-line: 38px;
+  --text-headline-lg-mobile-weight: 700;
+
+  --text-headline-md-size: 28px;
+  --text-headline-md-line: 34px;
+  --text-headline-md-weight: 600;
+
+  /* Body — Be Vietnam Pro */
+  --text-body-lg-size: 18px;
+  --text-body-lg-line: 28px;
+  --text-body-lg-weight: 400;
+
+  --text-body-md-size: 16px;
+  --text-body-md-line: 24px;
+  --text-body-md-weight: 400;
+
+  --text-label-sm-size: 12px;
+  --text-label-sm-line: 16px;
+  --text-label-sm-weight: 600;
+  --text-label-sm-spacing: 0.05em;
+
+  /* ── Border Radius ───────────────────────────────────────────────────────── */
+  --radius-sm: 0.25rem; /*  4px */
+  --radius-base: 0.5rem; /*  8px — buttons, inputs */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.5rem; /* 24px — cards, modals, "pizza peel" */
+  --radius-full: 9999px; /* pills */
+
+  /* ── Spacing ─────────────────────────────────────────────────────────────── */
+  --space-unit: 8px;
+  --space-gutter: 24px;
+  --space-margin-mobile: 16px;
+  --space-margin-desktop: 48px;
+  --container-max-width: 1200px;
+
+  /* ── Shadow (warm, diffused — 5% opacity) ───────────────────────────────── */
+  --shadow-sm: 0 2px 8px rgba(74, 50, 31, 0.05);
+  --shadow: 0 4px 20px rgba(74, 50, 31, 0.05);
+  --shadow-lg: 0 8px 32px rgba(74, 50, 31, 0.08);
+
+  /* ── Textures ────────────────────────────────────────────────────────────── */
+  /* Bamboo slats — use as background in dividers and footer */
+  --texture-bamboo-slats: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 11px,
+    rgba(106, 72, 0, 0.06) 11px,
+    rgba(106, 72, 0, 0.06) 12px
+  );
+}
+
+/* ── Design System Token Aliases (short names used by UI kit) ─────────────── */
+:root {
+  /* Raw color palette */
+  --terracotta-900: #5c160c;
+  --terracotta-800: #74200f;
+  --terracotta-700: #922719;
+  --terracotta-600: #a8331f;
+  --terracotta-500: #bc4a33;
+  --terracotta-300: #d98c7b;
+  --terracotta-200: #ecc2b8;
+  --terracotta-100: #f6e0d9;
+  --terracotta-50: #fbefea;
+
+  --basil-900: #2c3b27;
+  --basil-700: #3c5034;
+  --basil-600: #45593c;
+  --basil-500: #4d6545;
+  --basil-400: #6e8366;
+  --basil-300: #93a68c;
+  --basil-200: #c2cdbc;
+  --basil-100: #dfe6db;
+  --basil-50: #eff2ec;
+
+  --gold-900: #4a3200;
+  --gold-800: #6a4800;
+  --gold-600: #8a6310;
+  --gold-500: #a87e22;
+  --gold-400: #c29a3d;
+  --gold-300: #d9b86a;
+  --gold-200: #ead6a4;
+  --gold-100: #f4e9cd;
+  --gold-50: #faf3e2;
+
+  --parchment: #fdf9ef;
+  --parchment-deep: #f6efdf;
+  --cream: #fbf4e4;
+  --oat: #efe6d2;
+  --line: #e7dcc6;
+  --line-strong: #d8cbae;
+
+  --ink-900: #261e14;
+  --ink-800: #332a1e;
+  --ink-700: #4a3f30;
+  --ink-500: #6e6151;
+  --ink-400: #8c7e6a;
+  --ink-300: #a89b86;
+
+  /* Semantic short aliases */
+  --bg: var(--parchment);
+  --surface: #fffdf8;
+  --surface-sunken: var(--parchment-deep);
+  --surface-inset: var(--cream);
+  --fg1: var(--ink-900);
+  --fg2: var(--ink-700);
+  --fg3: var(--ink-500);
+  --fg4: var(--ink-300);
+  --border: var(--line);
+  --border-strong: var(--line-strong);
+  --primary: var(--terracotta-700);
+  --primary-hover: var(--terracotta-800);
+  --primary-soft: var(--terracotta-50);
+  --on-primary: var(--parchment);
+  --success: var(--basil-500);
+  --success-hover: var(--basil-700);
+  --success-soft: var(--basil-50);
+  --on-success: var(--parchment);
+  --accent: var(--gold-800);
+  --accent-warm: var(--gold-800);
+  --accent-soft: var(--gold-50);
+
+  /* Additional shadows */
+  --shadow-xs: 0 1px 4px rgba(74, 50, 31, 0.06);
+  --shadow-md: 0 4px 16px rgba(74, 50, 31, 0.1);
+  --shadow-xl: 0 16px 48px rgba(74, 50, 31, 0.16);
+  --shadow-inset: inset 0 2px 6px rgba(74, 50, 31, 0.06);
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-warm: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+
+  /* Cintiago decorative */
+  --cg-stroke: rgba(77, 101, 69, 0.35);
+  --cg-stroke-soft: rgba(77, 101, 69, 0.16);
+  --cg-dash: rgba(146, 39, 25, 0.4);
+}
+
+/* ── Cintiago decorative classes ────────────────────────────────────────────── */
+
+.cg-card {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 0 0 1px var(--cg-stroke-soft),
+    0 0 6px 1px var(--cg-stroke),
+    var(--shadow-xs);
+  overflow: hidden;
+}
+
+.cg-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+.cg-divider {
+  height: 1px;
+  border: none;
+  border-top: 1px dashed var(--cg-dash);
+  margin: 0;
+}
+
+.cg-sheet {
+  position: relative;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  box-shadow: var(--shadow-xl);
+  padding: 10px 20px 24px;
+}
+.cg-sheet::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  margin: 6px auto 14px;
+}
+
+.cg-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(38, 30, 20, 0.42);
+  display: flex;
+  align-items: flex-end;
+  z-index: 50;
+}
+
+.cg-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--fg3);
+  white-space: nowrap;
+}
+.cg-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+.cg-dot--open {
+  background: radial-gradient(
+    circle at 34% 30%,
+    #82a077 0%,
+    var(--basil-500) 62%
+  );
+}
+.cg-dot--closed {
+  background: #a8554a;
+}
+
+.cg-note {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+  padding: 11px 13px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--gold-900);
+}
+
+.cg-noscroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.mr-bamboo-divider {
+  height: 20px;
+  background-image: var(--texture-bamboo-slats);
+  background-color: var(--color-surface-high);
+  border-top: 1px solid var(--color-bamboo-accent);
+  border-bottom: 1px solid var(--color-bamboo-accent);
+}
+
+.mr-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg4);
+}
+
+/* ── Typography utility classes ────────────────────────────────────────────── */
+
+.text-headline-lg {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-lg-size);
+  line-height: var(--text-headline-lg-line);
+  font-weight: var(--text-headline-lg-weight);
+}
+@media (max-width: 768px) {
+  .text-headline-lg {
+    font-size: var(--text-headline-lg-mobile-size);
+    line-height: var(--text-headline-lg-mobile-line);
+  }
+}
+
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: var(--text-headline-md-size);
+  line-height: var(--text-headline-md-line);
+  font-weight: var(--text-headline-md-weight);
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  font-weight: var(--text-body-lg-weight);
+}
+
+.text-body-md {
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  font-weight: var(--text-body-md-weight);
+}
+
+.text-label-sm {
+  font-family: var(--font-body);
+  font-size: var(--text-label-sm-size);
+  line-height: var(--text-label-sm-line);
+  font-weight: var(--text-label-sm-weight);
+  letter-spacing: var(--text-label-sm-spacing);
+  text-transform: uppercase;
+}
+
+/* ── Base components ───────────────────────────────────────────────────────── */
+
+/* Primary button — Terracotta Red */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-tint);
+  box-shadow: var(--shadow);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Secondary button — Basil Green outline */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 23px;
+  background-color: transparent;
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-secondary);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--color-secondary-fixed);
+}
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Product card */
+.card-product {
+  background-color: var(--color-surface-lowest);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-bamboo-accent);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-product__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.card-product__body {
+  padding: 16px 20px 20px;
+  background-color: var(--color-surface-low);
+}
+
+/* Input field */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--color-surface-high);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-base);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md-size);
+  color: var(--color-on-surface);
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+  outline: none;
+}
+.input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-lowest);
+}
+
+/* Chip / badge */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-label-sm-size);
+  font-weight: var(--text-label-sm-weight);
+  letter-spacing: var(--text-label-sm-spacing);
+}
+.chip--vegetarian {
+  background-color: rgba(77, 101, 69, 0.12);
+  color: var(--color-secondary);
+}
+.chip--new {
+  background-color: rgba(146, 39, 25, 0.1);
+  color: var(--color-primary);
+}
+.chip--gold {
+  background-color: rgba(106, 72, 0, 0.1);
+  color: var(--color-tertiary-container);
+}
+
+/* Bamboo divider */
+.bamboo-divider {
+  height: 24px;
+  background-image: var(--texture-bamboo-slats);
+  background-color: var(--color-surface-high);
+  border-top: 1px solid var(--color-bamboo-accent);
+  border-bottom: 1px solid var(--color-bamboo-accent);
+}
+
+/* Default container */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-margin-mobile);
+}
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--space-margin-desktop);
+  }
+}

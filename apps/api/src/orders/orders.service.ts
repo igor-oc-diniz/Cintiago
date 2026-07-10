@@ -218,18 +218,27 @@ export class OrdersService {
 
     const productIds = (order.products ?? []).map((p) => p.productId);
 
-    const [client, pizzas, crusts, ingredientPrices, products, payment, store] =
-      await Promise.all([
-        this.prisma.client.findUnique({ where: { userId: userId } }),
-        this.prisma.pizza.findMany({ where: { id: { in: pizzaIds } } }),
-        this.prisma.crust.findMany({ where: { id: { in: crustIds } } }),
-        this.prisma.ingredientPrice.findMany({
-          where: { ingredientId: { in: ingredientIds } },
-        }),
-        this.prisma.product.findMany({ where: { id: { in: productIds } } }),
-        this.prisma.payment.findUnique({ where: { id: order.paymentId } }),
-        this.prisma.store.findFirst(),
-      ]);
+    const [
+      client,
+      pizzas,
+      crusts,
+      ingredients,
+      ingredientPrices,
+      products,
+      payment,
+      store,
+    ] = await Promise.all([
+      this.prisma.client.findUnique({ where: { userId: userId } }),
+      this.prisma.pizza.findMany({ where: { id: { in: pizzaIds } } }),
+      this.prisma.crust.findMany({ where: { id: { in: crustIds } } }),
+      this.prisma.ingredient.findMany({ where: { id: { in: ingredientIds } } }),
+      this.prisma.ingredientPrice.findMany({
+        where: { ingredientId: { in: ingredientIds } },
+      }),
+      this.prisma.product.findMany({ where: { id: { in: productIds } } }),
+      this.prisma.payment.findUnique({ where: { id: order.paymentId } }),
+      this.prisma.store.findFirst(),
+    ]);
 
     if (!client) throw new NotFoundException(`Cliente nao encontrado`);
 
@@ -247,6 +256,7 @@ export class OrdersService {
 
     const pizzaMap = new Map(pizzas.map((p) => [p.id, p]));
     const crustsMap = new Map(crusts.map((c) => [c.id, c]));
+    const ingredientStatusMap = new Map(ingredients.map((i) => [i.id, i]));
     const ingredientMap = new Map(
       ingredientPrices.map((i) => [i.ingredientId, i]),
     );
@@ -271,6 +281,16 @@ export class OrdersService {
         let halfPrice = this.getPrice(pizza, item.size);
 
         for (const ing of half.ingredients ?? []) {
+          const ingredient = ingredientStatusMap.get(ing.ingredientId);
+          if (!ingredient)
+            throw new NotFoundException(
+              `Ingrediente ${ing.ingredientId} não encontrado`,
+            );
+          if (!ingredient.active)
+            throw new BadRequestException(
+              `Ingrediente ${ing.ingredientId} está inativo e não pode ser pedido`,
+            );
+
           if (!chargedIngredients.has(ing.ingredientId)) {
             const ip = ingredientMap.get(ing.ingredientId);
             if (ip) halfPrice += this.getPrice(ip, item.size);

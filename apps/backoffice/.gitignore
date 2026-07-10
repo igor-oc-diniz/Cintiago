@@ -1,0 +1,26 @@
+/docs
+
+# Environment
+.env
+.env.local
+
+# Build outputs
+dist/
+dist-ssr/
+
+# Vite cache
+.vite/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.idea/
+*.suo
+*.sw?
+CLAUDE.md
+.DS_Store

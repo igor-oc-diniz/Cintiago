@@ -10,6 +10,7 @@ export class IngredientsService {
 
   async findAll() {
     return await this.prisma.ingredient.findMany({
+      where: { active: true },
       include: { ingredientPrice: true },
     });
   }
@@ -39,11 +40,11 @@ export class IngredientsService {
   }
 
   async updateIngredient(id: number, ingredient: UpdateIngredientDto) {
-    const { name, category } = ingredient;
+    const { name, category, active } = ingredient;
     try {
       return await this.prisma.ingredient.update({
         where: { id },
-        data: { name, category },
+        data: { name, category, active },
       });
     } catch (error) {
       handlePrismaError(error, `Ingredient ${id}`);
