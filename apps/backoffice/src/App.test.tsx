@@ -5,13 +5,15 @@ import { App } from "./App";
 vi.mock("@/api/auth", () => ({
   getMe: () => Promise.reject(new Error("no session")),
   getDevToken: () => Promise.reject(new Error("no dev-token")),
+  getGoogleAuthUrl: () => "http://localhost:3000/auth/google?from=backoffice",
+  logoutApi: () => Promise.resolve(),
 }));
 
 describe("App", () => {
-  it("renders without crashing and shows the Home page", async () => {
+  it("bootstraps and lands on the login screen when there is no session", async () => {
     render(<App />);
     expect(
-      await screen.findByText(/Pedidos \(em construção\)/i),
+      await screen.findByRole("button", { name: /Entrar com Google/i }),
     ).toBeInTheDocument();
   });
 });

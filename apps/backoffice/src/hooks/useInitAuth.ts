@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { setCredentials, setToken } from "@/store/slices/authSlice";
+import { setCredentials, setLoading, setToken } from "@/store/slices/authSlice";
 import { getDevToken, getMe } from "@/api/auth";
 import { COOKIE_TOKEN } from "@/constants/auth";
 import { useAuth } from "./useAuth";
@@ -32,7 +32,11 @@ export function useInitAuth() {
         })
         .then((user) => dispatch(setCredentials({ token: devToken, user })))
         .catch(() => {
-          // no session via cookie nor dev-token available — stays logged out
+          // No session via cookie nor dev-token — settle as guest so the
+          // guards can redirect to /login. The bootstrap runs at most once
+          // per page load (attempted ref): logging out doesn't re-trigger
+          // the dev-token fallback.
+          dispatch(setLoading(false));
         });
     }
   }, [dispatch, isLoggedIn]);
