@@ -8,9 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { UserWithClient } from './types/user-with-client.type';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { GoogleOAuthGuard } from './guards/google-oauth.guard';
+import { resolveOAuthRedirect } from './oauth-redirect.helper';
 import { JwtUser } from './types/jwt-payload.type';
 import * as express from 'express';
 
@@ -27,7 +28,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('google')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleOAuthGuard)
   googleLogin() {}
 
   @Get('dev-token')
@@ -40,7 +41,7 @@ export class AuthController {
   }
 
   @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleOAuthGuard)
   async googleCallback(
     @Req() req: RequestWithGoogleUser,
     @Res() res: express.Response,
@@ -50,8 +51,8 @@ export class AuthController {
     await this.authService.saveRefreshToken(user.id, tokens.refreshToken);
 
     const hasAddress = user.client !== null;
-    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:5174';
-    const baseUrl = hasAddress ? frontendUrl : `${frontendUrl}/onboarding`;
+    // `state` round-trips the login origin (web | backoffice) through Google
+    const baseUrl = resolveOAuthRedirect(req.query.state, hasAddress);
 
     res.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
@@ -90,7 +91,6 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: RequestWithJwtUser) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return await this.authService.getMe(req.user.userId);
   }
 

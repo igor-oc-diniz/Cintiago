@@ -11,7 +11,9 @@ interface AuthState {
 const initialState: AuthState = {
   token: null,
   user: null,
-  isLoading: false,
+  // Starts true: RootLayout always runs the session bootstrap (useInitAuth)
+  // on mount, and route guards must not redirect before it settles.
+  isLoading: true,
 };
 
 const authSlice = createSlice({
